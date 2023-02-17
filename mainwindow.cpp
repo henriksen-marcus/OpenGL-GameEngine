@@ -11,6 +11,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     //this sets up what's in the mainwindow.ui - the GUI
     ui->setupUi(this);
+
+    setFocus();
+    setMouseTracking(true);
+    setCursor(Qt::BlankCursor);
+    windowWidth = width();
+    windowHeight = height();
+    center = QPoint(windowWidth/2, windowHeight/2);
+
     init(); //initializes parts of the program
 }
 

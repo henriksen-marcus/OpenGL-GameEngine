@@ -18,6 +18,10 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    float windowWidth{};
+    float windowHeight{};
+    QPoint center;
+
 private slots:
     ///Slot called from the button in the mainwindow.ui file
     void on_rotationButton_toggled(bool checked);

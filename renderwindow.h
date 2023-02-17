@@ -1,19 +1,24 @@
-#ifndef RENDERWINDOW_H
-#define RENDERWINDOW_H
+#pragma once
 
 #include <QWindow>
 #include <QOpenGLFunctions_4_1_Core>
 #include <QTimer>
 #include <QElapsedTimer>
 
+#include "Cube.h"
+#include "Camera.h"
+#include "XYZ.h"
+#include "enums.h"
+
 class QOpenGLContext;
 class Shader;
 class MainWindow;
 
-/// This inherits from QWindow to get access to the Qt functionality and
-// OpenGL surface.
-// We also inherit from QOpenGLFunctions, to get access to the OpenGL functions
-// This is the same as using "glad" and "glw" from general OpenGL tutorials
+/* This inherits from QWindow to get access to the Qt functionality and
+ * OpenGL surface. We also inherit from QOpenGLFunctions, to get access
+ * to the OpenGL functions. This is the same as using "glad" and "glfw"
+ * from general OpenGL tutorials.
+*/
 class RenderWindow : public QWindow, protected QOpenGLFunctions_4_1_Core
 {
     Q_OBJECT
@@ -26,36 +31,56 @@ public:
     void exposeEvent(QExposeEvent *) override;  //gets called when app is shown and resized
 
 private slots:
-    void render();          //the actual render - function
+    void render();
 
 private:
     void init();            //initialize things we need before rendering
 
-    QOpenGLContext *mContext{nullptr};  //Our OpenGL context
+    // Our OpenGL context
+    QOpenGLContext* mContext;
+
     bool mInitialized{false};
 
-    Shader *mShaderProgram{nullptr};    //holds pointer the GLSL shader program
-    GLint  mMatrixUniform;              //OpenGL reference to the Uniform in the shader program
+    Shader* mShaderProgram;
 
-    GLuint mVAO;                        //OpenGL reference to our VAO
-    GLuint mVBO;                        //OpenGL reference to our VBO
+    // Timer that drives the gameloop
+    QTimer *mRenderTimer;
 
-    QMatrix4x4 *mMVPmatrix{nullptr};         //The matrix with the transform for the object we draw
+    // Time variable that reads the calculated FPS
+    QElapsedTimer mTimeStart;
 
-    QTimer *mRenderTimer{nullptr};           //timer that drives the gameloop
-    QElapsedTimer mTimeStart;               //time variable that reads the calculated FPS
+    // Points back to MainWindow to be able to put info in StatusBar
+    MainWindow *mMainWindow;
 
-    MainWindow *mMainWindow{nullptr};        //points back to MainWindow to be able to put info in StatusBar
+    // Helper class to get some clean debug info from OpenGL
+    class QOpenGLDebugLogger* mOpenGLDebugLogger;
 
-    class QOpenGLDebugLogger *mOpenGLDebugLogger{nullptr};  //helper class to get some clean debug info from OpenGL
-    class Logger *mLogger{nullptr};         //logger - Output Log in the application
+    // Logger - Output Log in the application
+    class Logger* mLogger;
 
-    ///Helper function that uses QOpenGLDebugLogger or plain glGetError()
+    float FOV{70.f};
+    float aspectRatio{16.f/9.f};
+    float nearPlane{0.01f};
+    float farPlane{1000.f};
+
+    float deltaTime{0.016f};
+    qint64 lastFrame{};
+    QElapsedTimer* frameTimer;
+
+    // How much the mouse moved since last tick
+    float lastMouseX{0.f};
+    float lastMouseY{0.f};
+
+    std::vector<Movement> heldKeys;
+
+    void processInput();
+
+    // Helper function that uses QOpenGLDebugLogger or plain glGetError()
     void checkForGLerrors();
 
-    void calculateFramerate();          //as name says
+    void calculateFramerate();
 
-    ///Starts QOpenGLDebugLogger if possible
+    // Starts QOpenGLDebugLogger if possible
     void startOpenGLDebugger();
 
 protected:
@@ -65,10 +90,14 @@ protected:
     // these functions in the cpp-file to use them of course!)
     //
     //    void mousePressEvent(QMouseEvent *event) override{}
-    //    void mouseMoveEvent(QMouseEvent *event) override{}
+    void mouseMoveEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;              //the only one we use now
-    //    void keyReleaseEvent(QKeyEvent *event) override{}
-    //    void wheelEvent(QWheelEvent *event) override{}
-};
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 
-#endif // RENDERWINDOW_H
+
+public:
+    Cube* cube = new Cube(QVector3D(0.f, 0.f, -4.f), 1.f, QVector3D(1.f, 0.5f, 1.f), GL_LINES);
+    Camera* camera = new Camera(QVector3D(0.f, 0.f, 1.f));
+    XYZ* xyz = new XYZ();
+};

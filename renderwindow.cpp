@@ -1,4 +1,3 @@
-#include "renderwindow.h"
 #include <QTimer>
 #include <QMatrix4x4>
 #include <QOpenGLContext>
@@ -7,16 +6,17 @@
 #include <QKeyEvent>
 #include <QStatusBar>
 #include <QDebug>
-
 #include <string>
+#include <iostream>
 
-#include "shader.h"
+#include "qapplication.h"
+#include "renderwindow.h"
+#include "Shader.h"
 #include "mainwindow.h"
 #include "logger.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
-
 {
     //This is sent to QWindow:
     setSurfaceType(QWindow::OpenGLSurface);
@@ -31,30 +31,17 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
         qDebug() << "Context could not be made - quitting this application";
     }
 
-    //This is the matrix used to transform (rotate) the triangle
-    //You could do without, but then you have to simplify the shader and shader setup
-    mMVPmatrix = new QMatrix4x4{};
-    mMVPmatrix->setToIdentity();    //1, 1, 1, 1 in the diagonal of the matrix
-
     //Make the gameloop timer:
     mRenderTimer = new QTimer(this);
+
+    // DeltaTime
+    frameTimer = new QElapsedTimer();
+    frameTimer->start();
 }
 
-RenderWindow::~RenderWindow()
-{
-    //cleans up the GPU memory
-    glDeleteVertexArrays( 1, &mVAO );
-    glDeleteBuffers( 1, &mVBO );
-}
 
-//Simple global for vertices of a triangle - should belong to a class !
-static GLfloat vertices[] =
-{
-    // Positions         // Colors
-    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // Bottom Left
-    0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,  // Bottom Right
-    0.0f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f   // Top
-};
+RenderWindow::~RenderWindow(){}
+
 
 // Sets up the general OpenGL stuff and the buffers needed to render a triangle
 void RenderWindow::init()
@@ -106,57 +93,38 @@ void RenderWindow::init()
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
 
     //Compile shaders:
-    //NB: hardcoded path to files! You have to change this if you change directories for the project.
-    //Qt makes a build-folder besides the project folder. That is why we go down one directory
+    // NB: hardcoded path to files! You have to change this if you change directories for the project.
+    // Qt makes a build-folder besides the project folder. That is why we go down one directory
     // (out of the build-folder) and then up into the project folder.
-    mShaderProgram = new Shader("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
+    mShaderProgram = new Shader();
+    mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
-    //********************** Making the object to be drawn **********************
+    cube->Init();
+    xyz->Init();
+}
 
-    //Making and using the Vertex Array Object - VAO
-    //VAO is a containter that holds VBOs
-    glGenVertexArrays( 1, &mVAO );
-    glBindVertexArray( mVAO );
+void RenderWindow::processInput()
+{
+    // Remove dupes
+    std::sort(heldKeys.begin(), heldKeys.end());
 
-    //Making and using the Vertex Buffer Object to hold vertices - VBO
-    //Since the mVAO is bound, this VBO will belong to that VAO
-    glGenBuffers( 1, &mVBO );
-    glBindBuffer( GL_ARRAY_BUFFER, mVBO );
+    // Remove duplicates
+    auto new_end = std::unique(heldKeys.begin(), heldKeys.end());
 
-    //this sends the vertex data to the GPU:
-    glBufferData( GL_ARRAY_BUFFER,      //what buffer type
-                  sizeof( vertices ),   //how big buffer do we need
-                  vertices,             //the actual vertices
-                  GL_STATIC_DRAW        //should the buffer be updated on the GPU
-                  );
+    // Resize the vector to remove the duplicates
+    heldKeys.resize(std::distance(heldKeys.begin(), new_end));
 
-    // 1st attribute buffer : vertices
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glVertexAttribPointer(
-                0,                  // attribute. No particular reason for 0, but must match layout(location = 0) in the vertex shader.
-                3,                  // size / number of elements of data type
-                GL_FLOAT,           // data type
-                GL_FALSE,           // normalize data
-                6 * sizeof(GLfloat),  // stride
-                (GLvoid*)0  );          // array buffer offset
-    glEnableVertexAttribArray(0);
-
-    // 2nd attribute buffer : colors
-    // Same parameter list as above but attribute and offset is adjusted accoringly
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,  6 * sizeof(GLfloat),  (GLvoid*)(3 * sizeof(GLfloat)) );
-    glEnableVertexAttribArray(1);
-
-    // Get the matrixUniform location from the shader
-    // This has to match the "matrix" variable name in the vertex shader
-    // The uniform is used in the render() function to send the model matrix to the shader
-    mMatrixUniform = glGetUniformLocation( mShaderProgram->getProgram(), "matrix" );
-
-    glBindVertexArray(0);       //unbinds any VertexArray - good practice
+    for (auto key : heldKeys)
+    {
+        camera->ProcessKeyboard(key, deltaTime);
+    }
 }
 
 // Called each frame - doing the rendering!!!
 void RenderWindow::render()
 {
+    processInput();
+
     mTimeStart.restart(); //restart FPS clock
     mContext->makeCurrent(this); //must be called every frame (every time mContext->swapBuffers is called)
 
@@ -165,19 +133,29 @@ void RenderWindow::render()
     //clear the screen for each redraw
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //what shader to use
-    glUseProgram(mShaderProgram->getProgram() );
+    mShaderProgram->UseShader();
 
-
-
-
-    //Calculate framerate before
+    // Calculate framerate before
     // checkForGLerrors() because that call takes a long time
     // and before swapBuffers(), else it will show the vsync time
     calculateFramerate();
 
     //using our expanded OpenGL debugger to check if everything is OK.
     checkForGLerrors();
+
+
+    QMatrix4x4 projection;
+    projection.perspective(FOV, aspectRatio, nearPlane, farPlane);
+
+    QMatrix4x4 emptyTranslation{};
+    glUniformMatrix4fv(mShaderProgram->GetModelLocation(), 1, GL_FALSE, emptyTranslation.constData());
+    glUniformMatrix4fv(mShaderProgram->GetProjectionLocation(), 1, GL_FALSE, projection.constData());
+    glUniformMatrix4fv(mShaderProgram->GetViewLocation(), 1, GL_FALSE, camera->GetViewMatrix().constData());
+
+
+    xyz->Draw();
+    cube->Draw(mShaderProgram->GetModelLocation());
+
 
     /* Qt require us to call this swapBuffers() -function.
      swapInterval is 1 by default which means that swapBuffers() will (hopefully) block
@@ -218,23 +196,27 @@ void RenderWindow::exposeEvent(QExposeEvent *)
 void RenderWindow::calculateFramerate()
 {
     long nsecElapsed = mTimeStart.nsecsElapsed();
-    static int frameCount{0};                       //counting actual frames for a quick "timer" for the statusbar
+    static int frameCount{};                       //counting actual frames for a quick "timer" for the statusbar
 
-    if (mMainWindow)            //if no mainWindow, something is really wrong...
+    if (mMainWindow)
     {
-        ++frameCount;
-        if (frameCount > 30)    //once pr 30 frames = update the message == twice pr second (on a 60Hz monitor)
+        if (++frameCount > 30)    // once pr 30 frames = update the message == twice pr second (on a 60Hz monitor)
         {
-            //showing some statistics in status bar
+            // showing some statistics in status bar
             mMainWindow->statusBar()->showMessage(" Time pr FrameDraw: " +
                                                   QString::number(nsecElapsed/1000000.f, 'g', 4) + " ms  |  " +
                                                   "FPS (approximated): " + QString::number(1E9 / nsecElapsed, 'g', 7));
             frameCount = 0;     //reset to show a new message in 30 frames
         }
     }
+
+    qint64 currentFrame = frameTimer->elapsed();
+    //frameTimer->restart();
+    deltaTime = (currentFrame - lastFrame) * 0.001f;
+    lastFrame = currentFrame;
 }
 
-//Uses QOpenGLDebugLogger if this is present
+//Uses QOpenGLDebugLogger if this is presentf
 //Reverts to glGetError() if not
 void RenderWindow::checkForGLerrors()
 {
@@ -298,22 +280,48 @@ void RenderWindow::startOpenGLDebugger()
     }
 }
 
+void RenderWindow::mouseMoveEvent(QMouseEvent* event)
+{
+    /* Get the difference from the last mouse position
+     * and send it to the camera. Then move cursor back
+     * to center of screen to prevent cursor from exiting
+     * the window.
+    */
+    float currentX = event->globalPosition().x();
+    float currentY = event->globalPosition().y();
+
+    float deltaX = currentX - mMainWindow->center.x();
+    float deltaY = mMainWindow->center.y() - currentY;
+
+    QCursor::setPos(mMainWindow->center);
+
+    camera->ProcessMouseMovement(deltaX, deltaY);
+}
+
 //Event sent from Qt when program receives a keyPress
 // NB - see renderwindow.h for signatures on keyRelease and mouse input
 void RenderWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Escape)
-    {
-        mMainWindow->close();       //Shuts down the whole program
-    }
+    //mMainWindow->statusBar()->showMessage(" AAAA");
 
-    //You get the keyboard input like this
-//    if(event->key() == Qt::Key_A)
-//    {
-//        mMainWindow->statusBar()->showMessage(" AAAA");
-//    }
-//    if(event->key() == Qt::Key_S)
-//    {
-//        mMainWindow->statusBar()->showMessage(" SSSS");
-//    }
+    if (event->key() == Qt::Key_Escape) mMainWindow->close();  // Shuts down the whole program
+
+    if (event->key() == Qt::Key_W) heldKeys.push_back(Movement::FORWARD);
+    if (event->key() == Qt::Key_A) heldKeys.push_back(Movement::LEFT);
+    if (event->key() == Qt::Key_S) heldKeys.push_back(Movement::BACKWARD);
+    if (event->key() == Qt::Key_D) heldKeys.push_back(Movement::RIGHT);
+    if (event->key() == Qt::Key_E) heldKeys.push_back(Movement::UP);
+    if (event->key() == Qt::Key_Q) heldKeys.push_back(Movement::DOWN);
 }
+
+void RenderWindow::keyReleaseEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_W) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::FORWARD), heldKeys.end());
+    if (event->key() == Qt::Key_A) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::LEFT), heldKeys.end());
+    if (event->key() == Qt::Key_S) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::BACKWARD), heldKeys.end());
+    if (event->key() == Qt::Key_D) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::RIGHT), heldKeys.end());
+    if (event->key() == Qt::Key_E) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::UP), heldKeys.end());
+    if (event->key() == Qt::Key_Q) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::DOWN), heldKeys.end());
+}
+
+void RenderWindow::wheelEvent(QWheelEvent* event){}

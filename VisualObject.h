@@ -10,12 +10,11 @@ class VisualObject : public QOpenGLFunctions_4_1_Core
 {
 public:
     VisualObject()
-    {
-        mVAO = mIBO = mVBO = 0;
-    }
+    {}
 
     virtual ~VisualObject()
     {
+        // We can delete these safely even if they don't exist
         glDeleteVertexArrays(1, &mVAO);
         glDeleteBuffers(1, &mIBO);
         glDeleteBuffers(1, &mVBO);
@@ -29,21 +28,7 @@ public:
     /**
      * \brief Draw the object on the screen. Call this each tick.
      */
-    virtual void Draw()
-    {
-        glBindVertexArray(mVAO);
-
-        // Decide if we should use IBO or not
-        if (!mIndices.empty())
-        {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
-            glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        }
-        else glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
-        
-        glBindVertexArray(0);
-    }
+    virtual void Draw(GLint mModelLocation = -1) = 0;
 
 protected:
     // Stores vertices for the object
@@ -52,15 +37,24 @@ protected:
     // Stores vertex indices for the object
     std::vector<GLuint> mIndices;
 
-    // Model matrix for transformations
-    QMatrix4x4 mMatrix;
-
     // Vertex Array Object
-    GLuint mVAO;
+    GLuint mVAO{};
 
     // Index buffer object
-    GLuint mIBO;
+    GLuint mIBO{};
 
     // Vertex buffer object
-    GLuint mVBO;
+    GLuint mVBO{};
+
+    // The world-space location of the object
+    QVector3D mLocation{};
+
+    // The world-space rotation of the object
+    QVector3D mRotation{};
+
+    // The world-space scale of the object
+    QVector3D mScale{};
+
+    // Handles scaling, rotation and translation of the object
+    QMatrix4x4 mMatrix{};
 };
