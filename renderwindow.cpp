@@ -10,8 +10,15 @@
 #include <iostream>
 
 #include "Cube.h"
+#include "VisualFunction2D.h"
 #include "XYZ.h"
 #include "Arrow.h"
+#include "VisualFunction3D.h"
+#include "VisualPoints.h"
+#include "Axis.h"
+
+#include "MathTasks.h"
+#include "functions.h"
 #include "renderwindow.h"
 #include "Shader.h"
 #include "mainwindow.h"
@@ -103,10 +110,37 @@ void RenderWindow::init()
     mShaderProgram = new Shader();
     mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
-    //renderer->Add("cube", new Cube(QVector3D(0.f, 0.f, 0.f), 1.f, QVector3D(1.f, 0.5f, 1.f), GL_LINES, true));
-    renderer->Add("xyz", new XYZ(true));
-    renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
+    //renderer->Add("xyz", new XYZ(true));
+    //renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
     //renderer->Add("cube", new Cube(QVector3D(), 1.f, QVector3D(0.3f, 0.6f, 1.f), GL_LINES, true));
+
+    std::vector<QPointF> points;
+    points.emplace_back(1.f, 1.f);
+    points.emplace_back(2.f, 3.f);
+    points.emplace_back(3.f, 0.f);
+    points.emplace_back(4.f, 1.f);
+    points.emplace_back(5.f, 2.f);
+    points.emplace_back(6.f, 7.f);
+    points.emplace_back(7.f, 4.f);
+
+
+    VisualPoints* pointspace = new VisualPoints(QVector3D(), 5);
+    pointspace->AddPoints(points);
+    pointspace->Init();
+    renderer->Add("pointspace", pointspace);
+
+
+    QVector3D abc = task_4_4_4(points);
+
+    auto px = [abc](float x) { return abc.x() * pow(x, 2) + abc.y() * x + abc.z(); };
+
+    auto* func = new VisualFunction2D();
+    func->FromFunction(px, 0.f, 7.f, 100);
+    func->Init();
+    renderer->Add("func", func);
+
+    FAxisInfo info = FAxisInfo{2, 1.f, 0.3f, QVector3D{10.f, 10.f, 0.f}};
+    renderer->Add("axis", new Axis(info, true));
 }
 
 void RenderWindow::processInput()

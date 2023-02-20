@@ -1,14 +1,13 @@
 #include "VisualFunction3D.h"
 
-#include <iostream>
 #include <fstream>
 #include <string>
-#include <ext/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
 
 
 void VisualFunction3D::Init()
 {
+    initializeOpenGLFunctions();
+
     glGenVertexArrays(1, &mVAO);
     glBindVertexArray(mVAO);
     
@@ -24,29 +23,27 @@ void VisualFunction3D::Init()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-    modelMatrix = glm::translate(modelMatrix, mLocation);
 }
 
-void VisualFunction3D::Draw(GLint modelLocation)
+void VisualFunction3D::Draw(GLint mModelLocation)
 {
-
-    if (modelLocation != -1)
+    Actor::Draw(mModelLocation);
+    return;
+    // Draw with no transformations we we have not gotten the shader "model" location.
+    if (mModelLocation != -1)
     {
-        //printf("x: %f, y: %f, z: %f\n", mLocation.x, mLocation.y, mLocation.z);
-        
-        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
     }
     else
     {
-        printf("modellocation was -1.");
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
     }
     
     glBindVertexArray(mVAO);
     glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
     glBindVertexArray(0);
-
-    glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(glm::mat4(1.f)));
 }
 
 void VisualFunction3D::FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float ymin,
@@ -81,11 +78,11 @@ void VisualFunction3D::FromFunction(std::function<float(float, float)> f, float 
     }
 }
 
-void VisualFunction3D::FromFunction(std::function<float(float, float)> f, glm::vec3 origin, float size,
+void VisualFunction3D::FromFunction(std::function<float(float, float)> f, QVector3D origin, float size,
                                     unsigned segments)
 {
-    float min = origin.x - size / 2.f;
-    float max = origin.x + size / 2.f;
+    float min = origin.x() - size / 2.f;
+    float max = origin.x() + size / 2.f;
 
     FromFunction(f, min, max, min, max, segments);
 }
@@ -106,35 +103,6 @@ void VisualFunction3D::FromFile(std::string fileName)
         }
         file.close();
     }
-    
-    /*
-    if (file.is_open()) {
-        Vertex v;
-        int n;
-        file >> n;
-        file >> std::ws;
-        mVertices.reserve(n);
-        
-        while (std::getline(file, line))
-        {
-            std::stringstream ss(line);
-            std::string val1, val2, val3;
-            ss.ignore(1, '(');
-            std::getline(std::cin, val1, ',');
-            std::getline(std::cin, val2, ',');
-            std::getline(std::cin, val3, ')');
-            std::cout << val1 << ", " << val2 << ", " << val3 << std::endl;
-        }
-        
-        */
-    /*Vertex vertex;
-        
-        for (int i{}; i < n; i++) {
-            in >> vertex;
-            mVertices.push_back(vertex);
-            std::cout << vertex << std::endl;
-        }
-        in.close();*/
 }
 
 

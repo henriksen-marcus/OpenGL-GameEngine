@@ -53,6 +53,9 @@ public:
         }
     }
 
+    Actor* operator [] (const std::string& name) { return mObjects.at(name); }
+
+
 protected:
     std::unordered_map<std::string, Actor*> mObjects;
 };

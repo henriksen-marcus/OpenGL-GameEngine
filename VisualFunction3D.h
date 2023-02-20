@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Actor.h"
 #include <functional>
+
+#include "Actor.h"
 
 class VisualFunction3D : public Actor
 {
@@ -11,7 +12,7 @@ public:
      */
     void Init() override;
  
-    void Draw(GLint modelLocation = -1) override;
+    void Draw(GLint mModelLocation = -1) override;
 
     /**
      * \brief Load data points into this object's mVertices array using the given function.
@@ -31,7 +32,7 @@ public:
      * \param size How long a side of the draw square should be.
      * \param segments How many segments to subdivide the area into, aka resolution.
      */
-    void FromFunction(std::function<float(float, float)> f, glm::vec3 origin, float size, unsigned segments);
+    void FromFunction(std::function<float(float, float)> f, QVector3D origin, float size, unsigned segments);
 
     /**
      * \brief Load data points into this object's mVertices array using a text file.

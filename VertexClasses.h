@@ -34,7 +34,7 @@ struct Vertex
 {
 	float x, y, z, r, g, b, u, v;
 
-	Vertex(float x_, float y_, float z_, float r_=0.f, float g_=0.f, float b_=0.f, float u_=0.f, float v_=0.f)
+    Vertex(float x_, float y_, float z_, float r_=0.f, float g_=0.f, float b_=0.f, float u_=0.f, float v_=0.f)
 	{
 		x = x_;   r = r_;
 		y = y_;   g = g_;
@@ -49,6 +49,26 @@ struct Vertex
         x = loc.x();   r = r_;
         y = loc.y();   g = g_;
         z = loc.z();   b = b_;
+
+        u = u_;
+        v = v_;
+    }
+
+    Vertex(float x_, float y_, float z_, const QVector3D& col = QVector3D(), float u_=0.f, float v_=0.f)
+    {
+        x = x_;   r = col.x();
+        y = y_;   g = col.y();
+        z = z_;   b = col.z();
+
+        u = u_;
+        v = v_;
+    }
+
+    Vertex(const QVector3D& loc, const QVector3D& col, float u_=0.f, float v_=0.f)
+    {
+        x = loc.x();   r = col.x();
+        y = loc.y();   g = col.y();
+        z = loc.z();   b = col.z();
 
         u = u_;
         v = v_;

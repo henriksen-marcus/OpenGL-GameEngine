@@ -6,6 +6,8 @@ void Actor::Init()
 {
     if (mVertices.empty()) return;
 
+    initializeOpenGLFunctions();
+
     glGenVertexArrays(1, &mVAO);
     glBindVertexArray(mVAO);
 

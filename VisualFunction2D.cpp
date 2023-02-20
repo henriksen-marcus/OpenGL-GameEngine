@@ -1,18 +1,11 @@
 #include "VisualFunction2D.h"
 
-#include <iostream>
 #include <fstream>
 #include <string>
-#include <ext/quaternion_common.hpp>
-
 
 void VisualFunction2D::Init()
 {
-    /*for (float i{}; i < segments; i+= delta)
-    {
-        mVertices.push_back(Vertex((float)i, f(i), 0.f));
-        mVertices.push_back(Vertex((float)(i+delta), f(i+delta), 0.f));
-    }*/
+    initializeOpenGLFunctions();
 
     glGenVertexArrays(1, &mVAO);
     glBindVertexArray(mVAO);
@@ -31,9 +24,22 @@ void VisualFunction2D::Init()
     glBindVertexArray(0);
 }
 
-void VisualFunction2D::Draw()
+void VisualFunction2D::Draw(GLint mModelLocation)
 {
     glBindVertexArray(mVAO);
+
+    // Draw with no transformations we we have not gotten the shader "model" location.
+    if (mModelLocation != -1)
+    {
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
+    }
+    else
+    {
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
+    }
+
     glDrawArrays(GL_LINES, 0, mVertices.size());
     glBindVertexArray(0);
 }
@@ -42,23 +48,22 @@ void VisualFunction2D::FromFunction(std::function<float(float)> f, float xmin, f
 {
     mVertices.clear();
     float h = (xmax - xmin) / static_cast<float>(segments);
-    int i{};
+
     for (auto x{xmin}; x < xmax; x+=h)
     {
-        i++;
         float y = f(x);
         float yh = f(x+h);
         
         mVertices.push_back(Vertex(x, y, 0.f, y > 0 ? y : 0.f, 0.f, y < 0 ? abs(y) : 0.f));
         mVertices.push_back(Vertex(x+h, yh, 0.f, yh > 0 ? yh : 0.f, 0.f, yh < 0 ? abs(yh) : 0.f));
-        printf("i: %d\n", i);
+        //printf("i: %d\n", i);
     }
 }
 
-void VisualFunction2D::FromFunction(std::function<float(float)> f, glm::vec3 origin, float sizeX, unsigned segments)
+void VisualFunction2D::FromFunction(std::function<float(float)> f, QVector3D origin, float sizeX, unsigned segments)
 {
-    float xmin = origin.x - sizeX / 2.f;
-    float xmax = origin.x + sizeX / 2.f;
+    float xmin = origin.x() - sizeX / 2.f;
+    float xmax = origin.x() + sizeX / 2.f;
 
     FromFunction(f, xmin, xmax, segments);
 }
