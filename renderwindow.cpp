@@ -9,7 +9,9 @@
 #include <string>
 #include <iostream>
 
-#include "qapplication.h"
+#include "Cube.h"
+#include "XYZ.h"
+#include "Arrow.h"
 #include "renderwindow.h"
 #include "Shader.h"
 #include "mainwindow.h"
@@ -37,6 +39,8 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     // DeltaTime
     frameTimer = new QElapsedTimer();
     frameTimer->start();
+
+    renderer = new Renderer();
 }
 
 
@@ -90,7 +94,7 @@ void RenderWindow::init()
     //general OpenGL stuff:
     glEnable(GL_DEPTH_TEST);            //enables depth sorting - must then use GL_DEPTH_BUFFER_BIT in glClear
     //    glEnable(GL_CULL_FACE);       //draws only front side of models - usually what you want - test it out!
-    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
+    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
 
     //Compile shaders:
     // NB: hardcoded path to files! You have to change this if you change directories for the project.
@@ -99,8 +103,10 @@ void RenderWindow::init()
     mShaderProgram = new Shader();
     mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
-    cube->Init();
-    xyz->Init();
+    //renderer->Add("cube", new Cube(QVector3D(0.f, 0.f, 0.f), 1.f, QVector3D(1.f, 0.5f, 1.f), GL_LINES, true));
+    renderer->Add("xyz", new XYZ(true));
+    renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
+    //renderer->Add("cube", new Cube(QVector3D(), 1.f, QVector3D(0.3f, 0.6f, 1.f), GL_LINES, true));
 }
 
 void RenderWindow::processInput()
@@ -153,8 +159,11 @@ void RenderWindow::render()
     glUniformMatrix4fv(mShaderProgram->GetViewLocation(), 1, GL_FALSE, camera->GetViewMatrix().constData());
 
 
-    xyz->Draw();
-    cube->Draw(mShaderProgram->GetModelLocation());
+    renderer->DrawObjects(mShaderProgram->GetModelLocation());
+    //renderer->Get("arrow")->AddActorLocalRotation(QVector3D(0.f, 0.f, 1.f));
+    //renderer->Get("arrow")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
+    //renderer->Get("xyz")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
+
 
 
     /* Qt require us to call this swapBuffers() -function.

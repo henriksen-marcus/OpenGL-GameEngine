@@ -13,7 +13,7 @@ public:
     Actor(const QVector3D& location = QVector3D(), bool init = false)
     {
         mLocation = location;
-        //if (init) Init();
+        if (init) Init();
     }
 
     void Init() override;
@@ -35,6 +35,14 @@ public:
     virtual void SetActorRotation(const QVector3D& rotation);
     virtual void AddActorLocalRotation(const QVector3D& offset);
 
+    virtual const QQuaternion& GetActorQuatRotation() { return mRotationQuat; }
+    virtual void SetActorRotation(const QQuaternion& rotation);
+    virtual void AddActorLocalRotation(const QQuaternion& offset);
+
+    virtual QVector3D& GetActorForwardVector() { return mForward; }
+    virtual QVector3D& GetActorUpVector() { return mUp; }
+    virtual QVector3D& GetActorRightVector() { return mRight; }
+
     // ---------- Scale ---------- //
     virtual const QVector3D& GetActorScale();
     virtual void SetActorScale(const QVector3D& rotation);
@@ -44,6 +52,16 @@ public:
     
 protected:
     virtual void UpdateModelMatrix();
+    virtual void UpdateModelMatrixQuat();
+    virtual void UpdateVectors();
+
+    QVector3D mForward  {0.f, 0.f, 1.f};
+    QVector3D mUp       {0.f, 1.f, 0.f};
+    QVector3D mWorldUp  {0.f, 1.f, 0.f};
+    QVector3D mRight    {1.f, 0.f, 0.f};
+
+    float mPitch{};
+    float mYaw{};
 };
 
 

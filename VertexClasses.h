@@ -1,5 +1,6 @@
 #pragma once
 
+#include "qvectornd.h"
 #include <fstream>
 
 struct Vertex0
@@ -42,6 +43,16 @@ struct Vertex
 		u = u_;
 		v = v_;
 	}
+
+    Vertex(const QVector3D& loc, float r_=0.f, float g_=0.f, float b_=0.f, float u_=0.f, float v_=0.f)
+    {
+        x = loc.x();   r = r_;
+        y = loc.y();   g = g_;
+        z = loc.z();   b = b_;
+
+        u = u_;
+        v = v_;
+    }
 
 	Vertex()
 	{

@@ -2,6 +2,7 @@
 
 #include <QOpenGLFunctions_4_1_Core>
 
+#include "BaseObject.h"
 #include "qmatrix4x4.h"
 #include "qvectornd.h"
 #include "enums.h"
@@ -16,7 +17,7 @@ const float DEFAULT_FOV =  70.f;
 const float MAX_FOV     =  100.f;
 const float MIN_FOV     =  35.f;
 
-class Camera : public QOpenGLFunctions_4_1_Core
+class Camera : public BaseObject
 {
 public:
     // camera Attributes

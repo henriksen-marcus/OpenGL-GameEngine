@@ -11,7 +11,7 @@
 class XYZ : public Actor
 {
 public:
-    XYZ();
+    XYZ(bool init = false);
 
 	/**
 	 * \brief Load the vertex data into memory and save information
@@ -22,7 +22,7 @@ public:
 	/**
 	 * \brief Render call.
 	 */
-    void Draw();
+    void Draw(GLint mMatrixLocation = -1) override;
 
 private:
     std::vector<Vertex0> mVertices;

@@ -1,7 +1,7 @@
 #include "XYZ.h"
 
 
-XYZ::XYZ()
+XYZ::XYZ(bool init)
 {
 	// We are not using an IBO here, just declaring points over again.
 	mVertices.push_back(Vertex0{0,0,0,1,0,0});
@@ -12,6 +12,8 @@ XYZ::XYZ()
 	
 	mVertices.push_back(Vertex0{0,0,0,0,0,1});
 	mVertices.push_back(Vertex0{0,0,1,0,0,1});
+
+    if (init) Init();
 }
 
 void XYZ::Init()
@@ -54,8 +56,22 @@ void XYZ::Init()
 	glBindVertexArray(0);
 }
 
-void XYZ::Draw()
+void XYZ::Draw(GLint mModelLocation)
 {
+    initializeOpenGLFunctions();
+
+    // Draw with no transformations we we have not gotten the shader "model" location.
+    if (mModelLocation != -1)
+    {
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
+    }
+    else
+    {
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
+    }
+
 	// Set the VAO as the current render state, which holds info about the VBO
 	glBindVertexArray(mVAO);
 	// Draw to screen

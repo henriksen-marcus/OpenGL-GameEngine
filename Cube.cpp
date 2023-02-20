@@ -6,8 +6,8 @@
 Cube::Cube(const QVector3D& origin, float size, const QVector3D& color, GLenum drawMode, bool init)
 {
     mVertices.clear();
-    mLocation = origin;
-    size /= 2; // Center the cube on the given origin
+
+    size *= 0.5f; // Center the cube on the given origin
 
     mVertices.emplace_back(-size, -size, -size, color.x(), color.y(), color.z()); // Origin 0
     mVertices.emplace_back(size, -size, -size, color.x(), color.y(), color.z()); // X 1
@@ -21,11 +21,12 @@ Cube::Cube(const QVector3D& origin, float size, const QVector3D& color, GLenum d
     mVertices.emplace_back(size, size, size, color.x(), color.y(), color.z()); // XYZ 7
 
     size *= 2;
-    Actor::UpdateModelMatrix();
 
+    mLocation = origin;
+    UpdateModelMatrix();
     mode = drawMode;
 
-    //if (init) Init();
+    if (init) Init();
 }
 
 void Cube::Init()
@@ -61,20 +62,28 @@ void Cube::Init()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind
 }
 
-void Cube::Draw(GLint modelLocation)
+void Cube::Draw(GLint mModelLocation)
 {
+    initializeOpenGLFunctions();
+
     glBindVertexArray(mVAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
-    if (modelLocation != -1)
+
+    // Draw with no transformations we we have not gotten the shader "model" location.
+    if (mModelLocation != -1)
     {
-        //glUniformMatrix4fv(modelLocation, 1, GL_FALSE, mMatrix.constData());
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
     }
     else
     {
-        printf("modellocation was -1.");
+        QMatrix4x4 temp;
+        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
     }
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
     glDrawElements(mode, mIndices.size(), GL_UNSIGNED_INT, nullptr);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     glBindVertexArray(0);
 }
 

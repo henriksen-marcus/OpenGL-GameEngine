@@ -5,13 +5,11 @@
 #include <vector>
 #include "VertexClasses.h"
 
+#include "BaseObject.h"
 
-class VisualObject : public QOpenGLFunctions_4_1_Core
+class VisualObject : public BaseObject
 {
 public:
-    VisualObject()
-    {}
-
     virtual ~VisualObject()
     {
         // We can delete these safely even if they don't exist
@@ -52,8 +50,10 @@ protected:
     // The world-space rotation of the object
     QVector3D mRotation{};
 
+    QQuaternion mRotationQuat{};
+
     // The world-space scale of the object
-    QVector3D mScale{};
+    QVector3D mScale{1.f, 1.f, 1.f};
 
     // Handles scaling, rotation and translation of the object
     QMatrix4x4 mMatrix{};

@@ -5,10 +5,9 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
-#include "Cube.h"
 #include "Camera.h"
-#include "XYZ.h"
 #include "enums.h"
+#include "Renderer.h"
 
 class QOpenGLContext;
 class Shader;
@@ -58,7 +57,7 @@ private:
     // Logger - Output Log in the application
     class Logger* mLogger;
 
-    float FOV{70.f};
+    float FOV{75.f};
     float aspectRatio{16.f/9.f};
     float nearPlane{0.01f};
     float farPlane{1000.f};
@@ -72,6 +71,10 @@ private:
     float lastMouseY{0.f};
 
     std::vector<Movement> heldKeys;
+
+    Renderer* renderer;
+
+    Camera* camera = new Camera(QVector3D(0.f, 0.f, 1.f));
 
     void processInput();
 
@@ -94,10 +97,4 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;              //the only one we use now
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
-
-
-public:
-    Cube* cube = new Cube(QVector3D(0.f, 0.f, -4.f), 1.f, QVector3D(1.f, 0.5f, 1.f), GL_LINES);
-    Camera* camera = new Camera(QVector3D(0.f, 0.f, 1.f));
-    XYZ* xyz = new XYZ();
 };

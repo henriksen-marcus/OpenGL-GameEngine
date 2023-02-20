@@ -7,7 +7,11 @@ TARGET      = 3D-programmering
 
 SOURCES += main.cpp \
     Actor.cpp \
+    Arrow.cpp \
+    BaseObject.cpp \
     Cube.cpp \
+    Pawn.cpp \
+    SceneComponent.cpp \
     Shader.cpp \
     XYZ.cpp \
     logger.cpp \
@@ -16,8 +20,13 @@ SOURCES += main.cpp \
 
 HEADERS += \
     Actor.h \
+    Arrow.h \
+    BaseObject.h \
     Camera.h \
     Cube.h \
+    Pawn.h \
+    Renderer.h \
+    SceneComponent.h \
     Shader.h \
     VertexClasses.h \
     VisualObject.h \
@@ -26,6 +35,8 @@ HEADERS += \
     logger.h \
     mainwindow.h \
     renderwindow.h
+
+HEADERS += $$SOURCES
 
 FORMS += \
     mainwindow.ui
@@ -36,4 +47,3 @@ DISTFILES += \
     plainshader.vert \
     vertex.vert
 
-#LIBS += -lOpenGL32
