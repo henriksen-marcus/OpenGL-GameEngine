@@ -111,8 +111,11 @@ void RenderWindow::init()
     mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
     //renderer->Add("xyz", new XYZ(true));
-    //renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
+    renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
     //renderer->Add("cube", new Cube(QVector3D(), 1.f, QVector3D(0.3f, 0.6f, 1.f), GL_LINES, true));
+
+    FAxisInfo info = FAxisInfo{3, 1.f, 0.3f, QVector3D{10.f, 10.f, 10.f}};
+    renderer->Add("axis", new Axis(info, true));
 
     std::vector<QPointF> points;
     points.emplace_back(1.f, 1.f);
@@ -123,24 +126,40 @@ void RenderWindow::init()
     points.emplace_back(6.f, 7.f);
     points.emplace_back(7.f, 4.f);
 
+//    VisualPoints* pointspace = new VisualPoints(QVector3D(), 5);
+//    pointspace->AddPoints(points);
+//    pointspace->Init();
+//    renderer->Add("pointspace", pointspace);
+
+//    QVector3D abc = task_4_4_4(points);
+//    auto px = [abc](float x) { return abc.x() * pow(x, 2) + abc.y() * x + abc.z(); };
+
+//    auto* func = new VisualFunction2D();
+//    func->FromFunction(px, 0.f, 7.f, 100);
+//    func->Init();
+//    renderer->Add("func", func);
+
+
+    points.clear();
+    points.emplace_back(1.f, 2.f);
+    points.emplace_back(2.f, 1.f);
+    points.emplace_back(3.f, 3.f);
+    points.emplace_back(4.f, 2.f);
 
     VisualPoints* pointspace = new VisualPoints(QVector3D(), 5);
     pointspace->AddPoints(points);
     pointspace->Init();
     renderer->Add("pointspace", pointspace);
 
-
-    QVector3D abc = task_4_4_4(points);
-
-    auto px = [abc](float x) { return abc.x() * pow(x, 2) + abc.y() * x + abc.z(); };
+    QVector4D abcd = task_4_6_10(points);
+    auto px2 = [abcd](float x) { return abcd.x() * pow(x, 3) + abcd.y() * pow(x, 2) + abcd.z() * x + abcd.w(); };
 
     auto* func = new VisualFunction2D();
-    func->FromFunction(px, 0.f, 7.f, 100);
+    func->FromFunction(px2, 0.f, 4.f, 100);
     func->Init();
     renderer->Add("func", func);
 
-    FAxisInfo info = FAxisInfo{2, 1.f, 0.3f, QVector3D{10.f, 10.f, 0.f}};
-    renderer->Add("axis", new Axis(info, true));
+
 }
 
 void RenderWindow::processInput()
@@ -195,7 +214,7 @@ void RenderWindow::render()
 
     renderer->DrawObjects(mShaderProgram->GetModelLocation());
     //renderer->Get("arrow")->AddActorLocalRotation(QVector3D(0.f, 0.f, 1.f));
-    //renderer->Get("arrow")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
+    renderer->Get("arrow")->AddActorLocalOffset(QVector3D(0.f, 0.01f, 0.f));
     //renderer->Get("xyz")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
 
 

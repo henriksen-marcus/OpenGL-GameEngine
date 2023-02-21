@@ -132,27 +132,6 @@ void Arrow::Draw(GLint mModelLocation)
 
 void Arrow::SetDirection(const QVector3D& direction)
 {
-//    // Get the current forward vector
-//    QVector3D currentForward = GetActorForwardVector();
-
-//    // Calculate the rotation angle in degrees
-//    float angle = qRadiansToDegrees(qAcos(QVector3D::dotProduct(currentForward, direction)));
-
-//    // Calculate the rotation axis
-//    QVector3D axis = QVector3D::crossProduct(currentForward, direction).normalized();
-//    axis *= angle;
-
-//    SetActorRotation(axis);
-
     QQuaternion additionalRot = QQuaternion::rotationTo(GetActorForwardVector(), direction);
-    //QVector3D rot = additionalRot.toEulerAngles();
-
-    //printf("x %f y %f z %f", rot.x(), rot.y(), rot.z());
     AddActorLocalRotation(additionalRot);
-    //QQuaternion oldRot = QQuaternion::fromEulerAngles(mRotation);
-    //QQuaternion newRotation = additionalRot * oldRot;
-
-    // Apply the rotation to the arrow's current rotation
-    //mRotation = newRotation.toEulerAngles();
-    //UpdateModelMatrix();
 }
