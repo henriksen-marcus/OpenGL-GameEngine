@@ -2,6 +2,12 @@
 
 // I hate Qt
 
+Actor::Actor(const QVector3D& location, bool init)
+{
+    mLocation = location;
+    if (init) Init();
+}
+
 void Actor::Init()
 {
     if (mVertices.empty()) return;
@@ -22,9 +28,12 @@ void Actor::Init()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
-    glGenBuffers(1, &mIBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
+    if (!mIndices.empty())
+    {
+        glGenBuffers(1, &mIBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
+    }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind
     glBindVertexArray(0); // This should be above the unbind beneath
@@ -131,6 +140,21 @@ void Actor::AddActorLocalScale(const QVector3D& offset)
 {
     mScale += offset;
     UpdateModelMatrix();
+}
+
+const Boundry2D& Actor::GetCollisionComponent()
+{
+    return mCollisionComponent;
+}
+
+void Actor::SetCollisionComponent(const Boundry2D& boundry)
+{
+    mCollisionComponent = boundry;
+}
+
+void Actor::SetCollisionComponent(float halfLength)
+{
+    mCollisionComponent = Boundry2D(QVector2D(mLocation.x(), mLocation.y()), halfLength);
 }
 
 

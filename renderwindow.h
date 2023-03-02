@@ -74,7 +74,7 @@ private:
 
     Renderer* renderer;
 
-    Camera* camera = new Camera(QVector3D(0.f, 0.f, 1.f));
+    Camera* camera = new Camera(QVector3D(0.f, 0.f, 3.f));
 
     void processInput();
 

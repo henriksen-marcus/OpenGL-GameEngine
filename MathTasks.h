@@ -39,10 +39,11 @@ QVector3D task_4_4_4(const std::vector<QPointF>& points)
 
     Matrix<float, 3, 1> xVec = bMat.inverse() * cMat;
 
-    //std::cout << "result: " << xVec(0,0) << " ," << xVec(1,0) << " ," << xVec(2,0) << std::endl;
+    std::cout << "result: " << xVec(0,0) << " ," << xVec(1,0) << " ," << xVec(2,0) << std::endl;
 
     return QVector3D(xVec(0,0), xVec(1,0), xVec(2,0));
 }
+
 
 QVector4D task_4_6_10(const std::vector<QPointF>& points)
 {

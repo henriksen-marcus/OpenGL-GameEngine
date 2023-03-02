@@ -2,6 +2,7 @@
 
 #include <functional>
 #include "VisualObject.h"
+#include "Boundry2D.h"
 
 class Actor : public VisualObject
 {
@@ -10,11 +11,7 @@ public:
      * \param location The starting location of the actor.
      * \param init If we should call init right after construction (saves a line of code).
      */
-    Actor(const QVector3D& location = QVector3D(), bool init = false)
-    {
-        mLocation = location;
-        if (init) Init();
-    }
+    Actor(const QVector3D& location = QVector3D(), bool init = false);
 
     void Init() override;
 
@@ -49,6 +46,10 @@ public:
     virtual void AddActorLocalScale(const QVector3D& offset);
     
     const QMatrix4x4& GetModelMatrix() { return mMatrix; }
+
+    const Boundry2D& GetCollisionComponent();
+    void SetCollisionComponent(const Boundry2D& boundry);
+    void SetCollisionComponent(float halfLength);
     
 protected:
     virtual void UpdateModelMatrix();
@@ -62,6 +63,8 @@ protected:
 
     float mPitch{};
     float mYaw{};
+
+    Boundry2D mCollisionComponent{};
 };
 
 

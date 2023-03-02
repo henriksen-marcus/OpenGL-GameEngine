@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+
+#include "BaseObject.h"
 #include "Actor.h"
 
 struct RenderObject
@@ -8,7 +10,7 @@ struct RenderObject
     std::string name = "";
 };
 
-class Renderer : QOpenGLFunctions_4_1_Core
+class Renderer : public BaseObject
 {
 public:
     /**

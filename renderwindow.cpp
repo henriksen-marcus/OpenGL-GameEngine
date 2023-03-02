@@ -16,6 +16,11 @@
 #include "VisualFunction3D.h"
 #include "VisualPoints.h"
 #include "Axis.h"
+#include "BaseObject.h"
+#include "World.h"
+#include "WorldManager.h"
+#include "Plane.h"
+#include "Quadtree.h"
 
 #include "MathTasks.h"
 #include "functions.h"
@@ -101,7 +106,7 @@ void RenderWindow::init()
     //general OpenGL stuff:
     glEnable(GL_DEPTH_TEST);            //enables depth sorting - must then use GL_DEPTH_BUFFER_BIT in glClear
     //    glEnable(GL_CULL_FACE);       //draws only front side of models - usually what you want - test it out!
-    glClearColor(0.3f, 0.3f, 0.3f, 1.0f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
+    glClearColor(128.f/255.f, 200.f/255.f, 0.9f, 1.f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
 
     //Compile shaders:
     // NB: hardcoded path to files! You have to change this if you change directories for the project.
@@ -111,54 +116,46 @@ void RenderWindow::init()
     mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
     //renderer->Add("xyz", new XYZ(true));
-    renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
+    //renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
     //renderer->Add("cube", new Cube(QVector3D(), 1.f, QVector3D(0.3f, 0.6f, 1.f), GL_LINES, true));
 
-    FAxisInfo info = FAxisInfo{3, 1.f, 0.3f, QVector3D{10.f, 10.f, 10.f}};
-    renderer->Add("axis", new Axis(info, true));
+    auto* a1 = new Actor(QVector3D(0.5f, -0.5f, 0.f));
+    a1->SetCollisionComponent(0.25f);
+    auto* a2 = new Actor(QVector3D(-0.2f, -0.5f, 0.f));
+    a2->SetCollisionComponent(0.3f);
+    auto* a3 = new Actor(QVector3D(0.8f, 0.5f, 0.f));
+    a3->SetCollisionComponent(0.1f);
 
-    std::vector<QPointF> points;
-    points.emplace_back(1.f, 1.f);
-    points.emplace_back(2.f, 3.f);
-    points.emplace_back(3.f, 0.f);
-    points.emplace_back(4.f, 1.f);
-    points.emplace_back(5.f, 2.f);
-    points.emplace_back(6.f, 7.f);
-    points.emplace_back(7.f, 4.f);
-
-//    VisualPoints* pointspace = new VisualPoints(QVector3D(), 5);
-//    pointspace->AddPoints(points);
-//    pointspace->Init();
-//    renderer->Add("pointspace", pointspace);
-
-//    QVector3D abc = task_4_4_4(points);
-//    auto px = [abc](float x) { return abc.x() * pow(x, 2) + abc.y() * x + abc.z(); };
-
-//    auto* func = new VisualFunction2D();
-//    func->FromFunction(px, 0.f, 7.f, 100);
-//    func->Init();
-//    renderer->Add("func", func);
+    renderer->Add("a1", new Plane(QVector3D(0.5f, -0.5f, 0.f), 0.5f, 0.5f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
+    renderer->Get("a1")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
 
-    points.clear();
-    points.emplace_back(1.f, 2.f);
-    points.emplace_back(2.f, 1.f);
-    points.emplace_back(3.f, 3.f);
-    points.emplace_back(4.f, 2.f);
+    renderer->Add("a2", new Plane(QVector3D(-0.2f, -0.5f, 0.f), 0.6f, 0.6f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
+    renderer->Get("a2")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
-    VisualPoints* pointspace = new VisualPoints(QVector3D(), 5);
-    pointspace->AddPoints(points);
-    pointspace->Init();
-    renderer->Add("pointspace", pointspace);
 
-    QVector4D abcd = task_4_6_10(points);
-    auto px2 = [abcd](float x) { return abcd.x() * pow(x, 3) + abcd.y() * pow(x, 2) + abcd.z() * x + abcd.w(); };
+    renderer->Add("a3", new Plane(QVector3D(0.8f, 0.5f, 0.f), 0.2f, 0.2f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
+    renderer->Get("a3")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
-    auto* func = new VisualFunction2D();
-    func->FromFunction(px2, 0.f, 4.f, 100);
-    func->Init();
-    renderer->Add("func", func);
+    auto* quad = new Quadtree(Boundry2D(QVector2D(0.f, 0.f), 2.f), 0.f);
+    //quad->Subdivide();
+//    quad->ne->Subdivide();
+//    quad->ne->ne->Subdivide();
+//    quad->ne->ne->ne->Subdivide();
 
+    quad->Insert(a1);
+    quad->Insert(a2);
+    quad->Insert(a3);
+
+    std::vector<Actor*> found;
+    quad->Query(found, Boundry2D(QVector2D(0.f, 0.f), 0.4f));
+    printf("found: %d\n", found.size());
+
+    renderer->Add("a4", new Plane(QVector3D(0.f, 0.f, 0.f), 0.8f, 0.8f, QVector3D(0.f, 0.f, 1.f), GL_LINES));
+    renderer->Get("a4")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+
+    quad->Init();
+    renderer->Add("quad", quad);
 
 }
 
@@ -214,7 +211,6 @@ void RenderWindow::render()
 
     renderer->DrawObjects(mShaderProgram->GetModelLocation());
     //renderer->Get("arrow")->AddActorLocalRotation(QVector3D(0.f, 0.f, 1.f));
-    renderer->Get("arrow")->AddActorLocalOffset(QVector3D(0.f, 0.01f, 0.f));
     //renderer->Get("xyz")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
 
 
