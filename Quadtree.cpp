@@ -1,7 +1,7 @@
 #include "Quadtree.h"
 #include <iostream>
 
-Quadtree::Quadtree(const Boundry2D& boundry, float _z)
+Quadtree::Quadtree(Boundry2D* boundry, float _z)
     : mBoundry(boundry), z(_z), mIsDivided(false)
 {
 }
@@ -13,7 +13,7 @@ void Quadtree::Insert(Actor* actor)
     /* If this node does't contain the center
      * position of the new actor, let another node
      * handle it. */
-    if (!mBoundry.Contains(actor)) return;
+    if (!mBoundry->Contains(actor)) return;
 
     /* If we get too many objects in this node,
      * split it into four to allow for more
@@ -39,25 +39,25 @@ void Quadtree::Subdivide()
     if (mIsDivided) return;
     mIsDivided = true;
 
-    float newHL = mBoundry.mHalfLength * 0.5f;
-    QVector2D loc = mBoundry.mLocation;
+    float newHL = mBoundry->mHalfLength * 0.5f;
+    QVector2D loc = mBoundry->mLocation;
 
-    this->nw = new Quadtree(Boundry2D(QVector2D(loc.x()-newHL, loc.y()+newHL), newHL), z+incr);
-    this->ne = new Quadtree(Boundry2D(QVector2D(loc.x()+newHL, loc.y()+newHL), newHL), z+incr);
-    this->sw = new Quadtree(Boundry2D(QVector2D(loc.x()-newHL, loc.y()-newHL), newHL), z+incr);
-    this->se = new Quadtree(Boundry2D(QVector2D(loc.x()+newHL, loc.y()-newHL), newHL), z+incr);
+    this->nw = new Quadtree(new Boundry2D(QVector2D(loc.x()-newHL, loc.y()+newHL), newHL), z+incr);
+    this->ne = new Quadtree(new Boundry2D(QVector2D(loc.x()+newHL, loc.y()+newHL), newHL), z+incr);
+    this->sw = new Quadtree(new Boundry2D(QVector2D(loc.x()-newHL, loc.y()-newHL), newHL), z+incr);
+    this->se = new Quadtree(new Boundry2D(QVector2D(loc.x()+newHL, loc.y()-newHL), newHL), z+incr);
 }
 
-void Quadtree::Query(std::vector<Actor*>& found, const Boundry2D& boundry)
+void Quadtree::Query(std::vector<Actor*>& found, Boundry2D* boundry)
 {
     // If this node's boundry is completely outside the given boundry
-    if (!mBoundry.Intersects(boundry)) return;
+    if (!mBoundry->Intersects(boundry)) return;
 
     // Check for actors inside self
     for (auto actor : mActors)
     {
         // Here we check for the actual collision
-        if (boundry.Intersects(actor)) found.push_back(actor);
+        if (boundry->Intersects(actor)) found.push_back(actor);
     }
 
     if (mIsDivided)
@@ -73,8 +73,8 @@ void Quadtree::Query(std::vector<Actor*>& found, const Boundry2D& boundry)
 void Quadtree::InitLines(std::vector<Vertex>& arr)
 {
     z = 0;
-    QVector2D loc = mBoundry.mLocation;
-    float hl = mBoundry.mHalfLength;
+    QVector2D loc = mBoundry->mLocation;
+    float hl = mBoundry->mHalfLength;
 
     // Square
     arr.emplace_back(loc.x() - hl, loc.y() + hl, z, 1.f);

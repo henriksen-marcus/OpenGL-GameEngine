@@ -4,6 +4,8 @@
 #include "VisualObject.h"
 #include "Boundry2D.h"
 
+class SceneComponent;
+
 class Actor : public VisualObject
 {
 public:
@@ -47,9 +49,14 @@ public:
     
     const QMatrix4x4& GetModelMatrix() { return mMatrix; }
 
-    const Boundry2D& GetCollisionComponent();
-    void SetCollisionComponent(const Boundry2D& boundry);
+    Boundry2D* GetCollisionComponent();
+    void SetCollisionComponent(Boundry2D* boundry);
     void SetCollisionComponent(float halfLength);
+
+    virtual void BeginPlay(){};
+    virtual void Tick(float deltaTime);
+    virtual void OnCollision(){};
+    virtual void OnCollision(Actor* otherActor){};
     
 protected:
     virtual void UpdateModelMatrix();
@@ -59,12 +66,13 @@ protected:
     QVector3D mForward  {0.f, 0.f, 1.f};
     QVector3D mUp       {0.f, 1.f, 0.f};
     QVector3D mWorldUp  {0.f, 1.f, 0.f};
-    QVector3D mRight    {1.f, 0.f, 0.f};
+    QVector3D mRight    {-1.f, 0.f, 0.f};
 
     float mPitch{};
     float mYaw{};
 
-    Boundry2D mCollisionComponent{};
+    Boundry2D* mCollisionComponent{};
+    std::vector<SceneComponent*> mComponents;
 };
 
 

@@ -3,6 +3,8 @@
 #include "Actor.h"
 #include "enums.h"
 
+class Camera;
+
 class Pawn : public Actor
 {
 public:
@@ -10,17 +12,20 @@ public:
 
     void Init() override;
 
-    void ProcessKeyboard(enum Movement direction, float deltaTime);
+    void ProcessKeyboard(Movement direction);
     void ProcessMouseMovement(float xoffset, float yoffset);
     void updateVectors();
     void UpdateCamera();
 
     void SetActor(Actor* actorToPossess, bool deleteCurrent = false);
-    Actor* GetActor() { return posessedActor; }
+    Actor* GetActor() { return mPosessedActor; }
 
-    virtual void Update();
+    Camera* GetCamera();
 
     void Draw(GLint mModelLocation = -1) override;
+
+    virtual void Tick(float deltaTime) override;
+    virtual void OnPickup(PickupType pickup){};
 
 protected:
     // Vectors
@@ -32,8 +37,11 @@ protected:
     float Yaw{};
     float Pitch{};
     
-    float movementSpeed;
-    float mouseSensitivity;
+    float mMovementSpeed;
+    float mMouseSensitivity;
 
-    Actor* posessedActor;
+    Actor* mPosessedActor;
+
+    // The current active camera
+    Camera* mCamera;
 };

@@ -29,14 +29,14 @@ bool Boundry2D::Contains(Actor* actor) const
     return Contains(point);
 }
 
-bool Boundry2D::Intersects(const Boundry2D& boundry) const
+bool Boundry2D::Intersects(Boundry2D* boundry) const
 {
     return
         !(
-            boundry.maxPoint.x() < minPoint.x() || // Object is to the left
-            boundry.minPoint.x() > maxPoint.x() || // Object is to the right
-            boundry.maxPoint.y() < minPoint.y() || // Object is under
-            boundry.minPoint.y() > maxPoint.y()    // Object is above
+            boundry->maxPoint.x() < minPoint.x() || // Object is to the left
+            boundry->minPoint.x() > maxPoint.x() || // Object is to the right
+            boundry->maxPoint.y() < minPoint.y() || // Object is under
+            boundry->minPoint.y() > maxPoint.y()    // Object is above
         );
 }
 

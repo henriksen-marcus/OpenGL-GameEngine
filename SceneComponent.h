@@ -1,16 +1,16 @@
 #pragma once
 
+#include "BaseObject.h"
 #include "qquaternion.h"
 #include "qvectornd.h"
-#include <QOpenGLFunctions_4_1_Core>
 
-class VisualObject;
+
 class Actor;
 
-class SceneComponent : public QOpenGLFunctions_4_1_Core
+class SceneComponent : public BaseObject
 {
 public:
-    SceneComponent();
+    SceneComponent(Actor* parent);
 
     /* Attch this object to the given actor. */
     void SetupAttachment(Actor* parent);
@@ -47,11 +47,18 @@ public:
 
     // ---------- Scale ---------- //
     virtual const QVector3D& GetActorScale() { return mScale; }
-    virtual void SetActorScale(const QVector3D& rotation);
+    virtual void SetActorScale(const QVector3D& scale);
     virtual void AddActorLocalScale(const QVector3D& offset);
 
+    virtual void Tick(float deltaTime);
+
+    /* If the component should copy the position
+     * of it's owning actor, with an offset. */
+    bool followParentTransform{true};
+    bool followParentRotation{true};
+
 protected:
-    VisualObject* mParent;
+    Actor* mParent;
 
     QVector3D mRelativeLocation{};
     QVector3D mWorldLocation{};
@@ -65,6 +72,6 @@ protected:
     QVector3D mForward  {0.f, 0.f, 1.f};
     QVector3D mUp       {0.f, 1.f, 0.f};
     QVector3D mWorldUp  {0.f, 1.f, 0.f};
-    QVector3D mRight    {1.f, 0.f, 0.f};
+    QVector3D mRight    {-1.f, 0.f, 0.f};
 };
 

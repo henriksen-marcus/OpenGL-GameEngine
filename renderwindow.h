@@ -12,6 +12,7 @@
 class QOpenGLContext;
 class Shader;
 class MainWindow;
+class Scene1;
 
 /* This inherits from QWindow to get access to the Qt functionality and
  * OpenGL surface. We also inherit from QOpenGLFunctions, to get access
@@ -72,9 +73,11 @@ private:
 
     std::vector<Movement> heldKeys;
 
-    Renderer* renderer;
+    //Renderer* renderer;
 
-    Camera* camera = new Camera(QVector3D(0.f, 0.f, 3.f));
+    //Camera* camera = new Camera(QVector3D(0.f, 0.f, 3.f));
+
+    Scene1* scene1;
 
     void processInput();
 

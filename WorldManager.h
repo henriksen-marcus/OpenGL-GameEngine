@@ -3,9 +3,6 @@
 #include "BaseObject.h"
 #include "World.h"
 
-#include <iostream>
-#include <cstdlib>
-
 class WorldManager : public BaseObject
 {
 public:

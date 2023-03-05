@@ -1,4 +1,5 @@
 ﻿#include "Actor.h"
+#include "SceneComponent.h"
 
 // I hate Qt
 
@@ -42,6 +43,8 @@ void Actor::Init()
 
 void Actor::Draw(GLint mModelLocation)
 {
+    if (mVertices.empty()) return;
+
     glBindVertexArray(mVAO);
 
     // Draw with no transformations we we have not gotten the shader "model" location.
@@ -100,12 +103,14 @@ const QVector3D& Actor::GetActorRotation()
 void Actor::SetActorRotation(const QVector3D& rotation)
 {
     mRotation = rotation;
+    mRotationQuat = QQuaternion::fromEulerAngles(rotation);
     UpdateModelMatrix();
 }
 
 void Actor::AddActorLocalRotation(const QVector3D& offset)
 {
     mRotation += offset;
+    mRotationQuat += QQuaternion::fromEulerAngles(offset);
     UpdateModelMatrix();
 }
 
@@ -142,22 +147,28 @@ void Actor::AddActorLocalScale(const QVector3D& offset)
     UpdateModelMatrix();
 }
 
-const Boundry2D& Actor::GetCollisionComponent()
+Boundry2D* Actor::GetCollisionComponent()
 {
     return mCollisionComponent;
 }
 
-void Actor::SetCollisionComponent(const Boundry2D& boundry)
+void Actor::SetCollisionComponent(Boundry2D* boundry)
 {
     mCollisionComponent = boundry;
 }
 
 void Actor::SetCollisionComponent(float halfLength)
 {
-    mCollisionComponent = Boundry2D(QVector2D(mLocation.x(), mLocation.y()), halfLength);
+    mCollisionComponent = new Boundry2D(QVector2D(mLocation.x(), mLocation.y()), halfLength);
 }
 
-
+void Actor::Tick(float deltaTime)
+{
+    for (auto c :mComponents)
+    {
+        c->Tick(deltaTime);
+    }
+}
 
 void Actor::UpdateModelMatrix()
 {

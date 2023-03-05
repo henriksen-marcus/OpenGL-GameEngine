@@ -6,6 +6,7 @@
 class Actor;
 class QElapsedTimer;
 class PauseableTimer;
+class Quadtree;
 
 class World : BaseObject
 {
@@ -14,29 +15,33 @@ public:
 
     void InitWorld();
 
+    /* Runs tick and draw on all actors in the world. */
+    virtual void Tick(float deltaTime, GLint mModelLocation);
+
     bool ContainsActor(Actor* actor);
+    bool ContainsActor(const std::string& name);
 
     bool IsPaused() { return isPaused; }
     void Pause(bool shouldPause);
     std::string GetMapName() { return mapName; }
-    float GetDeltaSeconds() { return deltaTime; }
+    float GetDeltaSeconds() { return mDeltaTime; }
     float GetTimeSeconds();
     float GetUnpausedTimeSeconds();
 
     template<class T>
     inline Actor* SpawnActor(const QVector3D& location, const QQuaternion& rotation);
+    void RemoveActor(Actor* actor);
 
 protected:
     Renderer* mRenderer;
-
+    Quadtree* mQuadtree;
     std::vector<Actor*> mActors;
-
     std::string mapName;
 
-    bool isPaused{};
+    bool isPaused;
     bool isWorldInitialized{};
 
-    float deltaTime{};
+    float mDeltaTime{};
     float timeSeconds{};
     float unpausedTimeSeconds{};
 

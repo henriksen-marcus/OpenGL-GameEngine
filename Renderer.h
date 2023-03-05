@@ -41,16 +41,38 @@ public:
         return mObjects.at(name); // Can be nullptr
     }
 
+    /* Run this function once at the start of the game. */
+    virtual void BeginPlay(GLint modelLocation)
+    {
+        for (auto it = mObjects.begin(); it != mObjects.end(); ++it)
+        {
+            it->second->BeginPlay();
+            it->second->Draw(modelLocation);
+        }
+    }
+
+    virtual Actor* Find(std::string name)
+    {
+        auto it = mObjects.find(name);
+        if (it != mObjects.end()) {
+            return it->second;
+        }
+        else {
+            return nullptr;
+        }
+    }
+
     /**
      * \brief Loop through the listed objects and draw them
      * on the screen.
      * \param modelLocation Shader location of the model matrix, so
      * that the objects can transform.
      */
-    virtual void DrawObjects(GLint modelLocation)
+    virtual void DrawObjects(GLint modelLocation, float deltaTime)
     {
         for (auto it = mObjects.begin(); it != mObjects.end(); ++it)
         {
+            it->second->Tick(deltaTime);
             it->second->Draw(modelLocation);
         }
     }

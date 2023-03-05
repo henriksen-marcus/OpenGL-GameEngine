@@ -11,14 +11,19 @@ SOURCES += main.cpp \
     Axis.cpp \
     BaseObject.cpp \
     Boundry2D.cpp \
+    CameraComponent.cpp \
     Cube.cpp \
+    CubePlayer.cpp \
+    HealthPack.cpp \
     Octree.cpp \
     Pawn.cpp \
     Plane.cpp \
+    PlayerController.cpp \
     Quadtree.cpp \
     Scene1.cpp \
     SceneComponent.cpp \
     Shader.cpp \
+    StaticSceneCamera.cpp \
     VisualFunction2D.cpp \
     VisualFunction3D.cpp \
     World.cpp \
@@ -35,17 +40,22 @@ HEADERS += \
     BaseObject.h \
     Boundry2D.h \
     Camera.h \
+    CameraComponent.h \
     Cube.h \
+    CubePlayer.h \
+    HealthPack.h \
     MathTasks.h \
     Octree.h \
     PausableTimer.h \
     Pawn.h \
     Plane.h \
+    PlayerController.h \
     Quadtree.h \
     Renderer.h \
     Scene1.h \
     SceneComponent.h \
     Shader.h \
+    StaticSceneCamera.h \
     TimeManager.h \
     VertexClasses.h \
     VisualFunction2D.h \

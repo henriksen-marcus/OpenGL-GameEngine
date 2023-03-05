@@ -9,3 +9,11 @@ enum Movement {
     DOWN,
     JUMP
 };
+
+enum PickupType
+{
+    Health,
+    Speed,
+    Life,
+    Damage
+};

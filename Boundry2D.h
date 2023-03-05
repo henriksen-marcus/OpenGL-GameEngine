@@ -23,7 +23,7 @@ public:
 
     /* Check if a given boundry overlaps
      * with this boundry. */
-    bool Intersects(const Boundry2D& boundry) const;
+    bool Intersects(Boundry2D* boundry) const;
 
     bool Intersects(Actor* actor) const;
 

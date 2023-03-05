@@ -21,6 +21,9 @@
 #include "WorldManager.h"
 #include "Plane.h"
 #include "Quadtree.h"
+#include "PlayerController.h"
+#include "Scene1.h"
+#include "CameraComponent.h"
 
 #include "MathTasks.h"
 #include "functions.h"
@@ -52,7 +55,7 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     frameTimer = new QElapsedTimer();
     frameTimer->start();
 
-    renderer = new Renderer();
+    //renderer = new Renderer();
 }
 
 
@@ -119,44 +122,46 @@ void RenderWindow::init()
     //renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
     //renderer->Add("cube", new Cube(QVector3D(), 1.f, QVector3D(0.3f, 0.6f, 1.f), GL_LINES, true));
 
-    auto* a1 = new Actor(QVector3D(0.5f, -0.5f, 0.f));
-    a1->SetCollisionComponent(0.25f);
-    auto* a2 = new Actor(QVector3D(-0.2f, -0.5f, 0.f));
-    a2->SetCollisionComponent(0.3f);
-    auto* a3 = new Actor(QVector3D(0.8f, 0.5f, 0.f));
-    a3->SetCollisionComponent(0.1f);
+//    auto* a1 = new Actor(QVector3D(0.5f, -0.5f, 0.f));
+//    a1->SetCollisionComponent(0.25f);
+//    auto* a2 = new Actor(QVector3D(-0.2f, -0.5f, 0.f));
+//    a2->SetCollisionComponent(0.3f);
+//    auto* a3 = new Actor(QVector3D(0.8f, 0.5f, 0.f));
+//    a3->SetCollisionComponent(0.1f);
 
-    renderer->Add("a1", new Plane(QVector3D(0.5f, -0.5f, 0.f), 0.5f, 0.5f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
-    renderer->Get("a1")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
-
-
-    renderer->Add("a2", new Plane(QVector3D(-0.2f, -0.5f, 0.f), 0.6f, 0.6f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
-    renderer->Get("a2")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+//    renderer->Add("a1", new Plane(QVector3D(0.5f, -0.5f, 0.f), 0.5f, 0.5f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
+//    renderer->Get("a1")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
 
-    renderer->Add("a3", new Plane(QVector3D(0.8f, 0.5f, 0.f), 0.2f, 0.2f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
-    renderer->Get("a3")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+//    renderer->Add("a2", new Plane(QVector3D(-0.2f, -0.5f, 0.f), 0.6f, 0.6f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
+//    renderer->Get("a2")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
-    auto* quad = new Quadtree(Boundry2D(QVector2D(0.f, 0.f), 2.f), 0.f);
-    //quad->Subdivide();
-//    quad->ne->Subdivide();
-//    quad->ne->ne->Subdivide();
-//    quad->ne->ne->ne->Subdivide();
 
-    quad->Insert(a1);
-    quad->Insert(a2);
-    quad->Insert(a3);
+//    renderer->Add("a3", new Plane(QVector3D(0.8f, 0.5f, 0.f), 0.2f, 0.2f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
+//    renderer->Get("a3")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
-    std::vector<Actor*> found;
-    quad->Query(found, Boundry2D(QVector2D(0.f, 0.f), 0.4f));
-    printf("found: %d\n", found.size());
+//    auto* quad = new Quadtree(Boundry2D(QVector2D(0.f, 0.f), 2.f), 0.f);
+//    //quad->Subdivide();
+////    quad->ne->Subdivide();
+////    quad->ne->ne->Subdivide();
+////    quad->ne->ne->ne->Subdivide();
 
-    renderer->Add("a4", new Plane(QVector3D(0.f, 0.f, 0.f), 0.8f, 0.8f, QVector3D(0.f, 0.f, 1.f), GL_LINES));
-    renderer->Get("a4")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+//    quad->Insert(a1);
+//    quad->Insert(a2);
+//    quad->Insert(a3);
 
-    quad->Init();
-    renderer->Add("quad", quad);
+//    std::vector<Actor*> found;
+//    quad->Query(found, Boundry2D(QVector2D(0.f, 0.f), 0.4f));
+//    printf("found: %d\n", found.size());
 
+//    renderer->Add("a4", new Plane(QVector3D(0.f, 0.f, 0.f), 0.8f, 0.8f, QVector3D(0.f, 0.f, 1.f), GL_LINES));
+//    renderer->Get("a4")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+
+//    quad->Init();
+//    renderer->Add("quad", quad);
+
+    scene1 = new Scene1();
+    WorldManager::GetInstance().SetWorld(scene1);
 }
 
 void RenderWindow::processInput()
@@ -170,17 +175,16 @@ void RenderWindow::processInput()
     // Resize the vector to remove the duplicates
     heldKeys.resize(std::distance(heldKeys.begin(), new_end));
 
-    for (auto key : heldKeys)
-    {
-        camera->ProcessKeyboard(key, deltaTime);
-    }
+//    for (auto key : heldKeys)
+//    {
+//        camera->ProcessKeyboard(key, deltaTime);
+//    }
+    PlayerController::GetInstance().ProcessKeyboard(heldKeys);
 }
 
 // Called each frame - doing the rendering!!!
 void RenderWindow::render()
 {
-    processInput();
-
     mTimeStart.restart(); //restart FPS clock
     mContext->makeCurrent(this); //must be called every frame (every time mContext->swapBuffers is called)
 
@@ -199,17 +203,28 @@ void RenderWindow::render()
     //using our expanded OpenGL debugger to check if everything is OK.
     checkForGLerrors();
 
+    processInput();
 
     QMatrix4x4 projection;
     projection.perspective(FOV, aspectRatio, nearPlane, farPlane);
 
+    QMatrix4x4 viewMatrix{};
+    auto* cam = PlayerController::GetInstance().GetCurrentCamera();
+    if (cam)
+    {
+        viewMatrix = cam->GetViewMatrix();
+        //std::cout << "Got camera\n";
+    }
+
     QMatrix4x4 emptyTranslation{};
     glUniformMatrix4fv(mShaderProgram->GetModelLocation(), 1, GL_FALSE, emptyTranslation.constData());
     glUniformMatrix4fv(mShaderProgram->GetProjectionLocation(), 1, GL_FALSE, projection.constData());
-    glUniformMatrix4fv(mShaderProgram->GetViewLocation(), 1, GL_FALSE, camera->GetViewMatrix().constData());
+    glUniformMatrix4fv(mShaderProgram->GetViewLocation(), 1, GL_FALSE, viewMatrix.constData());
 
+    std::cout << deltaTime << std::endl;
 
-    renderer->DrawObjects(mShaderProgram->GetModelLocation());
+    // Runs everything
+    WorldManager::GetInstance().GetWorld()->Tick(deltaTime, mShaderProgram->GetModelLocation());
     //renderer->Get("arrow")->AddActorLocalRotation(QVector3D(0.f, 0.f, 1.f));
     //renderer->Get("xyz")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
 
@@ -353,7 +368,7 @@ void RenderWindow::mouseMoveEvent(QMouseEvent* event)
 
     QCursor::setPos(mMainWindow->center);
 
-    camera->ProcessMouseMovement(deltaX, deltaY);
+    PlayerController::GetInstance().ProcessMouse(deltaX, deltaY);
 }
 
 //Event sent from Qt when program receives a keyPress
