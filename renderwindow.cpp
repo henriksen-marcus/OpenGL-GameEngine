@@ -24,6 +24,7 @@
 #include "PlayerController.h"
 #include "Scene1.h"
 #include "CameraComponent.h"
+#include "LineNPC.h"
 
 #include "MathTasks.h"
 #include "functions.h"
@@ -388,6 +389,20 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_D) heldKeys.push_back(Movement::RIGHT);
     if (event->key() == Qt::Key_E) heldKeys.push_back(Movement::UP);
     if (event->key() == Qt::Key_Q) heldKeys.push_back(Movement::DOWN);
+
+    if (event->key() == Qt::Key_Tab)
+    {
+        auto w = dynamic_cast<Scene1*>(WorldManager::GetInstance().GetWorld());
+        if (w)
+        {
+            auto l = dynamic_cast<LineNPC*>(w->mRenderer->Get("lineNPC"));
+            if (l)
+            {
+                currentFunc = currentFunc == 1 ? 2 : 1;
+                l->SwitchFunction(currentFunc);
+            }
+        }
+    }
 }
 
 void RenderWindow::keyReleaseEvent(QKeyEvent* event)

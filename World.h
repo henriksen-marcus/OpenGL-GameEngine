@@ -33,10 +33,9 @@ public:
     inline Actor* SpawnActor(const QVector3D& location, const QQuaternion& rotation);
     void RemoveActor(Actor* actor);
 
-protected:
-    std::vector<Cube*> mCubes;
-
     Renderer* mRenderer;
+
+protected:
     Quadtree* mQuadtree;
     std::vector<Actor*> mActors;
     std::string mapName;

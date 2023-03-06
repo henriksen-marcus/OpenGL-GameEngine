@@ -5,6 +5,9 @@
 
 void VisualFunction2D::Init()
 {
+    if (mVAO) glDeleteVertexArrays(1, &mVAO);
+    if (mVBO) glDeleteBuffers(1, &mVBO);
+
     initializeOpenGLFunctions();
 
     glGenVertexArrays(1, &mVAO);

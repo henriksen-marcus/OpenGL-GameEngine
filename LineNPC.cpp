@@ -5,17 +5,27 @@
 #include <cassert>
 #include <iostream>
 
-LineNPC::LineNPC(std::function<float(float)> f, float xmin, float xmax, unsigned segments)
+LineNPC::LineNPC(std::function<float(float)> f1, std::function<float(float)> f2, float xmin, float xmax, unsigned segments)
 {
     mNPC = new Cube(QVector3D(), 0.2f, QVector3D(0.f, 0.f, 1.f));
-    mCurve = f;
-    FromFunction(f, xmin, xmax, segments);
+    mCurve1 = f1;
+    mCurve2 = f2;
+    mCurrentCurve = f1;
+    FromFunction(f1, xmin, xmax, segments);
     mPosAlongLine = min_x;
+    mSegments = segments;
 }
 
 float LineNPC::Lerp(float a, float b, float t)
 {
     return a + t * (b - a);
+}
+
+void LineNPC::SwitchFunction(int num)
+{
+    mCurrentCurve = num == 1 ? mCurve1 : mCurve2;
+    FromFunction(mCurrentCurve, min_x, max_x, mSegments);
+    Init();
 }
 
 void LineNPC::Init()
@@ -36,7 +46,7 @@ void LineNPC::Tick(float deltaTime)
 
     QVector3D newPos = GetActorLocation();
     newPos.setX(newPos.x() + xval);
-    newPos.setY(newPos.y() + mCurve(xval));
+    newPos.setY(newPos.y() + mCurrentCurve(xval));
     mNPC->SetActorLocation(newPos);
 
     if (isGoingBack)

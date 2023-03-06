@@ -25,8 +25,9 @@ Scene1::Scene1()
 
     auto* arrow = new Arrow(QVector3D(0.f, 0.3f, -2.f), 0.2f, QVector3D(1.f, 0.f, 0.f), QVector3D(1.f, 0.f, 1.f));
 
-    auto f = [](float x) -> float { return sin(x); };
-    lineNPC = new LineNPC(f, 0.f, 3.f, 25);
+    auto f1 = [](float x) -> float { return sin(x); };
+    auto f2 = [](float x) -> float { return log(x); };
+    lineNPC = new LineNPC(f1, f2, 0.f, 3.f, 25);
     lineNPC->Init();
     lineNPC->SetActorLocation(QVector3D(-5.f, 1.2f, -1.f));
 
@@ -58,7 +59,7 @@ Scene1::Scene1()
     healthpacks.push_back(new HealthPack(QVector3D(-3.f, 0.f, -1.f)));
     healthpacks.push_back(new HealthPack(QVector3D(2.f, 0.f, 1.f)));
     healthpacks.push_back(new HealthPack(QVector3D(3.f, 0.f, -2.5f)));
-    healthpacks.push_back(new HealthPack(QVector3D(3.f, 0.f, -3.f)));
+    healthpacks.push_back(new HealthPack(QVector3D(2.5f, 0.f, -1.f)));
 
     int i = 0;
     std::string name = "hPack";

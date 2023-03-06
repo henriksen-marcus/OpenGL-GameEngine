@@ -70,6 +70,7 @@ private:
     // How much the mouse moved since last tick
     float lastMouseX{0.f};
     float lastMouseY{0.f};
+    int currentFunc = 1;
 
     std::vector<Movement> heldKeys;
 
