@@ -29,12 +29,16 @@ void Pawn::Init()
 
 void Pawn::Draw(GLint mModelLocation)
 {
-    mPosessedActor->Draw(mModelLocation);
+    mPossessedActor->Draw(mModelLocation);
 }
 
 void Pawn::Tick(float deltaTime)
 {
+    Actor::Tick(deltaTime);
 
+    mPossessedActor->SetActorLocation(mLocation);
+    mPossessedActor->SetActorRotation(mRotationQuat);
+    mPossessedActor->SetActorScale(mScale);
 }
 
 void Pawn::ProcessKeyboard(Movement direction)
@@ -42,16 +46,16 @@ void Pawn::ProcessKeyboard(Movement direction)
     switch (direction)
     {
     case Movement::FORWARD:
-        mPosessedActor->AddActorLocalOffset(QVector3D(0.f, 0.f, -mMovementSpeed));
+        AddActorLocalOffset(QVector3D(0.f, 0.f, -mMovementSpeed));
         break;
     case Movement::BACKWARD:
-        mPosessedActor->AddActorLocalOffset(QVector3D(0.f, 0.f, mMovementSpeed));
+        AddActorLocalOffset(QVector3D(0.f, 0.f, mMovementSpeed));
         break;
     case Movement::LEFT:
-        mPosessedActor->AddActorLocalOffset(QVector3D(mMovementSpeed, 0.f, 0.f));
+        AddActorLocalOffset(QVector3D(mMovementSpeed, 0.f, 0.f));
         break;
     case Movement::RIGHT:
-        mPosessedActor->AddActorLocalOffset(QVector3D(-mMovementSpeed, 0.f, 0.f));
+        AddActorLocalOffset(QVector3D(-mMovementSpeed, 0.f, 0.f));
         break;
     case Movement::UP:
         //mLocation += Up * velocity;
@@ -99,8 +103,8 @@ void Pawn::SetActor(Actor* actorToPossess, bool deleteCurrent)
 {
     if (deleteCurrent && actorToPossess)
     {
-        mPosessedActor = actorToPossess;
-        delete mPosessedActor;
+        mPossessedActor = actorToPossess;
+        delete mPossessedActor;
     }
 }
 

@@ -14,4 +14,7 @@ public:
     void FromFunction(std::function<float(float)> f, QVector3D origin, float sizeX, unsigned segments);
     void FromFile(std::string fileName);
     void ToFile(std::string fileName);
+
+protected:
+    float min_x, max_x;
 };

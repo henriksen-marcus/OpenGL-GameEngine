@@ -13,6 +13,14 @@ Boundry2D::Boundry2D(const QVector2D& location, float halfLength)
     maxPoint = mLocation + QVector2D(mHalfLength, mHalfLength);
 }
 
+void Boundry2D::Update(const QVector3D& location)
+{
+    mLocation = QVector2D(location.x(), location.z());
+    minPoint = mLocation - QVector2D(mHalfLength, mHalfLength);
+    maxPoint = mLocation + QVector2D(mHalfLength, mHalfLength);
+}
+
+
 bool Boundry2D::Contains(const QVector2D& point) const
 {
     //                                 Left wall                                  Right wall
@@ -31,6 +39,7 @@ bool Boundry2D::Contains(Actor* actor) const
 
 bool Boundry2D::Intersects(Boundry2D* boundry) const
 {
+    //if (!boundry) return false;
     return
         !(
             boundry->maxPoint.x() < minPoint.x() || // Object is to the left

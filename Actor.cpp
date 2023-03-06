@@ -1,5 +1,7 @@
 ﻿#include "Actor.h"
 #include "SceneComponent.h"
+#include "iostream"
+#include "Cube.h"
 
 // I hate Qt
 
@@ -164,10 +166,11 @@ void Actor::SetCollisionComponent(float halfLength)
 
 void Actor::Tick(float deltaTime)
 {
-    for (auto c :mComponents)
-    {
+    if (mCollisionComponent)
+        mCollisionComponent->Update(mLocation);
+
+    for (auto c : mComponents)
         c->Tick(deltaTime);
-    }
 }
 
 void Actor::UpdateModelMatrix()

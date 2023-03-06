@@ -23,10 +23,15 @@ public:
 
     Boundry2D* mBoundry;
 
+    void CheckChildren();
     bool IsLeaf() { return mActors.empty(); }
 
     // Add an actor to this node (doesn't fit further down)
     void Insert(Actor* actor);
+    void Remove(Actor* actor);
+    void RemoveAllActors();
+
+    void UpdateTree(const std::vector<Actor*>& existingActors);
 
     // Get the deepest node that fits this location
     Quadtree* Find(const QVector2D& location);
@@ -46,5 +51,5 @@ public:
 protected:
     bool mIsDivided{false};
 
-    static constexpr unsigned MAX_CAPACITY = 4;
+    static constexpr unsigned MAX_CAPACITY = 2;
 };

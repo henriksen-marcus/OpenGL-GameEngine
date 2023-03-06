@@ -14,6 +14,7 @@ public:
     Boundry2D();
     Boundry2D(const QVector2D& location, float halfLength);
 
+    void Update(const QVector3D& location);
 
     /* Check if a specific point is within
      * this  boundry. */

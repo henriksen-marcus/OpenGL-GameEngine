@@ -205,23 +205,26 @@ void RenderWindow::render()
 
     processInput();
 
-    QMatrix4x4 projection;
-    projection.perspective(FOV, aspectRatio, nearPlane, farPlane);
+
 
     QMatrix4x4 viewMatrix{};
+    float newFOV = FOV;
     auto* cam = PlayerController::GetInstance().GetCurrentCamera();
     if (cam)
     {
         viewMatrix = cam->GetViewMatrix();
-        //std::cout << "Got camera\n";
+        newFOV = cam->mFOV;
     }
+
+    QMatrix4x4 projection;
+    projection.perspective(newFOV, aspectRatio, nearPlane, farPlane);
 
     QMatrix4x4 emptyTranslation{};
     glUniformMatrix4fv(mShaderProgram->GetModelLocation(), 1, GL_FALSE, emptyTranslation.constData());
     glUniformMatrix4fv(mShaderProgram->GetProjectionLocation(), 1, GL_FALSE, projection.constData());
     glUniformMatrix4fv(mShaderProgram->GetViewLocation(), 1, GL_FALSE, viewMatrix.constData());
 
-    std::cout << deltaTime << std::endl;
+    //std::cout << deltaTime << std::endl;
 
     // Runs everything
     WorldManager::GetInstance().GetWorld()->Tick(deltaTime, mShaderProgram->GetModelLocation());

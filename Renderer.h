@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-
 #include "BaseObject.h"
 #include "Actor.h"
+#include <iostream>
 
 struct RenderObject
 {
@@ -34,6 +34,19 @@ public:
     virtual void Remove(const std::string& name)
     {
         mObjects.erase(name);
+    }
+
+    virtual void Remove(Actor* actor)
+    {
+//        for (auto it = mObjects.begin(); it != mObjects.end(); ++it) {
+//          if (it->second == actor) mObjects.erase(it->first);
+//        }
+        auto it = std::find_if(mObjects.begin(), mObjects.end(),
+            [&](const auto& pair) { return pair.second == actor; });
+
+        if (it != mObjects.end()) {
+            mObjects.erase(it->first);
+        }
     }
 
     virtual Actor* Get(const std::string& name)

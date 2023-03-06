@@ -7,8 +7,9 @@ class Actor;
 class QElapsedTimer;
 class PauseableTimer;
 class Quadtree;
+class Cube;
 
-class World : BaseObject
+class World : public BaseObject
 {
 public:
     World();
@@ -33,6 +34,8 @@ public:
     void RemoveActor(Actor* actor);
 
 protected:
+    std::vector<Cube*> mCubes;
+
     Renderer* mRenderer;
     Quadtree* mQuadtree;
     std::vector<Actor*> mActors;

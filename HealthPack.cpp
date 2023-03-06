@@ -6,8 +6,9 @@
 
 HealthPack::HealthPack(const QVector3D& location) : Actor(location)
 {
-    float size = 0.2f;
-    QVector3D color(1.f,1.f,1.f);
+    float size = 0.1f;
+    QVector3D color(1.f,0.1f,0.1f);
+    SetActorLocation(location);
 
     mVertices.emplace_back(-size, -size, -size, color.x(), color.y(), color.z()); // Origin 0
     mVertices.emplace_back(size, -size, -size, color.x(), color.y(), color.z()); // X 1
@@ -70,17 +71,17 @@ HealthPack::HealthPack(const QVector3D& location) : Actor(location)
     mIndices.push_back(5);
     mIndices.push_back(7);
 
+    SetCollisionComponent(0.05f);
+
     Init();
 }
 
 void HealthPack::OnCollision(Actor* otherActor)
 {
-    // dissapear and have an effect on the other actor
-    if (std::is_base_of<Pawn, decltype(*otherActor)>())
+    Pawn* otherPawn = dynamic_cast<Pawn*>(otherActor);
+    if (otherPawn)
     {
-        Pawn* otherPawn = dynamic_cast<Pawn*>(otherActor);
-        if (otherPawn) otherPawn->OnPickup(type);
-
-        WorldManager::GetInstance().GetWorld()->RemoveActor(this);
+        otherPawn->OnPickup(type);
+        GetWorld()->RemoveActor(this);
     }
 }

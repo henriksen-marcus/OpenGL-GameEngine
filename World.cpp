@@ -3,6 +3,8 @@
 #include <QElapsedTimer>
 #include "PausableTimer.h"
 #include "Quadtree.h"
+#include <iostream>
+#include "Cube.h"
 
 World::World()
 {
@@ -22,6 +24,33 @@ void World::Tick(float deltaTime, GLint mModelLocation)
     if (isPaused) return;
     mDeltaTime = deltaTime;
 
+    mQuadtree->UpdateTree(mActors);
+
+//    for (auto a : mActors)
+//    {
+//        if (a->GetCollisionComponent())
+//        {
+//            auto c = a->GetCollisionComponent();
+//            //printf("Collision pos: %f, %f\n", c->mLocation.x(), c->mLocation.y());
+//            //std::cout << "Collision pos: " << c->mLocation.x() << "," <<  c->mLocation.y() << "\n";
+//            //std::cout << "Actor pos: " << a->GetActorLocation().x() << "," << a->GetActorLocation().z() << "\n";
+//            mCubes.push_back(new Cube(a->GetActorLocation(), c->mHalfLength*2, QVector3D(1.f, 1.f, 0.f), GL_LINES));
+//            mCubes.back()->SetActorLocation(a->GetActorLocation());
+//            mCubes.back()->Init();
+//        }
+//    }
+
+//    for (auto c : mCubes)
+//    {
+//        c->Draw(mModelLocation);
+//    }
+
+//    for (auto c : mCubes)
+//    {
+//        delete c;
+//    }
+//    mCubes.clear();
+
     // Check each object in the world for collision
     for (auto actor : mActors)
     {
@@ -30,9 +59,19 @@ void World::Tick(float deltaTime, GLint mModelLocation)
 
         std::vector<Actor*> found;
         mQuadtree->Query(found, coll);
+        //std::cout << "Collision count for " << actor->name << ": " << found.size() << ".\n";
         if (!found.empty())
         {
-            actor->OnCollision(found.front());
+            for (auto otherActor : found)
+            {
+                if (otherActor != actor)
+                {
+                    actor->OnCollision(otherActor);
+                    std::cout << "Other collision!\n";
+                    break;
+                }
+            }
+
             for (auto otherActor : found)
             {
                 otherActor->OnCollision(actor);
@@ -54,7 +93,6 @@ bool World::ContainsActor(const std::string& name)
     return mRenderer->Find(name);
 }
 
-
 void World::Pause(bool shouldPause)
 {
     isPaused = shouldPause;
@@ -74,8 +112,15 @@ float World::GetUnpausedTimeSeconds()
 
 void World::RemoveActor(Actor* actor)
 {
-    for (int i{}; i < mActors.size(); i++)
-    {
-        if (mActors[i] == actor) mActors.erase(mActors.begin() + i);
-    }
+//    for (int i{}; i < mActors.size(); i++)
+//    {
+//        if (mActors[i] == actor) mActors.erase(mActors.begin() + i);
+//    }
+    auto it = std::find(mActors.begin(), mActors.end(), actor);
+    if (it != mActors.end()) mActors.erase(it);
+
+    mRenderer->Remove(actor);
+
+    // We don't need to remove it from the quadtree as it is updated each tick.
+    //mQuadtree->Remove(actor);
 }

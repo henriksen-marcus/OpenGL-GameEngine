@@ -8,7 +8,6 @@ class CubePlayer;
 class XYZ;
 class HealthPack;
 class StaticSceneCamera;
-
 class LineNPC;
 
 
@@ -21,8 +20,12 @@ public:
     Cube* bigCube;
     XYZ* cross;
     CubePlayer* player;
-    HealthPack* pack1;
     StaticSceneCamera* sceneCamera;
+    LineNPC* lineNPC;
+
+    HealthPack* pack1;
+
+    std::vector<HealthPack*> healthpacks;
 
     void Tick(float deltaTime, GLint mModelLocation) override;
 

@@ -34,6 +34,70 @@ void Quadtree::Insert(Actor* actor)
     }
 }
 
+void Quadtree::Remove(Actor* actor)
+{
+    // If this node doesn't contain the actor, check children
+    if (!mBoundry->Contains(actor))
+    {
+        if (mIsDivided)
+        {
+            nw->Remove(actor);
+            ne->Remove(actor);
+            sw->Remove(actor);
+            se->Remove(actor);
+
+            // If all children are empty, delete them
+            CheckChildren();
+        }
+        return;
+    }
+
+    // Remove the actor from this node
+    auto it = std::find(mActors.begin(), mActors.end(), actor);
+    if (it != mActors.end()) mActors.erase(it);
+
+    // If all children are empty, delete them
+    CheckChildren();
+}
+
+void Quadtree::RemoveAllActors()
+{
+    mActors.clear();
+
+    if (mIsDivided)
+    {
+        ne->RemoveAllActors();
+        nw->RemoveAllActors();
+        se->RemoveAllActors();
+        sw->RemoveAllActors();
+        CheckChildren();
+    }
+}
+
+void Quadtree::UpdateTree(const std::vector<Actor*>& existingActors)
+{
+    RemoveAllActors();
+
+    for (auto actor : existingActors)
+        if (actor->GetCollisionComponent())
+            Insert(actor);
+}
+
+void Quadtree::CheckChildren()
+{
+    if (!mIsDivided) return;
+    if (nw->IsLeaf() && ne->IsLeaf() && sw->IsLeaf() && se->IsLeaf())
+    {
+        delete nw;
+        delete ne;
+        delete sw;
+        delete se;
+
+        nw = ne = sw = se = nullptr;
+        mIsDivided = false;
+    }
+}
+
 void Quadtree::Subdivide()
 {
     if (mIsDivided) return;
@@ -101,6 +165,11 @@ void Quadtree::InitLines(std::vector<Vertex>& arr)
 void Quadtree::Init()
 {
     InitLines(mVertices);
+    for (auto i : mVertices)
+    {
+        i.z = i.y;
+        i.y = 0.5f;
+    }
     Actor::Init();
 }
 

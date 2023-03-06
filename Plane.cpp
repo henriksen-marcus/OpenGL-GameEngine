@@ -3,7 +3,6 @@
 Plane::Plane(const QVector3D& location, float sizeX, float sizeY, const QVector3D& color, GLenum mode)
 {
     mVertices.clear();
-
     sizeX *= 0.5f; // Center the cube on the given origin
     sizeY *= 0.5f;
 

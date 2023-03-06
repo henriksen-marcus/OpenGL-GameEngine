@@ -18,7 +18,7 @@ public:
     void UpdateCamera();
 
     void SetActor(Actor* actorToPossess, bool deleteCurrent = false);
-    Actor* GetActor() { return mPosessedActor; }
+    Actor* GetActor() { return mPossessedActor; }
 
     Camera* GetCamera();
 
@@ -40,7 +40,7 @@ protected:
     float mMovementSpeed;
     float mMouseSensitivity;
 
-    Actor* mPosessedActor;
+    Actor* mPossessedActor;
 
     // The current active camera
     Camera* mCamera;

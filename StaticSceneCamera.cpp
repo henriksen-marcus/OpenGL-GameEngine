@@ -7,14 +7,20 @@ StaticSceneCamera::StaticSceneCamera()
     camera1 = new CameraComponent(this);
     camera1->followParentTransform = false;
     camera1->followParentRotation = false;
-    camera1->SetWorldLocation(QVector3D(0.f, 1.f, 3.5f)); // Recessed
+    camera1->SetWorldLocation(QVector3D(0.f, 2.8f, 2.5f)); // Recessed
     //camera1->AddWorldRotation(QQuaternion::fromEulerAngles(QVector3D()))
-    camera1->mPitch = -10.f;
+    camera1->mPitch = -43.f;
+    camera1->mFOV = 85.f;
 
     camera2 = new CameraComponent(this);
     camera2->followParentTransform = false;
     camera2->followParentRotation = false;
-    camera2->SetWorldLocation(QVector3D());
+    //camera2->SetWorldLocation(QVector3D(-0.8f, 0.8f, -2.8f));
+    camera2->SetWorldLocation(QVector3D(0.f, 0.5f, -2.f));
+    camera2->mYaw = -270.f;
+    camera2->mPitch = -50.f;
+    camera2->mFOV = 125.f;
+    //camera2->AddWorldRotation(QQuaternion::fromEulerAngles(QVector3D(-30.f, -140.f, 0.f)));
 
     activeCamera = camera1;
     mComponents.push_back(camera1);

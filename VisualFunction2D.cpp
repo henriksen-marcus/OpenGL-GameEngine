@@ -47,6 +47,9 @@ void VisualFunction2D::Draw(GLint mModelLocation)
 void VisualFunction2D::FromFunction(std::function<float(float)> f, float xmin, float xmax, unsigned segments)
 {
     mVertices.clear();
+    min_x = xmin;
+    max_x = xmax;
+
     float h = (xmax - xmin) / static_cast<float>(segments);
 
     for (auto x{xmin}; x < xmax; x+=h)
@@ -62,8 +65,8 @@ void VisualFunction2D::FromFunction(std::function<float(float)> f, float xmin, f
 
 void VisualFunction2D::FromFunction(std::function<float(float)> f, QVector3D origin, float sizeX, unsigned segments)
 {
-    float xmin = origin.x() - sizeX / 2.f;
-    float xmax = origin.x() + sizeX / 2.f;
+    float xmin = min_x = origin.x() - sizeX / 2.f;
+    float xmax = max_x = origin.x() + sizeX / 2.f;
 
     FromFunction(f, xmin, xmax, segments);
 }

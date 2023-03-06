@@ -39,7 +39,9 @@ void Cube::Init()
 
     if (mode == GL_LINES) InitLines();
     else InitTriangles();
+
     initializeOpenGLFunctions();
+
     glGenVertexArrays(1, &mVAO);
     glBindVertexArray(mVAO);
 
@@ -87,7 +89,6 @@ void Cube::Draw(GLint mModelLocation)
     glBindVertexArray(0);
 }
 
-// TODO: Wrong stuff here!
 void Cube::InitTriangles()
 {
     mIndices.clear();

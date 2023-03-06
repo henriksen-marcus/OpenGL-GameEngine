@@ -58,6 +58,8 @@ public:
     virtual void OnCollision(){};
     virtual void OnCollision(Actor* otherActor){};
     
+    std::string name = "default";
+
 protected:
     virtual void UpdateModelMatrix();
     virtual void UpdateModelMatrixQuat();

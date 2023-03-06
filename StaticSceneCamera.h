@@ -13,7 +13,6 @@ public:
     CameraComponent* SwapCamera();
     void Tick(float deltaTime) override;
 
-protected:
     CameraComponent* activeCamera;
     CameraComponent* camera1;
     CameraComponent* camera2;

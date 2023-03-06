@@ -4,6 +4,7 @@
 
 class World;
 class WorldManager;
+class PlayerController;
 
 class BaseObject : public QOpenGLFunctions_4_1_Core
 {
@@ -11,5 +12,6 @@ public:
     BaseObject();
 
     World* GetWorld();
+    PlayerController& GetPlayerController();
 };
 

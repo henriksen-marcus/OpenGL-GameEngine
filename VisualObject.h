@@ -12,10 +12,9 @@ class VisualObject : public BaseObject
 public:
     virtual ~VisualObject()
     {
-        // We can delete these safely even if they don't exist
-        glDeleteVertexArrays(1, &mVAO);
-        glDeleteBuffers(1, &mIBO);
-        glDeleteBuffers(1, &mVBO);
+        if (mVAO) glDeleteVertexArrays(1, &mVAO);
+        if (mIBO) glDeleteBuffers(1, &mIBO);
+        if (mVBO) glDeleteBuffers(1, &mVBO);
     }
 
     /**

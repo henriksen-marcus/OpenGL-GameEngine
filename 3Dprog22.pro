@@ -15,6 +15,8 @@ SOURCES += main.cpp \
     Cube.cpp \
     CubePlayer.cpp \
     HealthPack.cpp \
+    House.cpp \
+    LineNPC.cpp \
     Octree.cpp \
     Pawn.cpp \
     Plane.cpp \
@@ -44,6 +46,8 @@ HEADERS += \
     Cube.h \
     CubePlayer.h \
     HealthPack.h \
+    House.h \
+    LineNPC.h \
     MathTasks.h \
     Octree.h \
     PausableTimer.h \
