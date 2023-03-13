@@ -13,5 +13,6 @@ public:
 
     World* GetWorld();
     PlayerController& GetPlayerController();
+    void UseShader(std::string name);
 };
 

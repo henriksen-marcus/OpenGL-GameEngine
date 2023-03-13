@@ -78,8 +78,6 @@ private:
 
     //Camera* camera = new Camera(QVector3D(0.f, 0.f, 3.f));
 
-    Scene1* scene1;
-
     void processInput();
 
     // Helper function that uses QOpenGLDebugLogger or plain glGetError()

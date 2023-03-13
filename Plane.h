@@ -2,6 +2,8 @@
 
 #include "Actor.h"
 
+class PlaneMesh;
+
 class Plane : public Actor
 {
 public:
@@ -11,8 +13,9 @@ public:
     void Draw(GLint mMatrixLocation = -1) override;
 
 private:
-    void InitTriangles();
-    void InitLines();
+      PlaneMesh* mesh;
+//    void InitTriangles();
+//    void InitLines();
 
-    GLenum mMode;
+//    GLenum mMode;
 };

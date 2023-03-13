@@ -18,6 +18,7 @@ SOURCES += main.cpp \
     House.cpp \
     LineNPC.cpp \
     MeshComponent.cpp \
+    Meshes/PlaneMesh.cpp \
     Octree.cpp \
     Pawn.cpp \
     Plane.cpp \
@@ -28,6 +29,7 @@ SOURCES += main.cpp \
     Shader.cpp \
     StaticSceneCamera.cpp \
     Texture2D.cpp \
+    TextureScene.cpp \
     Vendor/stb_image.cpp \
     VisualFunction2D.cpp \
     VisualFunction3D.cpp \
@@ -53,6 +55,7 @@ HEADERS += \
     LineNPC.h \
     MathTasks.h \
     MeshComponent.h \
+    Meshes/PlaneMesh.h \
     Octree.h \
     PausableTimer.h \
     Pawn.h \
@@ -63,8 +66,10 @@ HEADERS += \
     Scene1.h \
     SceneComponent.h \
     Shader.h \
+    ShaderManager.h \
     StaticSceneCamera.h \
     Texture2D.h \
+    TextureScene.h \
     TimeManager.h \
     Vendor/stb_image.h \
     VertexClasses.h \
@@ -88,5 +93,7 @@ DISTFILES += \
     fragment.frag \
     plainshader.frag \
     plainshader.vert \
+    texturefragshader.frag \
+    texturevertshader.vert \
     vertex.vert
 

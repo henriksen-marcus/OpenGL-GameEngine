@@ -14,8 +14,6 @@ class World : public BaseObject
 public:
     World();
 
-    void InitWorld();
-
     /* Runs tick and draw on all actors in the world. */
     virtual void Tick(float deltaTime, GLint mModelLocation);
 

@@ -25,6 +25,8 @@
 #include "Scene1.h"
 #include "CameraComponent.h"
 #include "LineNPC.h"
+#include "TextureScene.h"
+#include "ShaderManager.h"
 
 #include "MathTasks.h"
 #include "functions.h"
@@ -116,53 +118,28 @@ void RenderWindow::init()
     // NB: hardcoded path to files! You have to change this if you change directories for the project.
     // Qt makes a build-folder besides the project folder. That is why we go down one directory
     // (out of the build-folder) and then up into the project folder.
-    mShaderProgram = new Shader();
-    mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
+//    mShaderProgram = new Shader();
+//    mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
-    //renderer->Add("xyz", new XYZ(true));
-    //renderer->Add("arrow", new Arrow(QVector3D(), 1.f, QVector3D(1.f, 0.f, 1.f)));
-    //renderer->Add("cube", new Cube(QVector3D(), 1.f, QVector3D(0.3f, 0.6f, 1.f), GL_LINES, true));
+//    scene1 = new Scene1();
+//    WorldManager::GetInstance().SetWorld(scene1);
+    auto* texScene = new TextureScene();
+    WorldManager::GetInstance().SetWorld(texScene);
 
-//    auto* a1 = new Actor(QVector3D(0.5f, -0.5f, 0.f));
-//    a1->SetCollisionComponent(0.25f);
-//    auto* a2 = new Actor(QVector3D(-0.2f, -0.5f, 0.f));
-//    a2->SetCollisionComponent(0.3f);
-//    auto* a3 = new Actor(QVector3D(0.8f, 0.5f, 0.f));
-//    a3->SetCollisionComponent(0.1f);
-
-//    renderer->Add("a1", new Plane(QVector3D(0.5f, -0.5f, 0.f), 0.5f, 0.5f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
-//    renderer->Get("a1")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+    //    mShaderProgram = new Shader();
+    //    mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
 
-//    renderer->Add("a2", new Plane(QVector3D(-0.2f, -0.5f, 0.f), 0.6f, 0.6f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
-//    renderer->Get("a2")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+    auto* s1 = new Shader();
+    s1->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
+    auto* s2 = new Shader();
+    s2->CreateFromFiles("../OpenGLMainQt/texturevertshader.vert", "../OpenGLMainQt/texturefragshader.frag");
 
-//    renderer->Add("a3", new Plane(QVector3D(0.8f, 0.5f, 0.f), 0.2f, 0.2f, QVector3D(0.f, 1.f, 0.f), GL_LINES));
-//    renderer->Get("a3")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
-
-//    auto* quad = new Quadtree(Boundry2D(QVector2D(0.f, 0.f), 2.f), 0.f);
-//    //quad->Subdivide();
-////    quad->ne->Subdivide();
-////    quad->ne->ne->Subdivide();
-////    quad->ne->ne->ne->Subdivide();
-
-//    quad->Insert(a1);
-//    quad->Insert(a2);
-//    quad->Insert(a3);
-
-//    std::vector<Actor*> found;
-//    quad->Query(found, Boundry2D(QVector2D(0.f, 0.f), 0.4f));
-//    printf("found: %d\n", found.size());
-
-//    renderer->Add("a4", new Plane(QVector3D(0.f, 0.f, 0.f), 0.8f, 0.8f, QVector3D(0.f, 0.f, 1.f), GL_LINES));
-//    renderer->Get("a4")->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
-
-//    quad->Init();
-//    renderer->Add("quad", quad);
-
-    scene1 = new Scene1();
-    WorldManager::GetInstance().SetWorld(scene1);
+    auto& SM = ShaderManager::GetInstance();
+    SM.Shaders["plain"] = s1;
+    SM.Shaders["texture"] = s2;
+    SM.ActiveShader = s1;
 }
 
 void RenderWindow::processInput()
@@ -189,7 +166,8 @@ void RenderWindow::render()
     mContext->makeCurrent(this); //must be called every frame (every time mContext->swapBuffers is called)
     initializeOpenGLFunctions();    //must call this every frame it seems...
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    mShaderProgram->UseShader();
+    //mShaderProgram->UseShader();
+    ShaderManager::GetInstance().UseShader("plain");
 
     // Calculate framerate before
     // checkForGLerrors() because that call takes a long time
@@ -216,14 +194,15 @@ void RenderWindow::render()
     projection.perspective(newFOV, aspectRatio, nearPlane, farPlane);
 
     QMatrix4x4 emptyTranslation{};
-    glUniformMatrix4fv(mShaderProgram->GetModelLocation(), 1, GL_FALSE, emptyTranslation.constData());
-    glUniformMatrix4fv(mShaderProgram->GetProjectionLocation(), 1, GL_FALSE, projection.constData());
-    glUniformMatrix4fv(mShaderProgram->GetViewLocation(), 1, GL_FALSE, viewMatrix.constData());
+    Shader* shader = ShaderManager::GetInstance().ActiveShader;
+    glUniformMatrix4fv(shader->GetModelLocation(), 1, GL_FALSE, emptyTranslation.constData());
+    glUniformMatrix4fv(shader->GetProjectionLocation(), 1, GL_FALSE, projection.constData());
+    glUniformMatrix4fv(shader->GetViewLocation(), 1, GL_FALSE, viewMatrix.constData());
 
     //std::cout << deltaTime << std::endl;
 
     // Runs everything
-    WorldManager::GetInstance().GetWorld()->Tick(deltaTime, mShaderProgram->GetModelLocation());
+    WorldManager::GetInstance().GetWorld()->Tick(deltaTime, shader->GetModelLocation());
     //renderer->Get("arrow")->AddActorLocalRotation(QVector3D(0.f, 0.f, 1.f));
     //renderer->Get("xyz")->SetActorRotation(QVector3D(45.f, 1.f, 0.5f));
 
