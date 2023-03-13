@@ -63,7 +63,12 @@ GLuint Shader::GetModelLocation()
 
 GLuint Shader::GetViewLocation()
 {
-	return uniformView;
+    return uniformView;
+}
+
+GLuint Shader::GetTexture()
+{
+
 }
 
 void Shader::UseShader()
@@ -122,6 +127,7 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 	uniformModel = glGetUniformLocation(shaderID, "matrixTransform_IN");
 	uniformProjection = glGetUniformLocation(shaderID, "projection_IN");
     uniformView = glGetUniformLocation(shaderID, "view_IN");
+    uniformTexture = glGetUniformLocation(shaderID, "texture_IN");
 }
 
 void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "qvectornd.h"
-#include "eigen/Eigen/eigen"
+#include "Vendor/eigen/Eigen/eigen"
 
 #include <iostream>
 

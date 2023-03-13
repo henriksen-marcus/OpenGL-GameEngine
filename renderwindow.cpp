@@ -186,21 +186,16 @@ void RenderWindow::processInput()
 // Called each frame - doing the rendering!!!
 void RenderWindow::render()
 {
-    mTimeStart.restart(); //restart FPS clock
     mContext->makeCurrent(this); //must be called every frame (every time mContext->swapBuffers is called)
-
     initializeOpenGLFunctions();    //must call this every frame it seems...
-
-    //clear the screen for each redraw
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     mShaderProgram->UseShader();
 
     // Calculate framerate before
     // checkForGLerrors() because that call takes a long time
     // and before swapBuffers(), else it will show the vsync time
     calculateFramerate();
-
+    mTimeStart.restart(); // Restart FPS clock
     //using our expanded OpenGL debugger to check if everything is OK.
     checkForGLerrors();
 

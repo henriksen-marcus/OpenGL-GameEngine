@@ -67,7 +67,7 @@ void World::Tick(float deltaTime, GLint mModelLocation)
                 if (otherActor != actor)
                 {
                     actor->OnCollision(otherActor);
-                    std::cout << "Other collision!\n";
+                    //std::cout << "Other collision!\n";
                     break;
                 }
             }

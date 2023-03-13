@@ -17,6 +17,7 @@ SOURCES += main.cpp \
     HealthPack.cpp \
     House.cpp \
     LineNPC.cpp \
+    MeshComponent.cpp \
     Octree.cpp \
     Pawn.cpp \
     Plane.cpp \
@@ -26,6 +27,8 @@ SOURCES += main.cpp \
     SceneComponent.cpp \
     Shader.cpp \
     StaticSceneCamera.cpp \
+    Texture2D.cpp \
+    Vendor/stb_image.cpp \
     VisualFunction2D.cpp \
     VisualFunction3D.cpp \
     World.cpp \
@@ -49,6 +52,7 @@ HEADERS += \
     House.h \
     LineNPC.h \
     MathTasks.h \
+    MeshComponent.h \
     Octree.h \
     PausableTimer.h \
     Pawn.h \
@@ -60,7 +64,9 @@ HEADERS += \
     SceneComponent.h \
     Shader.h \
     StaticSceneCamera.h \
+    Texture2D.h \
     TimeManager.h \
+    Vendor/stb_image.h \
     VertexClasses.h \
     VisualFunction2D.h \
     VisualFunction3D.h \
