@@ -73,10 +73,8 @@ private:
     int currentFunc = 1;
 
     std::vector<Movement> heldKeys;
-
-    //Renderer* renderer;
-
-    //Camera* camera = new Camera(QVector3D(0.f, 0.f, 3.f));
+    unsigned int texture;
+    unsigned int VBO, VAO, EBO;
 
     void processInput();
 

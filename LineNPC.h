@@ -11,7 +11,7 @@ public:
     float Lerp(float a, float b, float t);
     void SwitchFunction(int num);
     void Init() override;
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
     void Tick(float deltaTime) override;
 
     float mOffset{0.012f};

@@ -13,7 +13,7 @@ public:
     void SetTexture(Texture2D* texture);
 
     void Init() override;
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
 
 protected:
     Texture2D* mTexture;

@@ -21,7 +21,7 @@ public:
      * \brief Draw the object on the screen. Call this each tick.
      * \param modelLocation The location in the vertex shader of the model matrix
      */
-    virtual void Draw(GLint mModelLocation = -1) override;
+    virtual void Draw() override;
 
     
     // ---------- Translation ---------- //
@@ -58,6 +58,8 @@ public:
     virtual void OnCollision(){};
     virtual void OnCollision(Actor* otherActor){};
     
+    void AddComponent(SceneComponent* component);
+
     std::string name = "default";
 
 protected:

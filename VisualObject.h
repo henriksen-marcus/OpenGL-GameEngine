@@ -4,7 +4,6 @@
 #include <QMatrix4x4>
 #include <vector>
 #include "VertexClasses.h"
-
 #include "BaseObject.h"
 
 class VisualObject : public BaseObject
@@ -25,7 +24,7 @@ public:
     /**
      * \brief Draw the object on the screen. Call this each tick.
      */
-    virtual void Draw(GLint mModelLocation = -1) = 0;
+    virtual void Draw() = 0;
 
 protected:
     // Stores vertices for the object

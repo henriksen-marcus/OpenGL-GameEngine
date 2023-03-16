@@ -27,7 +27,7 @@ public:
 
     std::vector<HealthPack*> healthpacks;
 
-    void Tick(float deltaTime, GLint mModelLocation) override;
+    void Tick(float deltaTime) override;
 
 protected:
 

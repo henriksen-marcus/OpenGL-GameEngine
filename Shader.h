@@ -21,10 +21,17 @@ public:
 	void UseShader();
 	void ClearShader();
 
-	GLuint GetID() { return shaderID; }
+    inline GLuint GetID() { return shaderID; }
+
+    void SendUniforms();
 
 private:
     GLuint shaderID, uniformProjection, uniformModel, uniformView, uniformTexture;
+
+    static constexpr float defaultFOV{75.f};
+    static constexpr float aspectRatio{16.f/9.f};
+    static constexpr float nearPlane{0.01f};
+    static constexpr float farPlane{1000.f};
 
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);

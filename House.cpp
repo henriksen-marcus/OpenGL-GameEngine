@@ -32,16 +32,16 @@ House::House(const QVector3D& location)
     //Init();
 }
 
-void House::Draw(GLint mModelLocation)
+void House::Draw()
 {
-    backWall->Draw(mModelLocation);
-    bottom->Draw(mModelLocation);
-    top->Draw(mModelLocation);
-    leftWall->Draw(mModelLocation);
-    rightWall->Draw(mModelLocation);
-    leftOfDoor->Draw(mModelLocation);
-    rightOfDoor->Draw(mModelLocation);
-    mDoor->Draw(mModelLocation);
+    backWall->Draw();
+    bottom->Draw();
+    top->Draw();
+    leftWall->Draw();
+    rightWall->Draw();
+    leftOfDoor->Draw();
+    rightOfDoor->Draw();
+    mDoor->Draw();
 }
 
 void House::Tick(float deltaTime)

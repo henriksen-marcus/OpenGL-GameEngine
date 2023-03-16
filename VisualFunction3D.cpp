@@ -25,27 +25,6 @@ void VisualFunction3D::Init()
     glBindVertexArray(0);
 }
 
-void VisualFunction3D::Draw(GLint mModelLocation)
-{
-    Actor::Draw(mModelLocation);
-    return;
-    // Draw with no transformations we we have not gotten the shader "model" location.
-    if (mModelLocation != -1)
-    {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
-    }
-    else
-    {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
-    }
-    
-    glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
-    glBindVertexArray(0);
-}
-
 void VisualFunction3D::FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float ymin,
     float ymax, unsigned segments)
 {

@@ -8,7 +8,7 @@ class VisualFunction2D : public Actor
 {
 public:
     void Init() override;
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
 
     void FromFunction(std::function<float(float)> f, float xmin, float xmax, unsigned segments);
     void FromFunction(std::function<float(float)> f, QVector3D origin, float sizeX, unsigned segments);

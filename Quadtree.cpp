@@ -173,12 +173,12 @@ void Quadtree::Init()
     Actor::Init();
 }
 
-void Quadtree::Draw(GLint mModelLocation)
+void Quadtree::Draw()
 {
     glBindVertexArray(mVAO);
 
     QMatrix4x4 temp{};
-    glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, temp.constData());
+    glUniformMatrix4fv(GetActiveShader()->GetModelLocation(), 1, GL_FALSE, temp.constData());
 
     glDrawArrays(GL_LINES, 0, mVertices.size());
 

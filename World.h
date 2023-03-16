@@ -15,7 +15,7 @@ public:
     World();
 
     /* Runs tick and draw on all actors in the world. */
-    virtual void Tick(float deltaTime, GLint mModelLocation);
+    virtual void Tick(float deltaTime);
 
     bool ContainsActor(Actor* actor);
     bool ContainsActor(const std::string& name);

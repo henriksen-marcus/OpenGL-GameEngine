@@ -9,7 +9,7 @@ public:
 
     virtual void AddPoints(const std::vector<QPointF>& points, const QVector3D& color = QVector3D(1.f, 1.f, 1.f));
 
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
 
 protected:
     GLint mPointSize{1};

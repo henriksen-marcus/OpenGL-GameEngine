@@ -3,7 +3,6 @@
 #include "WorldManager.h"
 #include "PlayerController.h"
 #include "ShaderManager.h"
-#include "Shader.h"
 
 BaseObject::BaseObject()
 {
@@ -21,6 +20,17 @@ PlayerController& BaseObject::GetPlayerController()
 
 void BaseObject::UseShader(std::string name)
 {
-    Shader* shader = ShaderManager::GetInstance().Shaders[name];
-    if (shader) shader->UseShader();
+    auto& sm = ShaderManager::GetInstance();
+    Shader* shader = sm.Shaders[name];
+    if (shader)
+    {
+        sm.ActiveShader = shader;
+        shader->UseShader();
+    }
+    else std::cout << "Tried applying false shader.\n";
+}
+
+Shader* BaseObject::GetActiveShader()
+{
+    return ShaderManager::GetInstance().ActiveShader;
 }

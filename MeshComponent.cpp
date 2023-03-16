@@ -1,4 +1,5 @@
 #include "MeshComponent.h"
+#include "Shader.h"
 #include "Texture2D.h"
 
 
@@ -32,6 +33,12 @@ void MeshComponent::Init()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
+    //if (mTexture)
+    //{
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(2);
+    //}
+
     if (!mIndices.empty())
     {
         glGenBuffers(1, &mIBO);
@@ -44,25 +51,28 @@ void MeshComponent::Init()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind
 }
 
-void MeshComponent::Draw(GLint mModelLocation)
+void MeshComponent::Draw()
 {
     if (mVertices.empty()) return;
 
-    glBindVertexArray(mVAO);
-
-    // Draw with no transformations we we have not gotten the shader "model" location.
-    if (mModelLocation != -1)
+    if (mTexture)
     {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
+        mTexture->Bind();
+        UseShader("texture");
     }
     else
     {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
+        std::cout << "No texture..\n";
+        UseShader("plain");
     }
 
-    if (mTexture) mTexture->Bind();
+    // Uniforms specific to the shader.
+    Shader* activeShader = GetActiveShader();
+    activeShader->SendUniforms();
+
+    glUniformMatrix4fv(activeShader->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
+
+    glBindVertexArray(mVAO);
 
     // Decide if we should use IBO or not
     if (!mIndices.empty())
@@ -73,6 +83,6 @@ void MeshComponent::Draw(GLint mModelLocation)
     }
     else glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
 
-    if (mTexture) mTexture->Unbind();
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
 }

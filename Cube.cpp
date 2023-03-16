@@ -64,23 +64,14 @@ void Cube::Init()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind
 }
 
-void Cube::Draw(GLint mModelLocation)
+void Cube::Draw()
 {
     initializeOpenGLFunctions();
 
     glBindVertexArray(mVAO);
 
-    // Draw with no transformations we we have not gotten the shader "model" location.
-    if (mModelLocation != -1)
-    {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
-    }
-    else
-    {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
-    }
+    QMatrix4x4 temp;
+    glUniformMatrix4fv(GetActiveShader()->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
     glDrawElements(mode, mIndices.size(), GL_UNSIGNED_INT, nullptr);

@@ -23,9 +23,7 @@ class Axis : public Actor
 public:
     Axis(const FAxisInfo& axisInfo, bool init = false);
 
-    void Init() override { Actor::Init(); }
-
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
 
 protected:
     int mNumAxis;

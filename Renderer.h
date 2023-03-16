@@ -60,7 +60,7 @@ public:
         for (auto it = mObjects.begin(); it != mObjects.end(); ++it)
         {
             it->second->BeginPlay();
-            it->second->Draw(modelLocation);
+            it->second->Draw();
         }
     }
 
@@ -81,12 +81,12 @@ public:
      * \param modelLocation Shader location of the model matrix, so
      * that the objects can transform.
      */
-    virtual void DrawObjects(GLint modelLocation, float deltaTime)
+    virtual void DrawObjects(float deltaTime)
     {
         for (auto it = mObjects.begin(); it != mObjects.end(); ++it)
         {
             it->second->Tick(deltaTime);
-            it->second->Draw(modelLocation);
+            it->second->Draw();
         }
     }
 

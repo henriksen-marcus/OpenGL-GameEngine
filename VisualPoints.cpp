@@ -17,23 +17,13 @@ void VisualPoints::AddPoints(const std::vector<QPointF>& points, const QVector3D
     }
 }
 
-void VisualPoints::Draw(GLint mModelLocation)
+void VisualPoints::Draw()
 {
     initializeOpenGLFunctions();
 
     glBindVertexArray(mVAO);
 
-    // Draw with no transformations we we have not gotten the shader "model" location.
-    if (mModelLocation != -1)
-    {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(mModelLocation, 1, GL_FALSE, mMatrix.constData());
-    }
-    else
-    {
-        QMatrix4x4 temp;
-        glUniformMatrix4fv(1, 1, GL_FALSE, temp.constData());
-    }
+    glUniformMatrix4fv(GetActiveShader()->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
 
     glPointSize(mPointSize);
 

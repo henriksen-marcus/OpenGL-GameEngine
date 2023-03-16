@@ -27,9 +27,9 @@ void Pawn::Init()
     
 }
 
-void Pawn::Draw(GLint mModelLocation)
+void Pawn::Draw()
 {
-    mPossessedActor->Draw(mModelLocation);
+    mPossessedActor->Draw();
 }
 
 void Pawn::Tick(float deltaTime)

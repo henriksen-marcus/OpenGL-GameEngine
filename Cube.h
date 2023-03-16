@@ -9,7 +9,7 @@ public:
     
     void Init() override;
 
-    void Draw(GLint modelLocation = -1) override;
+    void Draw() override;
 
 protected:
     void InitTriangles();

@@ -11,8 +11,6 @@ public:
      * \brief Load the data from the mVertices array into the GPU's memory. Do this before calling Draw().
      */
     void Init() override;
- 
-    void Draw(GLint mModelLocation = -1) override;
 
     /**
      * \brief Load data points into this object's mVertices array using the given function.

@@ -7,6 +7,11 @@ SceneComponent::SceneComponent(Actor* parent)
 {
 }
 
+void SceneComponent::SetupAttachment(Actor* parent)
+{
+    mParent = parent;
+}
+
 void SceneComponent::SetRelativeLocation(const QVector3D& location)
 {
     followParentTransform = true;

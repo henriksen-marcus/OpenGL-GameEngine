@@ -18,8 +18,3 @@ void printQVector3D(const QVector3D& vec) {
     qDebug() << "X:" << vec.x() << "Y:" << vec.y() << "Z:" << vec.z();
 }
 
-void CubePlayer::Draw(GLint mModelLocation)
-{
-    Pawn::Draw(mModelLocation);
-}
-

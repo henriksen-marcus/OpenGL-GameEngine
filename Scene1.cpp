@@ -72,10 +72,8 @@ Scene1::Scene1()
 
 }
 
-void Scene1::Tick(float deltaTime, GLint mModelLocation)
+void Scene1::Tick(float deltaTime)
 {
-    World::Tick(deltaTime, mModelLocation);
+    World::Tick(deltaTime);
     sceneCamera->Tick(deltaTime);
-    //mQuadtree->Draw(mModelLocation);
-    mRenderer->Get("house")->AddActorLocalRotation(QVector3D(0.f, 0.7f, 0.f));
 }

@@ -1,4 +1,5 @@
 #include "CameraComponent.h"
+#include <iostream>
 
 CameraComponent::CameraComponent(Actor* parent)
     : SceneComponent(parent)
@@ -16,6 +17,7 @@ QMatrix4x4& CameraComponent::GetViewMatrix()
 void CameraComponent::Tick(float deltaTime)
 {
     SceneComponent::Tick(deltaTime);
+
     mPitch = qBound(-89.9f, mPitch, 89.9f);
     UpdateCameraVectors();
 }

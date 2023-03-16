@@ -1,7 +1,10 @@
 #include "Shader.h"
+#include "CameraComponent.h"
+#include "qmatrix4x4.h"
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "PlayerController.h"
 
 Shader::Shader()
 {
@@ -85,7 +88,25 @@ void Shader::ClearShader()
 		shaderID = 0;
 	}
 	uniformModel = 0;
-	uniformProjection = 0;
+    uniformProjection = 0;
+}
+
+void Shader::SendUniforms()
+{
+    QMatrix4x4 viewMatrix{};
+    float newFOV = defaultFOV;
+    auto* cam = PlayerController::GetInstance().GetCurrentCamera();
+    if (cam)
+    {
+        viewMatrix = cam->GetViewMatrix();
+        newFOV = cam->mFOV;
+    }
+
+    QMatrix4x4 projection;
+    projection.perspective(newFOV, aspectRatio, nearPlane, farPlane);
+
+    glUniformMatrix4fv(GetProjectionLocation(), 1, GL_FALSE, projection.constData());
+    glUniformMatrix4fv(GetViewLocation(), 1, GL_FALSE, viewMatrix.constData());
 }
 
 void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)

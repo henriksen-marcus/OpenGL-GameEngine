@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-
-#include "VertexClasses.h"
 #include "Actor.h"
 
 /**
@@ -22,8 +19,5 @@ public:
 	/**
 	 * \brief Render call.
 	 */
-    void Draw(GLint mMatrixLocation = -1) override;
-
-private:
-    std::vector<Vertex0> mVertices;
+    void Draw() override;
 };

@@ -34,10 +34,10 @@ void LineNPC::Init()
     VisualFunction2D::Init();
 }
 
-void LineNPC::Draw(GLint mModelLocation)
+void LineNPC::Draw()
 {
-    VisualFunction2D::Draw(mModelLocation);
-    mNPC->Draw(mModelLocation);
+    VisualFunction2D::Draw();
+    mNPC->Draw();
 }
 
 void LineNPC::Tick(float deltaTime)

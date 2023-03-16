@@ -22,7 +22,7 @@ public:
 
     Camera* GetCamera();
 
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
 
     virtual void Tick(float deltaTime) override;
     virtual void OnPickup(PickupType pickup){};

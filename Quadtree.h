@@ -46,7 +46,7 @@ public:
 
     void InitLines(std::vector<Vertex>& arr);
     void Init() override;
-    void Draw(GLint mModelLocation = -1) override;
+    void Draw() override;
 
 protected:
     bool mIsDivided{false};

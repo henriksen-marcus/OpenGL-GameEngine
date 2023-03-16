@@ -19,37 +19,12 @@ World::World()
     worldUnpausedTimer->start();
 }
 
-void World::Tick(float deltaTime, GLint mModelLocation)
+void World::Tick(float deltaTime)
 {
     if (isPaused) return;
     mDeltaTime = deltaTime;
 
     mQuadtree->UpdateTree(mActors);
-
-//    for (auto a : mActors)
-//    {
-//        if (a->GetCollisionComponent())
-//        {
-//            auto c = a->GetCollisionComponent();
-//            //printf("Collision pos: %f, %f\n", c->mLocation.x(), c->mLocation.y());
-//            //std::cout << "Collision pos: " << c->mLocation.x() << "," <<  c->mLocation.y() << "\n";
-//            //std::cout << "Actor pos: " << a->GetActorLocation().x() << "," << a->GetActorLocation().z() << "\n";
-//            mCubes.push_back(new Cube(a->GetActorLocation(), c->mHalfLength*2, QVector3D(1.f, 1.f, 0.f), GL_LINES));
-//            mCubes.back()->SetActorLocation(a->GetActorLocation());
-//            mCubes.back()->Init();
-//        }
-//    }
-
-//    for (auto c : mCubes)
-//    {
-//        c->Draw(mModelLocation);
-//    }
-
-//    for (auto c : mCubes)
-//    {
-//        delete c;
-//    }
-//    mCubes.clear();
 
     // Check each object in the world for collision
     for (auto actor : mActors)
@@ -79,7 +54,7 @@ void World::Tick(float deltaTime, GLint mModelLocation)
         }
     }
 
-    mRenderer->DrawObjects(mModelLocation, deltaTime);
+    mRenderer->DrawObjects(deltaTime);
 }
 
 bool World::ContainsActor(Actor* actor)
