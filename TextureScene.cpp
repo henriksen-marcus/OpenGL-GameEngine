@@ -4,12 +4,20 @@
 #include "Actor.h"
 #include "XYZ.h"
 #include "PlayerController.h"
+#include "Meshes/CubeMesh.h"
 
 TextureScene::TextureScene()
 {
-    auto* plane = new Plane(QVector3D(), 5.f, 5.f);
-    mActors.push_back(plane);
-    mRenderer->Add("plane", plane);
+//    auto* plane = new Plane(QVector3D(), 5.f, 5.f);
+//    mActors.push_back(plane);
+//    mRenderer->Add("plane", plane);
+
+    auto* cubeactor = new Actor();
+    auto* cube = new CubeMesh(cubeactor, 0.5f);
+    cube->SetTexture("../OpenGLMainQt/Textures/tex.jpg");
+    cubeactor->SetMesh(cube);
+    mActors.push_back(cubeactor);
+    mRenderer->Add("cubeactor", cubeactor);
 
     auto* camActor = new Actor(QVector3D(0.f, 1.f, 2.f));
     auto* cam = new CameraComponent(camActor);

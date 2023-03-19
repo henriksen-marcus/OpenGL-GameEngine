@@ -2,7 +2,7 @@
 
 #include "VisualFunction2D.h"
 
-class Cube;
+class CubeMesh;
 
 class LineNPC : public VisualFunction2D
 {
@@ -18,7 +18,7 @@ public:
 
 protected:
     /* The NPC that will move along the line. */
-    Cube* mNPC;
+    CubeMesh* mNPC;
     float mPosAlongLine{0.f};
     bool isGoingBack{false};
     std::function<float(float)> mCurrentCurve;

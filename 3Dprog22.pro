@@ -12,7 +12,6 @@ SOURCES += main.cpp \
     BaseObject.cpp \
     Boundry2D.cpp \
     CameraComponent.cpp \
-    Cube.cpp \
     CubePlayer.cpp \
     HealthPack.cpp \
     House.cpp \
@@ -48,13 +47,13 @@ HEADERS += \
     Boundry2D.h \
     Camera.h \
     CameraComponent.h \
-    Cube.h \
     CubePlayer.h \
     HealthPack.h \
     House.h \
     LineNPC.h \
     MathTasks.h \
     MeshComponent.h \
+    Meshes/CubeMesh.h \
     Meshes/PlaneMesh.h \
     Octree.h \
     PausableTimer.h \

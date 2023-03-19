@@ -1,9 +1,8 @@
 #include "CubePlayer.h"
-#include "Cube.h"
 
 CubePlayer::CubePlayer()
 {
-    mPossessedActor = new Cube(QVector3D(), 0.2f, QVector3D(0.5f, 1.f, 0.2f));
+    //mPossessedActor = new Cube(QVector3D(), 0.2f, QVector3D(0.5f, 1.f, 0.2f));
     mPossessedActor->Init();
     mMovementSpeed *= 3.f;
     SetCollisionComponent(0.1f);

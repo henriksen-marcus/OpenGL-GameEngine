@@ -5,6 +5,7 @@
 
 void PlayerController::ProcessKeyboard(const std::vector<Movement>& heldKeys)
 {
+    if (!currentPossessed) return;
     for (auto key : heldKeys)
       {
           currentPossessed->ProcessKeyboard(key);
@@ -13,6 +14,7 @@ void PlayerController::ProcessKeyboard(const std::vector<Movement>& heldKeys)
 
 void PlayerController::ProcessMouse(float xoffset, float yoffset)
 {
+    if (!currentPossessed) return;
     currentPossessed->ProcessMouseMovement(xoffset, yoffset);
 }
 

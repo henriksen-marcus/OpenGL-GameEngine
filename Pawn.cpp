@@ -1,5 +1,4 @@
 #include "Pawn.h"
-#include "Cube.h"
 #include "Camera.h"
 #include "enums.h"
 

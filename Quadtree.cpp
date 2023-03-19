@@ -6,6 +6,17 @@ Quadtree::Quadtree(Boundry2D* boundry, float _z)
 {
 }
 
+Quadtree::~Quadtree()
+{
+    delete nw;
+    delete ne;
+    delete sw;
+    delete se;
+    delete mBoundry;
+    /* We don't delete the actors because the
+     * the quadtree doesn't own them. */
+}
+
 void Quadtree::Insert(Actor* actor)
 {
     if (!actor) return;

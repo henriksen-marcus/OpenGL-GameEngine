@@ -3,14 +3,25 @@
 #include "Texture2D.h"
 
 
-MeshComponent::MeshComponent()
+MeshComponent::MeshComponent(Actor* parent, GLenum drawMode)
+    : SceneComponent(parent), mDrawMode(drawMode), mTexture(nullptr)
 {
 
+}
+
+MeshComponent::~MeshComponent()
+{
+    delete mTexture;
 }
 
 void MeshComponent::SetTexture(Texture2D* texture)
 {
     mTexture = texture;
+}
+
+void MeshComponent::SetTexture(std::string path)
+{
+    mTexture = new Texture2D(path);
 }
 
 void MeshComponent::Init()
@@ -55,7 +66,7 @@ void MeshComponent::Draw()
 {
     if (mVertices.empty()) return;
 
-    if (mTexture)
+    if (mTexture != NULL)
     {
         mTexture->Bind();
         UseShader("texture");
@@ -78,7 +89,7 @@ void MeshComponent::Draw()
     if (!mIndices.empty())
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
-        glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(mDrawMode, mIndices.size(), GL_UNSIGNED_INT, nullptr);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     else glDrawArrays(GL_TRIANGLES, 0, mVertices.size());

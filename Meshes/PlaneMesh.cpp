@@ -1,7 +1,8 @@
 #include "PlaneMesh.h"
 #include "Texture2D.h"
 
-PlaneMesh::PlaneMesh(const QVector3D& location, float sizeX, float sizeY, const QVector3D& color, GLenum mode)
+PlaneMesh::PlaneMesh(Actor* parent, const QVector3D& location, float sizeX, float sizeY, const QVector3D& color, GLenum mode)
+    :MeshComponent(parent, mode)
 {
     mVertices.clear();
     sizeX *= 0.5f; // Center the cube on the given origin

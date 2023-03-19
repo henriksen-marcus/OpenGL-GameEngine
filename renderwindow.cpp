@@ -9,7 +9,6 @@
 #include <string>
 #include <iostream>
 
-#include "Cube.h"
 #include "VisualFunction2D.h"
 #include "XYZ.h"
 #include "Arrow.h"
@@ -115,21 +114,9 @@ void RenderWindow::init()
     //    glEnable(GL_CULL_FACE);       //draws only front side of models - usually what you want - test it out!
     glClearColor(128.f/255.f, 200.f/255.f, 0.9f, 1.f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
 
-    //Compile shaders:
-    // NB: hardcoded path to files! You have to change this if you change directories for the project.
-    // Qt makes a build-folder besides the project folder. That is why we go down one directory
-    // (out of the build-folder) and then up into the project folder.
-//    mShaderProgram = new Shader();
-//    mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
 
-//    scene1 = new Scene1();
-//    WorldManager::GetInstance().SetWorld(scene1);
     auto* texScene = new TextureScene();
     WorldManager::GetInstance().SetWorld(texScene);
-
-    //    mShaderProgram = new Shader();
-    //    mShaderProgram->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
-
 
     auto* s1 = new Shader();
     s1->CreateFromFiles("../OpenGLMainQt/vertex.vert", "../OpenGLMainQt/fragment.frag");
@@ -141,70 +128,6 @@ void RenderWindow::init()
     SM.Shaders["plain"] = s1;
     SM.Shaders["texture"] = s2;
     SM.ActiveShader = s1;
-
-//    float vertices[] = {
-//            // positions          // colors           // texture coords
-//             0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-//             0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-//            -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-//            -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
-//        };
-//        unsigned int indices[] = {
-//            0, 1, 3, // first triangle
-//            1, 2, 3  // second triangle
-//        };
-
-//        glGenVertexArrays(1, &VAO);
-//        glGenBuffers(1, &VBO);
-//        glGenBuffers(1, &EBO);
-
-//        glBindVertexArray(VAO);
-
-//        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-//        // position attribute
-//        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-//        glEnableVertexAttribArray(0);
-//        // color attribute
-//        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-//        glEnableVertexAttribArray(1);
-//        // texture coord attribute
-//        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-//        glEnableVertexAttribArray(2);
-
-
-//        // load and create a texture
-//        // -------------------------
-
-//        glGenTextures(1, &texture);
-//        glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-//        // set the texture wrapping parameters
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//        // set texture filtering parameters
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//        // load image, create texture and generate mipmaps
-//        int width, height, nrChannels;
-//        // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-//        std::string path = "../OpenGLMainQt/Textures/wall2.jpg";
-//        stbi_set_flip_vertically_on_load(1);
-//        unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-//        if (data)
-//        {
-//            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-//            glGenerateMipmap(GL_TEXTURE_2D);
-//        }
-//        else
-//        {
-//            std::cout << "Failed to load texture" << std::endl;
-//        }
-//        stbi_image_free(data);
-
 }
 
 void RenderWindow::processInput()
@@ -243,41 +166,8 @@ void RenderWindow::render()
 
     processInput();
 
-
-
-//    QMatrix4x4 viewMatrix{};
-//    float newFOV = FOV;
-//    auto* cam = PlayerController::GetInstance().GetCurrentCamera();
-//    if (cam)
-//    {
-//        viewMatrix = cam->GetViewMatrix();
-//        newFOV = cam->mFOV;
-//    }
-
-//    QMatrix4x4 projection;
-//    projection.perspective(newFOV, aspectRatio, nearPlane, farPlane);
-
-//    ShaderManager::GetInstance().UseShader("texture");
-//    ShaderManager::GetInstance().ActiveShader = ShaderManager::GetInstance().Shaders["texture"];
-
-//    QMatrix4x4 emptyTranslation{};
-//    Shader* shader = ShaderManager::GetInstance().ActiveShader;
-//    glUniformMatrix4fv(shader->GetModelLocation(), 1, GL_FALSE, emptyTranslation.constData());
-//    glUniformMatrix4fv(shader->GetProjectionLocation(), 1, GL_FALSE, projection.constData());
-//    glUniformMatrix4fv(shader->GetViewLocation(), 1, GL_FALSE, viewMatrix.constData());
-
-    //std::cout << deltaTime << std::endl;
-
     // Runs everything
     WorldManager::GetInstance().GetWorld()->Tick(deltaTime);
-
-
-
-//    // bind Texture
-//    glBindTexture(GL_TEXTURE_2D, texture);
-//    glBindVertexArray(VAO);
-//    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 
     /* Qt require us to call this swapBuffers() -function.
      swapInterval is 1 by default which means that swapBuffers() will (hopefully) block

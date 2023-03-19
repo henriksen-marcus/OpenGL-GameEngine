@@ -13,6 +13,7 @@ class World : public BaseObject
 {
 public:
     World();
+    ~World();
 
     /* Runs tick and draw on all actors in the world. */
     virtual void Tick(float deltaTime);

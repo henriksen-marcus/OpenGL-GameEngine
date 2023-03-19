@@ -8,6 +8,7 @@ class Quadtree : public Actor
 {
 public:
     Quadtree(Boundry2D* boundry, float _z);
+    ~Quadtree();
 
     // 4 sub-sections
     Quadtree* nw;

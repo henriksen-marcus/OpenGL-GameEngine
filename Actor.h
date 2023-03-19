@@ -3,6 +3,7 @@
 #include <functional>
 #include "VisualObject.h"
 #include "Boundry2D.h"
+#include "MeshComponent.h"
 
 class SceneComponent;
 
@@ -14,6 +15,7 @@ public:
      * \param init If we should call init right after construction (saves a line of code).
      */
     Actor(const QVector3D& location = QVector3D(), bool init = false);
+    ~Actor();
 
     void Init() override;
 
@@ -60,6 +62,9 @@ public:
     
     void AddComponent(SceneComponent* component);
 
+    void SetMesh(MeshComponent* mesh);
+    void ClearMesh();
+
     std::string name = "default";
 
 protected:
@@ -75,7 +80,8 @@ protected:
     float mPitch{};
     float mYaw{};
 
-    Boundry2D* mCollisionComponent{};
+    Boundry2D* mCollisionComponent;
+    MeshComponent* mMesh;
     std::vector<SceneComponent*> mComponents;
 };
 

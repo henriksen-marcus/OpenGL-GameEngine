@@ -4,7 +4,6 @@
 #include "PausableTimer.h"
 #include "Quadtree.h"
 #include <iostream>
-#include "Cube.h"
 
 World::World()
 {
@@ -17,6 +16,16 @@ World::World()
     worldUnpausedTimer = new QElapsedTimer();
     worldTimer->start();
     worldUnpausedTimer->start();
+}
+
+World::~World()
+{
+    delete worldTimer;
+    delete worldUnpausedTimer;
+    delete mQuadtree;
+    delete mRenderer;
+    for (auto a : mActors)
+        delete a;
 }
 
 void World::Tick(float deltaTime)

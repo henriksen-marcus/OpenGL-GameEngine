@@ -1,13 +1,12 @@
 #include "LineNPC.h"
-#include "Cube.h"
-
+#include "Meshes/CubeMesh.h"
 #include <cmath>
 #include <cassert>
 #include <iostream>
 
 LineNPC::LineNPC(std::function<float(float)> f1, std::function<float(float)> f2, float xmin, float xmax, unsigned segments)
 {
-    mNPC = new Cube(QVector3D(), 0.2f, QVector3D(0.f, 0.f, 1.f));
+    mNPC = new CubeMesh(this, 0.2f, QVector3D(0.f, 0.f, 1.f));
     mCurve1 = f1;
     mCurve2 = f2;
     mCurrentCurve = f1;
@@ -47,7 +46,7 @@ void LineNPC::Tick(float deltaTime)
     QVector3D newPos = GetActorLocation();
     newPos.setX(newPos.x() + xval);
     newPos.setY(newPos.y() + mCurrentCurve(xval));
-    mNPC->SetActorLocation(newPos);
+    mNPC->SetWorldLocation(newPos);
 
     if (isGoingBack)
     {
