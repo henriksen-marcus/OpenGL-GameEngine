@@ -90,6 +90,8 @@ FORMS += \
 
 DISTFILES += \
     fragment.frag \
+    phongshader.frag \
+    phongshader.vert \
     plainshader.frag \
     plainshader.vert \
     texturefragshader.frag \
