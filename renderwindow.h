@@ -30,6 +30,7 @@ public:
 
     void exposeEvent(QExposeEvent *) override;  //gets called when app is shown and resized
 
+    friend class DebugLogger;
 private slots:
     void render();
 
@@ -98,3 +99,4 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
 };
+

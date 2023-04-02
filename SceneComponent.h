@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QMatrix4x4>
+
 #include "BaseObject.h"
 #include "qquaternion.h"
 #include "qvectornd.h"
@@ -12,12 +14,14 @@ class SceneComponent : public BaseObject
 public:
     SceneComponent(Actor* parent);
 
-    /* Attch this object to the given actor. */
+    /* Attach this object to the given actor. */
     void SetupAttachment(Actor* parent);
 
-    /* Remove the attahcment to the current actor
+    /* Remove the attachment to the current actor
        if there is one. */
     void DetachFromActor();
+
+    void SetFollowParent(bool follow);
 
     // ---------- Translation ---------- //
     virtual const QVector3D& GetRelativeLocation() { return mRelativeLocation; }
@@ -47,15 +51,19 @@ public:
 
     // ---------- Scale ---------- //
     virtual const QVector3D& GetActorScale() { return mScale; }
-    virtual void SetActorScale(const QVector3D& scale);
-    virtual void AddActorLocalScale(const QVector3D& offset);
+    virtual void SetWorldScale(const QVector3D& scale);
+    virtual void AddWorldScale(const QVector3D& offset);
 
     virtual void Tick(float deltaTime);
 
+    virtual void UpdateModelMatrixQuat();
+    virtual void UpdateModelMatrix();
+    virtual void UpdateVectors();
+
     /* If the component should copy the position
      * of it's owning actor, with an offset. */
-    bool followParentTransform{true};
-    bool followParentRotation{true};
+    bool followParentTransform;
+    bool followParentRotation;
 
 protected:
     Actor* mParent;
@@ -65,6 +73,8 @@ protected:
 
     QQuaternion mRelativeRotation{};
     QQuaternion mWorldRotation{};
+
+    QMatrix4x4 mMatrix{};
 
     // The world-space scale of the object
     QVector3D mScale{1.f, 1.f, 1.f};

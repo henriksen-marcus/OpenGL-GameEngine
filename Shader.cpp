@@ -70,11 +70,6 @@ GLuint Shader::GetViewLocation()
     return uniformView;
 }
 
-GLuint Shader::GetTexture()
-{
-
-}
-
 void Shader::UseShader()
 {
 	glUseProgram(shaderID);

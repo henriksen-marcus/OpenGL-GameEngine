@@ -21,9 +21,8 @@ public:
 
     /**
      * \brief Draw the object on the screen. Call this each tick.
-     * \param modelLocation The location in the vertex shader of the model matrix
      */
-    virtual void Draw() override;
+    void Draw() override;
 
     
     // ---------- Translation ---------- //
@@ -62,6 +61,7 @@ public:
     
     void AddComponent(SceneComponent* component);
 
+    MeshComponent* GetMesh();
     void SetMesh(MeshComponent* mesh);
     void ClearMesh();
 

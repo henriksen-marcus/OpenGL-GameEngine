@@ -1,39 +1,40 @@
-#include <QTimer>
+#include "renderwindow.h"
+
+#include <iostream>
+#include <QDebug>
+#include <QKeyEvent>
 #include <QMatrix4x4>
 #include <QOpenGLContext>
-#include <QOpenGLFunctions>
 #include <QOpenGLDebugLogger>
-#include <QKeyEvent>
+#include <QOpenGLFunctions>
 #include <QStatusBar>
-#include <QDebug>
+#include <QTimer>
 #include <string>
-#include <iostream>
 
-#include "VisualFunction2D.h"
-#include "XYZ.h"
 #include "Arrow.h"
-#include "VisualFunction3D.h"
-#include "VisualPoints.h"
 #include "Axis.h"
 #include "BaseObject.h"
+#include "CameraComponent.h"
+#include "functions.h"
+#include "LineNPC.h"
+#include "logger.h"
+#include "mainwindow.h"
+#include "MathTasks.h"
+#include "Plane.h"
+#include "PlayerController.h"
+#include "Quadtree.h"
+#include "Scenes/Scene1.h"
+#include "Shader.h"
+#include "ShaderManager.h"
+#include "Scenes/TextureScene.h"
+#include "VisualFunction2D.h"
+#include "VisualFunction3D.h"
+#include "VisualPoints.h"
 #include "World.h"
 #include "WorldManager.h"
-#include "Plane.h"
-#include "Quadtree.h"
-#include "PlayerController.h"
-#include "Scene1.h"
-#include "CameraComponent.h"
-#include "LineNPC.h"
-#include "TextureScene.h"
-#include "ShaderManager.h"
-
+#include "XYZ.h"
 #include "Vendor/stb_image.h"
-#include "MathTasks.h"
-#include "functions.h"
-#include "renderwindow.h"
-#include "Shader.h"
-#include "mainwindow.h"
-#include "logger.h"
+#include "DebugLogger.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -103,7 +104,7 @@ void RenderWindow::init()
     mLogger->logText(tempString);
 
     //Start the Qt OpenGL debugger
-    //Really helpfull when doing OpenGL
+    //Really helpful when doing OpenGL
     //Supported on most Windows machines - at least with NVidia GPUs
     //reverts to plain glGetError() on Mac and other unsupported PCs
     // - can be deleted
@@ -128,6 +129,8 @@ void RenderWindow::init()
     SM.Shaders["plain"] = s1;
     SM.Shaders["texture"] = s2;
     SM.ActiveShader = s1;
+
+    DebugLogger::GetInstance().SetRenderWindow(this);
 }
 
 void RenderWindow::processInput()
@@ -314,8 +317,6 @@ void RenderWindow::mouseMoveEvent(QMouseEvent* event)
 // NB - see renderwindow.h for signatures on keyRelease and mouse input
 void RenderWindow::keyPressEvent(QKeyEvent *event)
 {
-    //mMainWindow->statusBar()->showMessage(" AAAA");
-
     if (event->key() == Qt::Key_Escape) mMainWindow->close();  // Shuts down the whole program
 
     if (event->key() == Qt::Key_W) heldKeys.push_back(Movement::FORWARD);

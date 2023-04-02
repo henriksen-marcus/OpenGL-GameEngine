@@ -39,18 +39,18 @@ protected:
     // Vertex buffer object
     GLuint mVBO{};
 
-    // The world-space location of the object
-    QVector3D mLocation{};
+    //// The world-space location of the object
+    //QVector3D mLocation{};
 
-    // The world-space rotation of the object
-    QVector3D mRotation{};
+    //// The world-space rotation of the object
+    //QVector3D mRotation{};
 
-    QQuaternion mRotationQuat{};
+    //QQuaternion mRotationQuat{};
 
-    // The world-space scale of the object
-    QVector3D mScale{1.f, 1.f, 1.f};
+    //// The world-space scale of the object
+    //QVector3D mScale{1.f, 1.f, 1.f};
 
-    // Handles scaling, rotation and translation of the object
-    QMatrix4x4 mMatrix{};
+    //// Handles scaling, rotation and translation of the object
+    //QMatrix4x4 mMatrix{};
 };
 

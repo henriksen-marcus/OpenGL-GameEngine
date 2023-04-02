@@ -14,13 +14,7 @@ public:
 
     void ProcessKeyboard(Movement direction);
     void ProcessMouseMovement(float xoffset, float yoffset);
-    void updateVectors();
     void UpdateCamera();
-
-    void SetActor(Actor* actorToPossess, bool deleteCurrent = false);
-    Actor* GetActor() { return mPossessedActor; }
-
-    Camera* GetCamera();
 
     void Draw() override;
 
@@ -28,20 +22,6 @@ public:
     virtual void OnPickup(PickupType pickup){};
 
 protected:
-    // Vectors
-    QVector3D Front{};
-    QVector3D Up{};
-    QVector3D Right{};
-    QVector3D WorldUp{};
-
-    float Yaw{};
-    float Pitch{};
-    
     float mMovementSpeed;
     float mMouseSensitivity;
-
-    Actor* mPossessedActor;
-
-    // The current active camera
-    Camera* mCamera;
 };

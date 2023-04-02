@@ -4,7 +4,7 @@
 
 
 MeshComponent::MeshComponent(Actor* parent, GLenum drawMode)
-    : SceneComponent(parent), mDrawMode(drawMode), mTexture(nullptr)
+    : SceneComponent(parent), mTexture(nullptr), mDrawMode(drawMode)
 {
 
 }
@@ -44,11 +44,11 @@ void MeshComponent::Init()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
-    //if (mTexture)
-    //{
+    if (mTexture != nullptr)
+    {
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
         glEnableVertexAttribArray(2);
-    //}
+    }
 
     if (!mIndices.empty())
     {
@@ -66,14 +66,14 @@ void MeshComponent::Draw()
 {
     if (mVertices.empty()) return;
 
-    if (mTexture != NULL)
+    if (mTexture != nullptr)
     {
         mTexture->Bind();
         UseShader("texture");
     }
     else
     {
-        std::cout << "No texture..\n";
+        //std::cout << "No texture..\n";
         UseShader("plain");
     }
 

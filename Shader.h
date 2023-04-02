@@ -16,7 +16,6 @@ public:
 	GLuint GetProjectionLocation();
 	GLuint GetModelLocation();
 	GLuint GetViewLocation();
-    GLuint GetTexture();
 
 	void UseShader();
 	void ClearShader();

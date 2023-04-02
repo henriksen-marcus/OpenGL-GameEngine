@@ -21,8 +21,7 @@ PlayerController& BaseObject::GetPlayerController()
 void BaseObject::UseShader(std::string name)
 {
     auto& sm = ShaderManager::GetInstance();
-    Shader* shader = sm.Shaders[name];
-    if (shader)
+    if (Shader* shader = sm.Shaders[name])
     {
         sm.ActiveShader = shader;
         shader->UseShader();
@@ -33,4 +32,19 @@ void BaseObject::UseShader(std::string name)
 Shader* BaseObject::GetActiveShader()
 {
     return ShaderManager::GetInstance().ActiveShader;
+}
+
+void BaseObject::print(const std::string& message)
+{
+	DebugLogger::GetInstance().Print(message);
+}
+
+void BaseObject::print(const std::string& message, const QVector3D& vec)
+{
+    print(message + " " + std::to_string(vec.x()) + " " + std::to_string(vec.y()) + " " + std::to_string(vec.z()));
+}
+
+void BaseObject::print(const QVector3D& vec)
+{
+    print(std::to_string(vec.x()) + " " + std::to_string(vec.y()) + " " + std::to_string(vec.z()));
 }

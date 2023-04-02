@@ -29,6 +29,20 @@ void Actor::Draw()
     if (mMesh) mMesh->Draw();
 }
 
+void Actor::Tick(float deltaTime)
+{
+    UpdateModelMatrixQuat();
+    if (mCollisionComponent)
+        mCollisionComponent->Update(mLocation);
+    
+    if (mMesh) 
+    {
+    	mMesh->Tick(deltaTime);
+    }
+
+    for (auto c : mComponents)
+        c->Tick(deltaTime);
+}
 
 // ---------- Translation ---------- //
 
@@ -40,13 +54,13 @@ const QVector3D& Actor::GetActorLocation()
 void Actor::SetActorLocation(const QVector3D& location)
 {
     mLocation = location;
-    UpdateModelMatrix();
+    UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalOffset(const QVector3D& offset)
 {
     mLocation += mForward * offset.z() + QVector3D::crossProduct(mForward, mUp) * offset.x() + mUp * offset.y();
-    UpdateModelMatrix();
+    UpdateModelMatrixQuat();
 }
 
 
@@ -62,14 +76,14 @@ void Actor::SetActorRotation(const QVector3D& rotation)
 {
     mRotation = rotation;
     mRotationQuat = QQuaternion::fromEulerAngles(rotation);
-    UpdateModelMatrix();
+    UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalRotation(const QVector3D& offset)
 {
     mRotation += offset;
-    mRotationQuat += QQuaternion::fromEulerAngles(offset);
-    UpdateModelMatrix();
+    mRotationQuat = mRotationQuat * QQuaternion::fromEulerAngles(offset);
+    //UpdateModelMatrixQuat();
 }
 
 void Actor::SetActorRotation(const QQuaternion& rotation)
@@ -96,13 +110,13 @@ const QVector3D& Actor::GetActorScale()
 void Actor::SetActorScale(const QVector3D& scale)
 {
     mScale = scale;
-    UpdateModelMatrix();
+    UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalScale(const QVector3D& offset)
 {
     mScale += offset;
-    UpdateModelMatrix();
+    UpdateModelMatrixQuat();
 }
 
 Boundry2D* Actor::GetCollisionComponent()
@@ -120,18 +134,15 @@ void Actor::SetCollisionComponent(float halfLength)
     mCollisionComponent = new Boundry2D(QVector2D(mLocation.x(), mLocation.y()), halfLength);
 }
 
-void Actor::Tick(float deltaTime)
-{
-    if (mCollisionComponent)
-        mCollisionComponent->Update(mLocation);
-    for (auto c : mComponents)
-        c->Tick(deltaTime);
-}
-
 void Actor::AddComponent(SceneComponent* component)
 {
     mComponents.push_back(component);
     component->SetupAttachment(this);
+}
+
+MeshComponent* Actor::GetMesh()
+{
+    return mMesh;
 }
 
 void Actor::SetMesh(MeshComponent* mesh)
@@ -147,6 +158,7 @@ void Actor::ClearMesh()
 
 void Actor::UpdateModelMatrix()
 {
+    print("Updt!");
     UpdateVectors();
 
     mMatrix.setToIdentity();

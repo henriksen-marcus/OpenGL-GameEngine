@@ -15,7 +15,6 @@ public:
         return instance;
     }
 
-
     void ProcessKeyboard(const std::vector<Movement>& heldKeys);
     void ProcessMouse(float xoffset, float yoffset);
 

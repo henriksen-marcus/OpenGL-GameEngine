@@ -10,32 +10,46 @@ public:
     {
         size *= 0.5f; // Center the cube on the given origin
 
-//        mVertices.emplace_back(-size, -size, -size, color); // Origin 0
-//        mVertices.emplace_back(size, -size, -size, color); // X 1
-//        mVertices.emplace_back(-size, size, -size, color); // Y 2
-//        mVertices.emplace_back(-size, -size, size, color); // Z 3
+        mVertices.emplace_back(-size, -size, -size, color);  
+        mVertices.emplace_back(size, -size, -size, color);
+        mVertices.emplace_back(-size, size, -size, color);
+        mVertices.emplace_back(-size, -size, size, color);  
 
-//        mVertices.emplace_back(size, -size, size, color); // XZ 4
-//        mVertices.emplace_back(size, size, -size, color); // XY 5
+        mVertices.emplace_back(size, -size, size, color);  
+        mVertices.emplace_back(size, size, -size, color);
 
-//        mVertices.emplace_back(-size, size, size, color); // ZY 6
-//        mVertices.emplace_back(size, size, size, color); // XYZ 7
+        mVertices.emplace_back(-size, size, size, color); 
+        mVertices.emplace_back(size, size, size, color); 
 
-        mVertices.emplace_back(-size, -size, -size, color, 1.0f, 1.0f); // Origin 0
-        mVertices.emplace_back(size, -size, -size, color, 1.0f, 1.0f); // X 1
-        mVertices.emplace_back(-size, size, -size, color, 0.0f, 0.0f); // Y 2
-        mVertices.emplace_back(-size, -size, size, color, 0.0f, 0.0f); // Z 3
+        //mVertices.emplace_back(-size, -size, -size, color, 1.0f, 1.0f); // Origin 0
+        //mVertices.emplace_back(size, -size, -size, color, 1.0f, 1.0f); // X 1
+        //mVertices.emplace_back(-size, size, -size, color, 0.0f, 0.0f); // Y 2
+        //mVertices.emplace_back(-size, -size, size, color, 0.0f, 0.0f); // Z 3
 
-        mVertices.emplace_back(size, -size, size, color, 1.0f, 0.0f); // XZ 4
-        mVertices.emplace_back(size, size, -size, color, 1.0f, 1.0f); // XY 5
+        //mVertices.emplace_back(size, -size, size, color, 1.0f, 0.0f); // XZ 4
+        //mVertices.emplace_back(size, size, -size, color, 1.0f, 1.0f); // XY 5
 
-        mVertices.emplace_back(-size, size, size, color, 0.0f, 0.0f); // ZY 6
-        mVertices.emplace_back(size, size, size, color, 1.0f, 0.0f); // XYZ 7
+        //mVertices.emplace_back(-size, size, size, color, 0.0f, 0.0f); // ZY 6
+        //mVertices.emplace_back(size, size, size, color, 1.0f, 0.0f); // XYZ 7
 
         if (mDrawMode == GL_LINES) InitLines();
         else InitTriangles();
         Init();
     }
+
+    //float d = 0.f;
+    //QQuaternion q;
+
+    //void Tick(float deltaTime) override
+    //{
+	   // d+=0.2f;
+    //    SetFollowParent(false);
+    //    auto e = q * QQuaternion::fromEulerAngles(QVector3D(0.f, 0.f, d));
+    //    mMatrix.setToIdentity();
+    //    //mMatrix.rotate(d, QVector3D(0.f, 0.f, 1.f));
+    //    //mMatrix.rotate(QQuaternion::fromEulerAngles(e));
+    //    mMatrix.rotate(e);
+    //}
 
 protected:
     void InitTriangles()
