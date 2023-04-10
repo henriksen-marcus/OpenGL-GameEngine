@@ -47,264 +47,312 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp">
+    <ClCompile Include="Source\Engine\Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Arrow.cpp">
+    <ClCompile Include="Source\Game\Arrow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Axis.cpp">
+    <ClCompile Include="Source\Game\Axis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseObject.cpp">
+    <ClCompile Include="Source\Engine\BaseObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Boundry2D.cpp">
+    <ClCompile Include="Source\Engine\Boundry2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
+    <ClCompile Include="Source\Engine\CameraComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CubePlayer.cpp">
+    <ClCompile Include="Source\Game\CubePlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HealthPack.cpp">
+    <ClCompile Include="Source\Game\HealthPack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="House.cpp">
+    <ClCompile Include="Source\Game\House.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LineNPC.cpp">
+    <ClCompile Include="Source\Game\LineNPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeshComponent.cpp">
+    <ClCompile Include="Source\Engine\MeshComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Octree.cpp">
+    <ClCompile Include="Source\Engine\Octree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pawn.cpp">
+    <ClCompile Include="Source\Engine\Pawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Plane.cpp">
+    <ClCompile Include="Source\Game\Plane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Meshes\PlaneMesh.cpp">
+    <ClCompile Include="Source\Engine\Meshes\PlaneMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
+    <ClCompile Include="Source\Engine\PlayerController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree.cpp">
+    <ClCompile Include="Source\Engine\Quadtree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Scene1.cpp">
+    <ClCompile Include="Source\Game\Scenes\Scene1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneComponent.cpp">
+    <ClCompile Include="Source\Engine\SceneComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="Source\Engine\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StaticSceneCamera.cpp">
+    <ClCompile Include="Source\Game\StaticSceneCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
+    <ClCompile Include="Source\Engine\Texture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\TextureScene.cpp">
+    <ClCompile Include="Source\Game\Scenes\TextureScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VisualFunction2D.cpp">
+    <ClCompile Include="Source\Game\VisualFunction2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VisualFunction3D.cpp">
+    <ClCompile Include="Source\Engine\TriangleSurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VisualPoints.cpp">
+    <ClCompile Include="Source\Game\VisualPoints.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
+    <ClCompile Include="Source\Engine\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="XYZ.cpp">
+    <ClCompile Include="Source\Game\XYZ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="logger.cpp">
+    <ClCompile Include="Source\Engine\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
+    <ClCompile Include="Source\Engine\mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderwindow.cpp">
+    <ClCompile Include="Source\Engine\renderwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Vendor\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpringArmComponent.cpp">
+    <ClCompile Include="Source\Engine\SpringArmComponent.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugLogger.cpp">
+    <ClCompile Include="Source\Engine\DebugLogger.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestCameraActor.cpp">
+    <ClCompile Include="Source\Game\TestCameraActor.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="LineActor.cpp">
+    <ClCompile Include="Source\Game\LineActor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\FlyingCamera.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\HeightmapScene.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Shader3.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\MeshWalker.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\BarycentricScene.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h">
+    <ClInclude Include="Source\Engine\Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Arrow.h">
+    <ClInclude Include="Source\Game\Arrow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Axis.h">
+    <ClInclude Include="Source\Game\Axis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseObject.h">
+    <ClInclude Include="Source\Engine\BaseObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Boundry2D.h">
+    <ClInclude Include="Source\Engine\Boundry2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Source\Game\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CameraComponent.h">
+    <ClInclude Include="Source\Engine\CameraComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Meshes\CubeMesh.h">
+    <ClInclude Include="Source\Engine\Meshes\CubeMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CubePlayer.h">
+    <ClInclude Include="Source\Game\CubePlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HealthPack.h">
+    <ClInclude Include="Source\Game\HealthPack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="House.h">
+    <ClInclude Include="Source\Game\House.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineNPC.h">
+    <ClInclude Include="Source\Game\LineNPC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MathTasks.h">
+    <ClInclude Include="Source\Utility\MathTasks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeshComponent.h">
+    <ClInclude Include="Source\Engine\MeshComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Octree.h">
+    <ClInclude Include="Source\Engine\Octree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PausableTimer.h">
+    <ClInclude Include="Source\Engine\PausableTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pawn.h">
+    <ClInclude Include="Source\Engine\Pawn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
+    <ClInclude Include="Source\Game\Plane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Meshes\PlaneMesh.h">
+    <ClInclude Include="Source\Engine\Meshes\PlaneMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerController.h">
+    <ClInclude Include="Source\Engine\PlayerController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree.h">
+    <ClInclude Include="Source\Engine\Quadtree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
+    <ClInclude Include="Source\Engine\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Scene1.h">
+    <ClInclude Include="Source\Game\Scenes\Scene1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneComponent.h">
+    <ClInclude Include="Source\Engine\SceneComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="Source\Engine\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderManager.h">
+    <ClInclude Include="Source\Engine\ShaderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StaticSceneCamera.h">
+    <ClInclude Include="Source\Game\StaticSceneCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
+    <ClInclude Include="Source\Engine\Texture2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\TextureScene.h">
+    <ClInclude Include="Source\Game\Scenes\TextureScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
+    <ClInclude Include="Source\Engine\TimeManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VertexClasses.h">
+    <ClInclude Include="Source\Engine\VertexClasses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VisualFunction2D.h">
+    <ClInclude Include="Source\Game\VisualFunction2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VisualFunction3D.h">
+    <ClInclude Include="Source\Engine\TriangleSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VisualObject.h">
+    <ClInclude Include="Source\Engine\VisualObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VisualPoints.h">
+    <ClInclude Include="Source\Game\VisualPoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
+    <ClInclude Include="Source\Engine\World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WorldManager.h">
+    <ClInclude Include="Source\Engine\WorldManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="XYZ.h">
+    <ClInclude Include="Source\Game\XYZ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enums.h">
+    <ClInclude Include="Source\Engine\enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="functions.h">
+    <ClInclude Include="Source\Utility\functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="logger.h">
+    <ClInclude Include="Source\Engine\logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <QtMoc Include="mainwindow.h">
+    <QtMoc Include="Source\Engine\mainwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="renderwindow.h">
+    <QtMoc Include="Source\Engine\renderwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClInclude Include="Vendor\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpringArmComponent.h">
+    <ClInclude Include="Source\Engine\SpringArmComponent.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugLogger.h">
+    <ClInclude Include="Source\Engine\DebugLogger.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestCameraActor.h">
+    <ClInclude Include="Source\Game\TestCameraActor.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineActor.h">
+    <ClInclude Include="Source\Game\LineActor.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="Meshes\LineMesh.h">
+    <ClInclude Include="Source\Engine\Meshes\LineMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\ArrowMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\FlatTriangleMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\FlyingCamera.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\HeightmapScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\LightCube.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Shader3.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\TestMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\MeshWalker.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Math.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\BarycentricScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Timer.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -317,28 +365,36 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwindow.ui">
+    <QtUic Include="Source\Engine\mainwindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment.frag">
+    <None Include="Source\Engine\Shader\fragment.frag">
       <Filter>Distribution Files</Filter>
     </None>
-    <None Include="plainshader.frag">
+    <None Include="Source\Engine\Shader\plainshader.frag">
       <Filter>Distribution Files</Filter>
     </None>
-    <None Include="plainshader.vert">
+    <None Include="Source\Engine\Shader\plainshader.vert">
       <Filter>Distribution Files</Filter>
     </None>
-    <None Include="texturefragshader.frag">
+    <None Include="Source\Engine\Shader\texturefragshader.frag">
       <Filter>Distribution Files</Filter>
     </None>
-    <None Include="texturevertshader.vert">
+    <None Include="Source\Engine\Shader\texturevertshader.vert">
       <Filter>Distribution Files</Filter>
     </None>
-    <None Include="vertex.vert">
+    <None Include="Source\Engine\Shader\vertex.vert">
       <Filter>Distribution Files</Filter>
     </None>
+    <None Include="Source\Engine\Shader\phongshader.vert" />
+    <None Include="Source\Engine\Shader\phongshader.frag" />
+    <None Include="Source\Engine\Shader\godshader.vert" />
+    <None Include="Source\Engine\Shader\godshader.frag" />
+    <None Include="Source\Engine\Shader\godshader.geom" />
+    <None Include="Source\Engine\Shader\geo.vert" />
+    <None Include="Source\Engine\Shader\geo.frag" />
+    <None Include="Source\Engine\Shader\geo.geom" />
   </ItemGroup>
 </Project>
