@@ -2,6 +2,9 @@
 
 #include "Source/Engine/Actor.h"
 
+/**
+ * \brief Simple line that bridges between two points.
+ */
 class LineActor : public Actor
 {
 public:

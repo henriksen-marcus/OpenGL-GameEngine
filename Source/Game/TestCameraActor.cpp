@@ -12,7 +12,7 @@ TestCameraActor::TestCameraActor()
 	springArm = new SpringArmComponent(static_cast<Actor*>(this), 1.f, 45.f);
 	camera = new CameraComponent(static_cast<Actor*>(this));
 	camera->SetFollowParent(false);
-	springArm->SetCameraComponent(camera);
+	springArm->SetCamera(camera);
 }
 
 void TestCameraActor::Draw()

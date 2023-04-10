@@ -36,12 +36,12 @@ Texture2D::Texture2D(const std::string& path)
 //        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
         glBindTexture(GL_TEXTURE_2D, 0);
-        stbi_image_free(mLocalBuffer);
     }
     else
     {
         std::cout << "Failed to load image.\n";
     }
+	stbi_image_free(mLocalBuffer);
 }
 
 Texture2D::~Texture2D()

@@ -8,6 +8,7 @@ class QElapsedTimer;
 class PauseableTimer;
 class Quadtree;
 class Cube;
+class Renderer;
 
 class World : public BaseObject
 {
@@ -29,8 +30,14 @@ public:
     float GetUnpausedTimeSeconds();
 
     template<class T>
-    inline Actor* SpawnActor(const QVector3D& location, const QQuaternion& rotation);
+    inline Actor* SpawnActor(const std::string& name, const QVector3D& location = QVector3D());
+
+    template<class T>
+    inline Actor* SpawnActor(const std::string& name, MeshComponent* mesh);
+
     void RemoveActor(Actor* actor);
+
+    void BeginPlay() { mRenderer->BeginPlay(); };
 
     Renderer* mRenderer;
 
@@ -51,20 +58,38 @@ protected:
 };
 
 template<class T>
-inline Actor* World::SpawnActor(const QVector3D& location, const QQuaternion& rotation)
+inline Actor* World::SpawnActor(const std::string& name, const QVector3D& location)
 {
-    //if (std::is_base_of<Actor, T>::value);
-    static_assert(std::is_base_of<Actor, T>::value, "T must be derived from Actor");
-
+    static_assert(is_derived_from<T, Actor>::value, "SpawnActor failed: T must be derived from Actor.");
+    static_assert(std::is_default_constructible<T>::value, "SpawnActor failed: T must be default constructible.");
+    
     T* newActor = new T();
     if (newActor)
     {
         newActor->SetActorLocation(location);
-        newActor->SetActorRotation(rotation);
+        //newActor->SetActorRotation(rotation);
 
         mActors.push_back(newActor);
-        mRenderer->Add(newActor);
+        mRenderer->Add(name, newActor);
     }
     return newActor;
 }
+
+template <class T>
+Actor* World::SpawnActor(const std::string& name, MeshComponent* mesh)
+{
+    static_assert(is_derived_from<T, Actor>::value, "SpawnActor failed: T must be derived from Actor.");
+	static_assert(std::is_default_constructible<T>::value, "SpawnActor failed: T must be default constructible.");
+
+    T* newActor = new T();
+    if (newActor)
+    {
+        mesh->SetupAttachment(newActor);
+        newActor->SetMesh(mesh);
+        mActors.push_back(newActor);
+        mRenderer->Add(name, newActor);
+    }
+    return newActor;
+}
+
 

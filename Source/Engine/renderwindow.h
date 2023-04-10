@@ -39,8 +39,6 @@ private:
 
     bool mInitialized{false};
 
-    Shader* mShaderProgram;
-
     // Timer that drives the gameloop
     QTimer *mRenderTimer;
 
@@ -88,6 +86,9 @@ private:
 
     // Starts QOpenGLDebugLogger if possible
     void startOpenGLDebugger();
+
+    bool bIsPolygonMode = false;
+    bool bIsCullMode = false;
 
 protected:
     //The QWindow that we inherit from have these functions to capture

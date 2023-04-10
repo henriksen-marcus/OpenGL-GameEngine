@@ -9,10 +9,15 @@ LineActor::LineActor(const QVector3D& color)
 
 void LineActor::Update(const QVector3D& start, const QVector3D& end)
 {
-	SetActorLocation(start);
-	QVector3D direction = end - start;
-	auto rotation = QQuaternion::rotationTo(mRotationQuat.toEulerAngles(), direction.normalized());
-	AddActorLocalRotation(rotation);
-	float length = direction.length();
-	mMesh->SetWorldScale(QVector3D(length, length, length));
+	// Calculate the distance between the start and end points
+    QVector3D diff = end - start;
+    float length = diff.length();
+
+    // Calculate the rotation quaternion needed to rotate the line to point in the correct direction
+    QQuaternion rotation = QQuaternion::rotationTo(QVector3D(0, 0, 1), diff.normalized());
+
+    // Set the actor's location, rotation, and scale to match the start and end points
+    SetActorLocation(start);
+    SetActorRotation(rotation);
+    SetActorScale(QVector3D(1, 1, length));
 }

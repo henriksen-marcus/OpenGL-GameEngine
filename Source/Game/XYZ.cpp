@@ -1,7 +1,7 @@
 #include "XYZ.h"
 
 
-XYZ::XYZ(bool init)
+XYZ::XYZ()
 {
 	// We are not using an IBO here, just declaring points over again.
     mVertices.push_back(Vertex(0.f, 0.f, 0.f, 1.f, 0.f, 0.f));
@@ -13,7 +13,7 @@ XYZ::XYZ(bool init)
     mVertices.push_back(Vertex(0.f, 0.f, 0.f, 0.f, 0.f, 1.f));
     mVertices.push_back(Vertex(0.f, 0.f, 1.f, 0.f, 0.f, 1.f));
 
-    if (init) Init();
+	Init();
 }
 
 void XYZ::Init()
@@ -60,7 +60,7 @@ void XYZ::Draw()
 {
     initializeOpenGLFunctions();
 
-    UseShader("plain");
+    UseShader("god");
 
     Shader* activeShader = GetActiveShader();
     activeShader->SendUniforms();

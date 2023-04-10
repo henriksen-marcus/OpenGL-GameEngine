@@ -7,7 +7,9 @@ enum Movement {
     RIGHT,
     UP,
     DOWN,
-    JUMP
+    JUMP,
+    ROTATE_LEFT,
+    ROTATE_RIGHT
 };
 
 enum PickupType

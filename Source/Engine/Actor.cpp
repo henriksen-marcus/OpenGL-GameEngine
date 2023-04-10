@@ -32,12 +32,14 @@ void Actor::Draw()
 void Actor::Tick(float deltaTime)
 {
     UpdateModelMatrixQuat();
+    UpdateVectors();
+
     if (mCollisionComponent)
-        mCollisionComponent->Update(mLocation);
+        mCollisionComponent->UpdateLocation(mLocation);
     
     if (mMesh) 
     {
-    	mMesh->Tick(deltaTime);
+        mMesh->Tick(deltaTime);
     }
 
     for (auto c : mComponents)
@@ -46,56 +48,65 @@ void Actor::Tick(float deltaTime)
 
 // ---------- Translation ---------- //
 
-const QVector3D& Actor::GetActorLocation()
+const QVector3D& Actor::GetActorLocation() const
 {
     return mLocation;
+}
+
+const QVector2D Actor::GetActorLocation2D() const
+{
+    return QVector2D(mLocation.x(), mLocation.z());
 }
 
 void Actor::SetActorLocation(const QVector3D& location)
 {
     mLocation = location;
-    UpdateModelMatrixQuat();
+    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalOffset(const QVector3D& offset)
 {
-    mLocation += mForward * offset.z() + QVector3D::crossProduct(mForward, mUp) * offset.x() + mUp * offset.y();
-    UpdateModelMatrixQuat();
+    mLocation += mRotationQuat.rotatedVector(offset);
 }
 
+void Actor::AddActorWorldOffset(const QVector3D& offset)
+{
+    mLocation += offset;
+}
 
 
 // ---------- Rotation ---------- //
 
 const QVector3D& Actor::GetActorRotation()
 {
-    return mRotation;
+    return mRotationQuat.toEulerAngles();
+    //return mRotation;
 }
 
 void Actor::SetActorRotation(const QVector3D& rotation)
 {
     mRotation = rotation;
     mRotationQuat = QQuaternion::fromEulerAngles(rotation);
-    UpdateModelMatrixQuat();
+    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalRotation(const QVector3D& offset)
 {
     mRotation += offset;
-    mRotationQuat = mRotationQuat * QQuaternion::fromEulerAngles(offset);
+    mRotationQuat *= QQuaternion::fromEulerAngles(offset);
     //UpdateModelMatrixQuat();
 }
 
 void Actor::SetActorRotation(const QQuaternion& rotation)
 {
     mRotationQuat = rotation;
-    UpdateModelMatrixQuat();
+    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalRotation(const QQuaternion& offset)
 {
     mRotationQuat *= offset;
-    UpdateModelMatrixQuat();
+    //UpdateModelMatrixQuat();
 }
 
 
@@ -110,13 +121,20 @@ const QVector3D& Actor::GetActorScale()
 void Actor::SetActorScale(const QVector3D& scale)
 {
     mScale = scale;
-    UpdateModelMatrixQuat();
+    UpdateCollisionScale();
+    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalScale(const QVector3D& offset)
 {
     mScale += offset;
-    UpdateModelMatrixQuat();
+    UpdateCollisionScale();
+    //UpdateModelMatrixQuat();
+}
+
+void Actor::UpdateCollisionScale()
+{
+    if (mCollisionComponent) mCollisionComponent->UpdateScale(mScale);
 }
 
 Boundry2D* Actor::GetCollisionComponent()
@@ -158,6 +176,7 @@ void Actor::ClearMesh()
 
 void Actor::UpdateModelMatrix()
 {
+    return;
     print("Updt!");
     UpdateVectors();
 
@@ -184,23 +203,8 @@ void Actor::UpdateModelMatrixQuat()
 
 void Actor::UpdateVectors()
 {
-    // Prevent gimball lock
-    //mRotation.setX(qBound(-90.0f, mRotation.x(), 90.0f));
-
-    mForward = QQuaternion::fromAxisAndAngle(mUp, mRotation.y()).rotatedVector(mForward);
-    mForward = QQuaternion::fromAxisAndAngle(QVector3D::crossProduct(mForward, mUp), mRotation.x()).rotatedVector(mForward);
-    mUp = QQuaternion::fromAxisAndAngle(mForward, mRotation.z()).rotatedVector(mUp);
-    mRight = QVector3D::crossProduct(mForward, mUp).normalized();
-
-    return;
-    mForward.setX(cos(qDegreesToRadians(mYaw)) * cos(qDegreesToRadians(mPitch)));
-    mForward.setY(sin(qDegreesToRadians(mPitch)));
-    mForward.setZ(sin(qDegreesToRadians(mYaw)) * cos(qDegreesToRadians(mPitch)));
+    mForward = mRotationQuat.rotatedVector(QVector3D(0.f, 0.f, -1.f));
+    mUp = mRotationQuat.rotatedVector(QVector3D(0.f, 1.f, 0.f));
     mForward.normalize();
-    // also re-calculate the Right and Up vector
-    // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    mRight = QVector3D::crossProduct(mForward, mWorldUp);
-    mRight.normalize();
-    mUp = QVector3D::crossProduct(mRight, mForward);
     mUp.normalize();
 }

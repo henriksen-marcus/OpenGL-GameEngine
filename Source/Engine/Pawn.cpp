@@ -1,16 +1,13 @@
 #include "Pawn.h"
+#include "CameraComponent.h"
 #include "enums.h"
+#include "PlayerController.h"
 
-Pawn::Pawn(const QVector3D& location, bool init)
+Pawn::Pawn(const QVector3D& location)
+	: Actor(location)
 {
-//    camera = new Camera(QVector3D(mLocation + QVector3D(0.f, 1.f, 1.f)));
-//    camera->Pitch = -30.f;
-    
-    mMovementSpeed = 0.01f;
-    mMouseSensitivity = 1.f;
-
-    mLocation = location;
-    if (init) Init();
+    mMovementSpeed = 0.03f;
+    mMouseSensitivity = 0.2f;
 }
 
 void Pawn::Init()
@@ -26,32 +23,50 @@ void Pawn::Draw()
 void Pawn::Tick(float deltaTime)
 {
     Actor::Tick(deltaTime);
+
+    AddActorWorldOffset(mTranslationQuery * deltaTime);
+    AddActorLocalRotation(mRotationQuery * deltaTime);
+    mTranslationQuery = QVector3D();
+    mRotationQuery = QVector3D();
 }
 
-void Pawn::ProcessKeyboard(Movement direction)
+void Pawn::ProcessKeyboard(const Movement direction)
 {
     switch (direction)
     {
     case Movement::FORWARD:
-        AddActorLocalOffset(QVector3D(0.f, 0.f, -mMovementSpeed));
+        //AddActorWorldOffset(mForward*mMovementSpeed);
+        mTranslationQuery += mForward * mMovementSpeed;
         break;
     case Movement::BACKWARD:
-        AddActorLocalOffset(QVector3D(0.f, 0.f, mMovementSpeed));
+        //AddActorWorldOffset(-mForward * mMovementSpeed);
+        mTranslationQuery += -mForward * mMovementSpeed;
         break;
     case Movement::LEFT:
-        AddActorLocalOffset(QVector3D(mMovementSpeed, 0.f, 0.f));
+        //AddActorWorldOffset(-GetActorRightVector() * mMovementSpeed);
+        mTranslationQuery += -GetActorRightVector() * mMovementSpeed;
         break;
     case Movement::RIGHT:
-        AddActorLocalOffset(QVector3D(-mMovementSpeed, 0.f, 0.f));
-        print("RIGHT");
+        //AddActorWorldOffset(GetActorRightVector() * mMovementSpeed);
+        mTranslationQuery += GetActorRightVector() * mMovementSpeed;
         break;
     case Movement::UP:
-        //mLocation += Up * velocity;
+        //AddActorWorldOffset(mWorldUp * mMovementSpeed);
+        mTranslationQuery += mWorldUp * mMovementSpeed;
         break;
     case Movement::DOWN:
-        //mLocation -= Up * velocity;
+        //AddActorWorldOffset(-mWorldUp * mMovementSpeed);
+        mTranslationQuery += -mWorldUp * mMovementSpeed;
         break;
     case Movement::JUMP:
+        break;
+	case ROTATE_LEFT:
+        //AddActorLocalRotation(QVector3D(0.f, 1.f, 0.f));
+        mRotationQuery += QVector3D(0.f, 1.f, 0.f);
+        break;
+	case ROTATE_RIGHT:
+        //AddActorLocalRotation(QVector3D(0.f, -1.f, 0.f));
+        mRotationQuery += QVector3D(0.f, -1.f, 0.f);
         break;
     }
 }
@@ -66,6 +81,21 @@ void Pawn::ProcessMouseMovement(float xoffset, float yoffset)
     //Pitch += yoffset;
 
     // update Front, Right and Up Vectors using the updated Euler angles
+}
+
+void Pawn::ProcessMouseScroll(float yoffset)
+{
+    mMovementSpeed = qBound(0.f, mMovementSpeed + yoffset * 0.01f, 10.f);
+}
+
+void Pawn::SetMovementSpeed(float speed)
+{
+    mMovementSpeed = speed;
+}
+
+void Pawn::SetAsCurrent()
+{
+    GetPlayerController().SetCurrentPossessed(this);
 }
 
 

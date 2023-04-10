@@ -5,17 +5,26 @@ PlaneMesh::PlaneMesh(Actor* parent, const QVector3D& location, float sizeX, floa
     :MeshComponent(parent, mode)
 {
     mVertices.clear();
+    mColor = color;
     sizeX *= 0.5f; // Center the cube on the given origin
     sizeY *= 0.5f;
 
-    mVertices.emplace_back(sizeX, 0.f, sizeY, color.x(), color.y(), color.z(), 1.f, 0.f);
-    mVertices.emplace_back(sizeX, 0.f, -sizeY, color.x(), color.y(), color.z(), 1.f, 1.f);
-    mVertices.emplace_back(-sizeX, 0.f, -sizeY, color.x(), color.y(), color.z(), 0.f, 1.f);
-    mVertices.emplace_back(-sizeX, 0.f, sizeY, color.x(), color.y(), color.z(), 0.f, 0.f);
+    SetWorldLocation(location);
 
-    mMode = mode;
-    if (mMode == GL_TRIANGLES) InitTriangles();
+    mVertices.emplace_back(sizeX, 0.f, sizeY, color, 1.f, 0.f, 0.f, 1.f, 0.f);
+    mVertices.emplace_back(sizeX, 0.f, -sizeY, color, 1.f, 1.f, 0.f, 1.f, 0.f);
+    mVertices.emplace_back(-sizeX, 0.f, -sizeY, color, 0.f, 1.f, 0.f, 1.f, 0.f);
+    mVertices.emplace_back(-sizeX, 0.f, sizeY, color, 0.f, 0.f, 0.f, 1.f, 0.f);
+
+    bUseLighting = false;
+
+    if (mDrawMode == GL_TRIANGLES) 
+    {
+    	InitTriangles();
+		GenerateNormals();
+    }
     else InitLines();
+    Init();
 }
 
 void PlaneMesh::InitTriangles()

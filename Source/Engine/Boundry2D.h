@@ -14,7 +14,9 @@ public:
     Boundry2D();
     Boundry2D(const QVector2D& location, float halfLength);
 
-    void Update(const QVector3D& location);
+    void UpdateLocation(const QVector3D& location);
+    void UpdateScale(const QVector3D& scale);
+    void UpdateMinMaxPoint();
 
     /* Check if a specific point is within
      * this  boundry. */
@@ -34,4 +36,5 @@ public:
     /* The location variable is in the centre, so
      * we use half measurements to get to the border. */
     float mHalfLength;
+    float mOriginalHalfLength;
 };

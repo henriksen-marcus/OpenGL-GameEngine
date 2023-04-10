@@ -8,7 +8,7 @@
 class XYZ : public Actor
 {
 public:
-    XYZ(bool init = false);
+    XYZ();
 
 	/**
 	 * \brief Load the vertex data into memory and save information

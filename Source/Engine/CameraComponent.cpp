@@ -1,37 +1,57 @@
 #include "CameraComponent.h"
-#include <iostream>
+#include "Actor.h"
+#include "PlayerController.h"
 
 CameraComponent::CameraComponent(Actor* parent)
-    : SceneComponent(parent)
+    : SceneComponent(parent),
+	  bLookAtParent(false)
 {
-    UpdateCameraVectors();
+    //mWorldRotation = QQuaternion::fromEulerAngles(QVector3D(0.f, -90.f, 0.f));
+    //camRotation = QVector3D(0.f, -90.f, 0.f);
+    mViewMatrix.setToIdentity();
+    mForward = QVector3D(0.f, 0.f, -1.f);
+    UpdateVectors();
 }
 
 QMatrix4x4& CameraComponent::GetViewMatrix()
 {
-    mLookAtMatrix.setToIdentity();
-    mLookAtMatrix.lookAt(mWorldLocation, mWorldLocation + mForward, mUp);
-    return mLookAtMatrix;
+    mViewMatrix.setToIdentity();
+    if (bLookAtParent)
+    {
+        mViewMatrix.lookAt(mWorldLocation, mParent->GetActorLocation(), mUp);
+    }
+	else mViewMatrix.lookAt(mWorldLocation, mWorldLocation + mForward, mUp);
+    return mViewMatrix;
 }
 
 void CameraComponent::Tick(float deltaTime)
 {
     SceneComponent::Tick(deltaTime);
-
-    mPitch = qBound(-89.9f, mPitch, 89.9f);
-    UpdateCameraVectors();
+    ConstrainPitch();
 }
 
-void CameraComponent::UpdateCameraVectors()
+void CameraComponent::ConstrainPitch()
 {
-    // Calculate the new front vector
-    QVector3D front;
-    front.setX(cos(qDegreesToRadians(mYaw)) * cos(qDegreesToRadians(mPitch)));
-    front.setY(sin(qDegreesToRadians(mPitch)));
-    front.setZ(sin(qDegreesToRadians(mYaw)) * cos(qDegreesToRadians(mPitch)));
-    mForward = front.normalized();
-    // also re-calculate the Right and Up vector
-    // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    mRight = QVector3D::crossProduct(mForward, mWorldUp).normalized();
-    mUp = QVector3D::crossProduct(mRight, mForward).normalized();
+    // Constrain pitch
+    auto rot = mWorldRotation.toEulerAngles();
+    rot.setX(qBound(-80.f, rot.x(), 80.f));
+    mWorldRotation = QQuaternion::fromEulerAngles(rot);
+}
+
+void CameraComponent::UpdateVectors()
+{
+    mForward = mWorldRotation.rotatedVector(QVector3D(0.f, 0.f, -1.f));
+    mForward.normalize();
+    /*mUp = mWorldRotation.rotatedVector(QVector3D(0.f, 1.f, 0.f));
+    mUp.normalize();*/
+    auto right = QVector3D::crossProduct(mForward, mWorldUp).normalized();
+    mUp = QVector3D::crossProduct(right, mForward).normalized();
+    auto d = mWorldRotation.toEulerAngles();
+    d.setZ(0.f);
+    mWorldRotation = QQuaternion::fromEulerAngles(d);
+}
+
+void CameraComponent::SetAsCurrent()
+{
+    GetPlayerController().SetCurrentCamera(this);
 }

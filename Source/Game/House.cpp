@@ -27,7 +27,7 @@ House::House(const QVector3D& location)
     rightOfDoor->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 
     SetCollisionComponent(0.5f);
-    mCollisionComponent->Update(mLocation);
+    mCollisionComponent->UpdateLocation(mLocation);
     //Init();
 }
 

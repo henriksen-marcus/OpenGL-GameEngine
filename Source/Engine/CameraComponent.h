@@ -11,12 +11,16 @@ public:
     QMatrix4x4& GetViewMatrix();
     void Tick(float deltaTime) override;
 
-    float mYaw{-90.f};
-    float mPitch{0.f};
+    /**
+     * \brief Set this camera as the current active
+     * camera in the player controller.
+     */
+    void SetAsCurrent();
+
     float mFOV{75.f};
-
+    bool bLookAtParent;
+    void ConstrainPitch();
 protected:
-    virtual void UpdateCameraVectors();
-
-    QMatrix4x4 mLookAtMatrix{};
+    void UpdateVectors() override;
+    QMatrix4x4 mViewMatrix{};
 };

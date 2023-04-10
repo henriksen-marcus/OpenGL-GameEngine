@@ -55,12 +55,11 @@ public:
     }
 
     /* Run this function once at the start of the game. */
-    virtual void BeginPlay(GLint modelLocation)
+    virtual void BeginPlay()
     {
         for (auto it = mObjects.begin(); it != mObjects.end(); ++it)
         {
             it->second->BeginPlay();
-            it->second->Draw();
         }
     }
 

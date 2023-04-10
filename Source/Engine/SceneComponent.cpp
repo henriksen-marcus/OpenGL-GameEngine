@@ -1,10 +1,10 @@
 #include "SceneComponent.h"
-#include "VisualObject.h"
 #include "Actor.h"
 
 SceneComponent::SceneComponent(Actor* parent) :
 	followParentTransform(true),
 	followParentRotation(true),
+	followParentScale(true),
 	mParent(parent)
 {
 }
@@ -17,6 +17,7 @@ void SceneComponent::SetupAttachment(Actor* parent)
 void SceneComponent::SetFollowParent(bool follow)
 {
     followParentTransform = follow;
+    followParentRotation = follow;
     followParentRotation = follow;
 }
 
@@ -57,7 +58,12 @@ void SceneComponent::SetWorldRotation(const QQuaternion& rotation)
 
 void SceneComponent::AddWorldRotation(const QQuaternion& offset)
 {
-    mWorldRotation += offset;
+    mWorldRotation *= offset;
+}
+
+void SceneComponent::AddWorldRotation(const QVector3D& offset)
+{
+    mWorldRotation *= QQuaternion::fromEulerAngles(offset);
 }
 
 void SceneComponent::SetWorldScale(const QVector3D& scale)
@@ -78,7 +84,11 @@ void SceneComponent::Tick(float deltaTime)
     if (followParentRotation)
         SetWorldRotation(mParent->GetActorQuatRotation() * mRelativeRotation);
 
+    if (followParentScale)
+        SetWorldScale(mParent->GetActorScale());
+
     UpdateModelMatrixQuat();
+    UpdateVectors();
 }
 
 void SceneComponent::UpdateModelMatrixQuat()
@@ -91,8 +101,7 @@ void SceneComponent::UpdateModelMatrixQuat()
 
 void SceneComponent::UpdateModelMatrix()
 {
-    print("Updt!");
-    UpdateVectors();
+    //UpdateVectors();
 
     mMatrix.setToIdentity();
     mMatrix.translate(mWorldLocation);
@@ -109,8 +118,6 @@ void SceneComponent::UpdateModelMatrix()
 
 void SceneComponent::UpdateVectors()
 {
-    mForward = QQuaternion::fromAxisAndAngle(mUp, mWorldRotation.y()).rotatedVector(mForward);
-    mForward = QQuaternion::fromAxisAndAngle(QVector3D::crossProduct(mForward, mUp), mWorldRotation.x()).rotatedVector(mForward);
-    mUp = QQuaternion::fromAxisAndAngle(mForward, mWorldRotation.z()).rotatedVector(mUp);
-    mRight = QVector3D::crossProduct(mForward, mUp).normalized();
+    mForward = mWorldRotation.rotatedVector(QVector3D(0.f, 0.f, -1.f));
+    mUp = mWorldRotation.rotatedVector(QVector3D(0.f, 1.f, 0.f));
 }

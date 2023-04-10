@@ -14,7 +14,7 @@ Scene1::Scene1()
 {
     ground = new Plane(QVector3D(0.f, -0.21f, 0.f), 8.f, 5.5f, QVector3D(150.f/255.f, 111.f/255.f, 51.f/255.f));
     //bigCube = new Cube(QVector3D(), 20.f, QVector3D(1.f, 1.f, 1.f), GL_LINES, true);
-    cross = new XYZ(true);
+    cross = new XYZ();
     player = new CubePlayer();
     player->name = "Mainplayer";
     sceneCamera = new StaticSceneCamera();

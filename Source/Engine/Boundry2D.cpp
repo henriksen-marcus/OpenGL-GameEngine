@@ -3,19 +3,32 @@
 
 Boundry2D::Boundry2D()
     : mLocation(QVector2D()),
-      mHalfLength(0.f)
+      mHalfLength(0.f),
+	  mOriginalHalfLength(0.f)
 {}
 
 Boundry2D::Boundry2D(const QVector2D& location, float halfLength)
-    : mLocation(location), mHalfLength(halfLength)
+    : mLocation(location), mHalfLength(halfLength), mOriginalHalfLength(halfLength)
 {
-    minPoint = mLocation - QVector2D(mHalfLength, mHalfLength);
-    maxPoint = mLocation + QVector2D(mHalfLength, mHalfLength);
+    UpdateMinMaxPoint();
 }
 
-void Boundry2D::Update(const QVector3D& location)
+void Boundry2D::UpdateLocation(const QVector3D& location)
 {
     mLocation = QVector2D(location.x(), location.z());
+    UpdateMinMaxPoint();
+}
+
+void Boundry2D::UpdateScale(const QVector3D& scale)
+{
+    // Since the boundary is only a square, we only need to check the largest scale
+	const float max = qMax(qMax(scale.x(), scale.y()), scale.z());
+	mHalfLength = mOriginalHalfLength * max;
+    UpdateMinMaxPoint();
+}
+
+void Boundry2D::UpdateMinMaxPoint()
+{
     minPoint = mLocation - QVector2D(mHalfLength, mHalfLength);
     maxPoint = mLocation + QVector2D(mHalfLength, mHalfLength);
 }

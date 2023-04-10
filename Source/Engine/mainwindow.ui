@@ -17,23 +17,10 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>OpenGL in Qt is great fun!</string>
+   <string>SoReal Engine</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QPushButton" name="rotationButton">
-      <property name="text">
-       <string>Stop rotation</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
     <item>
      <layout class="QVBoxLayout" name="OpenGLLayout"/>
     </item>
@@ -45,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>1396</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

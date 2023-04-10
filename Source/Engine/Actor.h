@@ -26,9 +26,11 @@ public:
 
     
     // ---------- Translation ---------- //
-    virtual const QVector3D& GetActorLocation();
+    virtual const QVector3D& GetActorLocation() const;
+    virtual const QVector2D GetActorLocation2D() const;
     virtual void SetActorLocation(const QVector3D& location);
     virtual void AddActorLocalOffset(const QVector3D& offset);
+    virtual void AddActorWorldOffset(const QVector3D& offset);
 
     // ---------- Rotation ---------- //
     virtual const QVector3D& GetActorRotation();
@@ -41,7 +43,11 @@ public:
 
     virtual QVector3D& GetActorForwardVector() { return mForward; }
     virtual QVector3D& GetActorUpVector() { return mUp; }
-    virtual QVector3D& GetActorRightVector() { return mRight; }
+    virtual QVector3D& GetActorRightVector()
+    {
+	    QVector3D right = QVector3D::crossProduct(mForward, mUp);
+        return right;
+    }
 
     // ---------- Scale ---------- //
     virtual const QVector3D& GetActorScale();
@@ -65,20 +71,20 @@ public:
     void SetMesh(MeshComponent* mesh);
     void ClearMesh();
 
-    std::string name = "default";
+    std::string name = "actor";
 
 protected:
-    virtual void UpdateModelMatrix();
+    [[deprecated]] void UpdateModelMatrix();
     virtual void UpdateModelMatrixQuat();
     virtual void UpdateVectors();
+    virtual void UpdateCollisionScale();
 
-    QVector3D mForward  {0.f, 0.f, 1.f};
+    QVector3D mForward  {0.f, 0.f, -1.f};
     QVector3D mUp       {0.f, 1.f, 0.f};
     QVector3D mWorldUp  {0.f, 1.f, 0.f};
-    QVector3D mRight    {-1.f, 0.f, 0.f};
 
-    float mPitch{};
-    float mYaw{};
+    [[deprecated]] float mPitch{};
+    [[deprecated]] float mYaw{};
 
     Boundry2D* mCollisionComponent;
     MeshComponent* mMesh;

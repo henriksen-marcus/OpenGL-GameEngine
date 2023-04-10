@@ -41,13 +41,14 @@ public:
     virtual void SetRelativeRotation(const QQuaternion& rotation);
     virtual void AddRelativeRotation(const QQuaternion& offset);
 
-    virtual const QQuaternion& GetWorldRotation() { return mRelativeRotation; }
+    virtual const QQuaternion& GetWorldRotation() { return mWorldRotation; }
     virtual void SetWorldRotation(const QQuaternion& rotation);
     virtual void AddWorldRotation(const QQuaternion& offset);
+    virtual void AddWorldRotation(const QVector3D& offset);
 
-    virtual QVector3D& GetForwardVector() { return mForward; }
-    virtual QVector3D& GetUpVector() { return mUp; }
-    virtual QVector3D& GetRightVector() { return mRight; }
+    virtual QVector3D GetForwardVector() { return mForward; }
+    virtual QVector3D GetUpVector() { return mUp; }
+    virtual QVector3D GetRightVector() { return QVector3D::crossProduct(mForward, mUp); }
 
     // ---------- Scale ---------- //
     virtual const QVector3D& GetActorScale() { return mScale; }
@@ -57,13 +58,14 @@ public:
     virtual void Tick(float deltaTime);
 
     virtual void UpdateModelMatrixQuat();
-    virtual void UpdateModelMatrix();
+    [[deprecated]] virtual void UpdateModelMatrix();
     virtual void UpdateVectors();
 
     /* If the component should copy the position
      * of it's owning actor, with an offset. */
     bool followParentTransform;
     bool followParentRotation;
+    bool followParentScale;
 
 protected:
     Actor* mParent;
@@ -79,9 +81,8 @@ protected:
     // The world-space scale of the object
     QVector3D mScale{1.f, 1.f, 1.f};
 
-    QVector3D mForward  {0.f, 0.f, 1.f};
+    QVector3D mForward  {0.f, 0.f, -1.f};
     QVector3D mUp       {0.f, 1.f, 0.f};
     QVector3D mWorldUp  {0.f, 1.f, 0.f};
-    QVector3D mRight    {-1.f, 0.f, 0.f};
 };
 

@@ -18,6 +18,12 @@ void PlayerController::ProcessMouse(float xoffset, float yoffset)
     currentPossessed->ProcessMouseMovement(xoffset, yoffset);
 }
 
+void PlayerController::ProcessMouseScroll(float yoffset)
+{
+	if (!currentPossessed) return;
+	currentPossessed->ProcessMouseScroll(yoffset);
+}
+
 Pawn* PlayerController::GetCurrentPossessed()
 {
     return currentPossessed;

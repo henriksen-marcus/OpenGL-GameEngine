@@ -6,6 +6,7 @@
 #include "qmatrix4x4.h"
 #include "qvectornd.h"
 #include "enums.h"
+#include "Source/Engine/BaseObject.h"
 
 
 // Default camera values

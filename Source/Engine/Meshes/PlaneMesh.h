@@ -10,7 +10,5 @@ public:
 protected:
     void InitTriangles();
     void InitLines();
-
-    GLenum mMode;
 };
 

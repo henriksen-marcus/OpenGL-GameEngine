@@ -1,6 +1,6 @@
 #include "Arrow.h"
 
-Arrow::Arrow(const QVector3D& location, float length, const QVector3D& direction, const QVector3D& color, bool init)
+Arrow::Arrow(const QVector3D& location, float length, const QVector3D& direction, const QVector3D& color)
 {
     SetActorLocation(location);
     SetDirection(direction);
@@ -25,7 +25,7 @@ Arrow::Arrow(const QVector3D& location, float length, const QVector3D& direction
     mVertices.emplace_back(-halfHeadSize, -halfHeadSize, headZ, color.x(), color.y(), color.z(), 0.f, 0.f); // 4
     mVertices.emplace_back(halfHeadSize, -halfHeadSize, headZ, color.x(), color.y(), color.z(), 0.f, 0.f); // 5
 
-    if (init) Init();
+    Init();
 }
 
 void Arrow::InitLines()
@@ -122,6 +122,6 @@ void Arrow::Draw()
 
 void Arrow::SetDirection(const QVector3D& direction)
 {
-    QQuaternion additionalRot = QQuaternion::rotationTo(GetActorForwardVector(), direction);
+    QQuaternion additionalRot = QQuaternion::rotationTo(GetActorForwardVector(), direction.normalized());
     AddActorLocalRotation(additionalRot);
 }

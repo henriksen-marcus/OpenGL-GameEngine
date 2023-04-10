@@ -119,7 +119,7 @@
     <ClCompile Include="Source\Game\VisualFunction2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\VisualFunction3D.cpp">
+    <ClCompile Include="Source\Engine\TriangleSurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\VisualPoints.cpp">
@@ -156,6 +156,21 @@
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\LineActor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\FlyingCamera.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\HeightmapScene.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Shader3.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\MeshWalker.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\BarycentricScene.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -256,7 +271,7 @@
     <ClInclude Include="Source\Game\VisualFunction2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\VisualFunction3D.h">
+    <ClInclude Include="Source\Engine\TriangleSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\VisualObject.h">
@@ -307,6 +322,39 @@
     <ClInclude Include="Source\Engine\Meshes\LineMesh.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\ArrowMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\FlatTriangleMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\FlyingCamera.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\HeightmapScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\LightCube.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Shader3.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\TestMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\MeshWalker.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Math.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\BarycentricScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Timer.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -340,5 +388,13 @@
     <None Include="Source\Engine\Shader\vertex.vert">
       <Filter>Distribution Files</Filter>
     </None>
+    <None Include="Source\Engine\Shader\phongshader.vert" />
+    <None Include="Source\Engine\Shader\phongshader.frag" />
+    <None Include="Source\Engine\Shader\godshader.vert" />
+    <None Include="Source\Engine\Shader\godshader.frag" />
+    <None Include="Source\Engine\Shader\godshader.geom" />
+    <None Include="Source\Engine\Shader\geo.vert" />
+    <None Include="Source\Engine\Shader\geo.frag" />
+    <None Include="Source\Engine\Shader\geo.geom" />
   </ItemGroup>
 </Project>

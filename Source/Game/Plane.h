@@ -13,7 +13,6 @@ public:
     void Draw() override;
 
 private:
-      PlaneMesh* mesh;
 //    void InitTriangles();
 //    void InitLines();
 

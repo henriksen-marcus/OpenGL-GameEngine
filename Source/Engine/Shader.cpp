@@ -7,11 +7,11 @@
 #include "PlayerController.h"
 
 Shader::Shader()
+	: shaderID(0),
+	  uniformProjection(0),
+	  uniformModel(0),
+	  uniformView(0)
 {
-	shaderID = 0;
-	uniformModel = 0;
-	uniformProjection = 0;
-	uniformView = 0;
 }
 
 Shader::~Shader()
@@ -107,11 +107,11 @@ void Shader::SendUniforms()
 void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 {
     initializeOpenGLFunctions();
-	shaderID = glCreateProgram();
 
+	shaderID = glCreateProgram();
 	if (!shaderID)
 	{
-		printf("Error creating shader program!\n");
+		qDebug() << "Error creating shader program!";
 		return;
 	}
 
@@ -172,4 +172,29 @@ void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderT
 	}
 
 	glAttachShader(theProgram, theShader);
+}
+
+void Shader::SetVec3(const std::string& name, const QVector3D& value)
+{
+	glUniform3f(glGetUniformLocation(shaderID, name.c_str()), value.x(), value.y(), value.z());
+}
+
+void Shader::SetBool(const std::string& name, bool value)
+{
+	glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (int)value);
+}
+
+void Shader::SetInt(const std::string& name, int value)
+{
+	glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
+}
+
+void Shader::SetFloat(const std::string& name, float value)
+{
+	glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
+}
+
+void Shader::SetMat4(const std::string& name, const QMatrix4x4& value)
+{
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 1, GL_FALSE, value.constData());
 }

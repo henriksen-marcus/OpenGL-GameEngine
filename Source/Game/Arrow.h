@@ -5,7 +5,7 @@
 class Arrow : public Actor
 {
 public:
-    Arrow(const QVector3D& location = QVector3D(), float length = 1.f, const QVector3D& direction = QVector3D(0.f, 0.f, -1.f), const QVector3D& color = QVector3D(1.f, 1.f, 1.f), bool init = true);
+    Arrow(const QVector3D& location = QVector3D(), float length = 1.f, const QVector3D& direction = QVector3D(0.f, 0.f, -1.f), const QVector3D& color = QVector3D(1.f, 1.f, 1.f));
 
     void Init() override;
     void Draw() override;

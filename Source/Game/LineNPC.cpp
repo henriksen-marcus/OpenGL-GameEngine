@@ -3,6 +3,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "Source/Engine/Math.h"
+
 LineNPC::LineNPC(std::function<float(float)> f1, std::function<float(float)> f2, float xmin, float xmax, unsigned segments)
 {
     mNPC = new CubeMesh(this, 0.2f, QVector3D(0.f, 0.f, 1.f));
@@ -14,10 +16,6 @@ LineNPC::LineNPC(std::function<float(float)> f1, std::function<float(float)> f2,
     mSegments = segments;
 }
 
-float LineNPC::Lerp(float a, float b, float t)
-{
-    return a + t * (b - a);
-}
 
 void LineNPC::SwitchFunction(int num)
 {
@@ -40,7 +38,7 @@ void LineNPC::Draw()
 
 void LineNPC::Tick(float deltaTime)
 {
-    float xval = Lerp(min_x, max_x, mPosAlongLine);
+    float xval = Math::Lerp(min_x, max_x, mPosAlongLine);
 
     QVector3D newPos = GetActorLocation();
     newPos.setX(newPos.x() + xval);

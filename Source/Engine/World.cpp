@@ -5,6 +5,7 @@
 #include "Quadtree.h"
 #include <iostream>
 
+
 World::World()
 {
     mRenderer = new Renderer();

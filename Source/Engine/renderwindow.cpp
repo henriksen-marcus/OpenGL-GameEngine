@@ -9,7 +9,12 @@
 #include <QOpenGLFunctions>
 #include <QStatusBar>
 #include <QTimer>
+#include <windows.h>
 #include <string>
+#include <iostream>
+#include <codecvt>
+#include <locale>
+#include <filesystem>
 
 #include "logger.h"
 #include "mainwindow.h"
@@ -22,6 +27,9 @@
 #include "Vendor/stb_image.h"
 #include "DebugLogger.h"
 #include "Source/Game/Scenes/Scene1.h"
+#include "Source/Game/Scenes/HeightmapScene.h"
+#include "Source/Engine/Shader3.h"
+#include "Source/Game/Scenes/BarycentricScene.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -45,13 +53,16 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     // DeltaTime
     frameTimer = new QElapsedTimer();
     frameTimer->start();
-
-    //renderer = new Renderer();
 }
 
-
-RenderWindow::~RenderWindow(){}
-
+RenderWindow::~RenderWindow()
+{
+	delete mRenderTimer;
+	delete mContext;
+    delete frameTimer;
+    delete mOpenGLDebugLogger;
+    delete mLogger;
+}
 
 // Sets up the general OpenGL stuff and the buffers needed to render a triangle
 void RenderWindow::init()
@@ -101,24 +112,50 @@ void RenderWindow::init()
     glEnable(GL_DEPTH_TEST);            //enables depth sorting - must then use GL_DEPTH_BUFFER_BIT in glClear
     //    glEnable(GL_CULL_FACE);       //draws only front side of models - usually what you want - test it out!
     glClearColor(128.f/255.f, 200.f/255.f, 0.9f, 1.f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
+    //glClearColor(0.f, 0.f, 0.f, 0.f);
+
+    TCHAR buffer[MAX_PATH] = { 0 };
+    GetModuleFileName( NULL, buffer, MAX_PATH );
+    std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
+
+    std::filesystem::path cwd = std::filesystem::current_path();
+    std::cout << cwd << std::endl;
 
 
-    auto* texScene = new TextureScene();
-    WorldManager::GetInstance().SetWorld(texScene);
+
+    //auto* texScene = new TextureScene();
+    //WorldManager::GetInstance().SetWorld(texScene);
+    //auto* heightmapscene = new HeightmapScene();
+    //WorldManager::GetInstance().SetWorld(heightmapscene);
+
+    auto* baryscene = new BarycentricScene();
+    WorldManager::GetInstance().SetWorld(baryscene);
+    
 
     auto* s1 = new Shader();
-    s1->CreateFromFiles("../Engine/Shader/vertex.vert", "../Engine/Shader/fragment.frag");
+    s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");
 
     auto* s2 = new Shader();
-    s2->CreateFromFiles("../Engine/Shader/texturevertshader.vert", "../Engine/Shader/texturefragshader.frag");
+    s2->CreateFromFiles("Source/Engine/Shader/texturevertshader.vert", "Source/Engine/Shader/texturefragshader.frag");
+
+    auto* s3 = new Shader();
+    s3->CreateFromFiles("Source/Engine/Shader/godshader.vert", "Source/Engine/Shader/godshader.frag");
+
+    auto* s4 = new Shader3();
+    s4->CreateFromFiles("Source/Engine/Shader/geo.vert", "Source/Engine/Shader/geo.geom", "Source/Engine/Shader/geo.frag");
 
     auto& SM = ShaderManager::GetInstance();
     SM.Shaders["plain"] = s1;
     SM.Shaders["texture"] = s2;
+    SM.Shaders["god"] = s3;
+    SM.Shaders["geo"] = s4;
     SM.ActiveShader = s1;
 
     DebugLogger::GetInstance().SetRenderWindow(this);
+    WorldManager::GetInstance().GetWorld()->BeginPlay();
 }
+
+
 
 void RenderWindow::processInput()
 {
@@ -143,11 +180,8 @@ void RenderWindow::render()
     mContext->makeCurrent(this); //must be called every frame (every time mContext->swapBuffers is called)
     initializeOpenGLFunctions();    //must call this every frame it seems...
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //mShaderProgram->UseShader();
-    //ShaderManager::GetInstance().UseShader("plain");
 
-    // Calculate framerate before
-    // checkForGLerrors() because that call takes a long time
+    // Calculate framerate before checkForGLerrors() because that call takes a long time
     // and before swapBuffers(), else it will show the vsync time
     calculateFramerate();
     mTimeStart.restart(); // Restart FPS clock
@@ -186,7 +220,7 @@ void RenderWindow::exposeEvent(QExposeEvent *)
     {
         //This timer runs the actual MainLoop
         //16 means 16ms = 60 Frames pr second (should be 16.6666666 to be exact...)
-        mRenderTimer->start(16);
+        mRenderTimer->start(4);
         mTimeStart.start();
     }
 }
@@ -310,12 +344,15 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_A) heldKeys.push_back(Movement::LEFT);
     if (event->key() == Qt::Key_S) heldKeys.push_back(Movement::BACKWARD);
     if (event->key() == Qt::Key_D) heldKeys.push_back(Movement::RIGHT);
-    if (event->key() == Qt::Key_E) heldKeys.push_back(Movement::UP);
-    if (event->key() == Qt::Key_Q) heldKeys.push_back(Movement::DOWN);
+    if (event->key() == Qt::Key_E) heldKeys.push_back(Movement::ROTATE_RIGHT);
+    if (event->key() == Qt::Key_Q) heldKeys.push_back(Movement::ROTATE_LEFT);
+    if (event->key() == Qt::Key_Shift) heldKeys.push_back(Movement::UP);
+    if (event->key() == Qt::Key_Control) heldKeys.push_back(Movement::DOWN);
+    if (event->key() == Qt::Key_Space) heldKeys.push_back(Movement::JUMP);
 
     if (event->key() == Qt::Key_Tab)
     {
-	    if (mMainWindow->isFullScreen())
+	    /*if (mMainWindow->isFullScreen())
 	    {
 		    mMainWindow->showNormal();
 		    mMainWindow->setFixedSize(800, 600);
@@ -323,7 +360,31 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
 	    else
 	    {
 		    mMainWindow->showFullScreen();
+	    }*/
+        if (bIsPolygonMode)
+        {
+	        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			bIsPolygonMode = false;
+		}
+		else
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			bIsPolygonMode = true;
+		}
+    }
+
+    if (event->key() == Qt::Key_Alt)
+    {
+	    if (bIsCullMode)
+	    {
+		    glDisable(GL_CULL_FACE);
+            bIsCullMode = false;
 	    }
+        else
+        {
+        	glEnable(GL_CULL_FACE);
+			bIsCullMode = true;
+        }
     }
 }
 
@@ -333,8 +394,21 @@ void RenderWindow::keyReleaseEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_A) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::LEFT), heldKeys.end());
     if (event->key() == Qt::Key_S) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::BACKWARD), heldKeys.end());
     if (event->key() == Qt::Key_D) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::RIGHT), heldKeys.end());
-    if (event->key() == Qt::Key_E) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::UP), heldKeys.end());
-    if (event->key() == Qt::Key_Q) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::DOWN), heldKeys.end());
+    if (event->key() == Qt::Key_E) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::ROTATE_RIGHT), heldKeys.end());
+    if (event->key() == Qt::Key_Q) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::ROTATE_LEFT), heldKeys.end());
+    if (event->key() == Qt::Key_Shift) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::UP), heldKeys.end());
+    if (event->key() == Qt::Key_Control) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::DOWN), heldKeys.end());
+    if (event->key() == Qt::Key_Space) heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(),Movement::JUMP), heldKeys.end());
 }
 
-void RenderWindow::wheelEvent(QWheelEvent* event){}
+void RenderWindow::wheelEvent(QWheelEvent* event)
+{
+	if (event->angleDelta().y() > 0)
+	{
+		PlayerController::GetInstance().ProcessMouseScroll(1.f);
+	}
+	else
+	{
+		PlayerController::GetInstance().ProcessMouseScroll(-1.f);
+	}
+}

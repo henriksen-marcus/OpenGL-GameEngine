@@ -8,7 +8,6 @@ class LineNPC : public VisualFunction2D
 {
 public:
     LineNPC(std::function<float(float)> f1, std::function<float(float)> f2, float xmin, float xmax, unsigned segments);
-    float Lerp(float a, float b, float t);
     void SwitchFunction(int num);
     void Init() override;
     void Draw() override;

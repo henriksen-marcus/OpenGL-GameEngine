@@ -79,7 +79,7 @@ void MainWindow::init()
     mRenderWindowContainer->setFocus();
 
     //feed in MainWindow to the logger - have to be done, else logger will crash program
-    Logger::getInstance()->setMainWindow(this);;
+    Logger::getInstance()->setMainWindow(this);
 }
 
 //Example of a slot called from the button on the top of the program.

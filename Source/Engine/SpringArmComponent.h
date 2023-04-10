@@ -8,15 +8,17 @@ class SpringArmComponent : public SceneComponent
 {
 	public:
     SpringArmComponent(Actor* parent, float cameraDistance, float cameraAngle);
-
     void Tick(float deltaTime) override;
 
     static QVector3D GetCameraOffset(float cameraDistance, float angle);
-    void SetCameraComponent(CameraComponent* cameraComponent);
+    void SetCamera(CameraComponent* cameraComponent);
+    QVector3D GetSocketLocation() const { return mWorldLocation + mCameraOffset; }
 
     inline void SetSpringStiffness(float stiffness) { mSpringStiffness = stiffness; }
     inline void SetDamping(float damping) { mDamping = damping; }
     inline void SetMass(float mass) { mMass = mass; }
+
+	bool bEnableCameraLag{true};
 
 private:
     CameraComponent* mCameraComponent;
@@ -24,8 +26,8 @@ private:
     QVector3D mCameraLocation;
     QVector3D mCameraVelocity;
 
-    float mSpringStiffness{500.f};
-    float mDamping{10.f};
-    float mMass{1.f};
+    float mSpringStiffness{200.f};
+    float mDamping{30.f};
+    float mMass{2.f};
 };
 
