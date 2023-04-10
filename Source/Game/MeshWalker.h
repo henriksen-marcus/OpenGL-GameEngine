@@ -5,6 +5,7 @@ class SpringArmComponent;
 class CameraComponent;
 class LightCube;
 class TriangleSurface;
+class LineActor;
 
 class MeshWalker : public Pawn
 {
@@ -20,5 +21,6 @@ protected:
 	SpringArmComponent* mSpringArm;
 	CameraComponent* mCamera;
 	LightCube* mLightCube;
+	LineActor* mLine;
 };
 

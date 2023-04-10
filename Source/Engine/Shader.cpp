@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include "PlayerController.h"
+#include "CameraComponent.h"
 
 Shader::Shader()
 	: shaderID(0),
@@ -95,6 +96,7 @@ void Shader::SendUniforms()
     {
         viewMatrix = cam->GetViewMatrix();
         newFOV = cam->mFOV;
+		SetVec3("cameraPosition", cam->GetWorldLocation());
     }
 
     QMatrix4x4 projection;

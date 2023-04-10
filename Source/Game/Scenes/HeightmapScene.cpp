@@ -63,7 +63,7 @@ HeightmapScene::HeightmapScene()
 	//scam->bLookAtParent = true;
 	//scam->SetFollowParent(false);
 	//light->AddComponent(scam);
-	//spring->SetCamera(scam);
+	//spring->SetAttachment(scam);
 
 	//reflectcube = new Actor();
 	//reflectcube->SetMesh(new CubeMesh(reflectcube, 1.f, QVector3D(0.5f, 0.5f, 0.5f)));

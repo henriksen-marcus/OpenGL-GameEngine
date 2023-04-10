@@ -210,7 +210,7 @@ float MeshComponent::GetHeight(const QVector2D& point)
 		{
 			// Get the height of the triangle
 			auto h = mVertices[i1].y * u + mVertices[i2].y * v + mVertices[i3].y * w;
-            print("baryc timer: " + mTimer->GetDurationAsString());
+            //print("baryc timer: " + mTimer->GetDurationAsString());
             return h;
 		}
     }

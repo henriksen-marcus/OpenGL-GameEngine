@@ -20,8 +20,8 @@ uniform sampler2D texture_IN;
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
 uniform bool useLighting;
-
 out vec4 fragmentColor_OUT;
+uniform vec3 cameraPosition;
 
 void main()
 {
@@ -35,16 +35,25 @@ void main()
     // Compute lighting if enabled
 	if (useLighting)
 	{
+		// Ambient
 		float ambientStrength = 0.1f;
 		vec3 ambient = ambientStrength * lightColor;
 
+		// Diffuse
 		vec3 norm = normalize(fragNormal);
 		vec3 lightDir = normalize(lightPosition - fragPosition);
 		float diff = max(dot(norm, lightDir), 0.f);
 		vec3 diffuse = diff * lightColor;
-		vec4 result = vec4((ambient + diffuse), 1.f) * fragColor * texColor;
-		fragmentColor_OUT = result;
 
+		// Specular
+		float specularStrength = 0.5f;
+		vec3 viewDir = normalize(cameraPosition - fragPosition);
+		vec3 reflectDir = reflect(-lightDir, norm);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);
+		vec3 specular = specularStrength * spec * lightColor;
+
+		vec4 result = vec4((ambient + diffuse + specular), 1.f) * fragColor * texColor;
+		fragmentColor_OUT = result;
 		
 
 //		vec3 lightDirection = normalize(lightPosition - gl_FragCoord.xyz);

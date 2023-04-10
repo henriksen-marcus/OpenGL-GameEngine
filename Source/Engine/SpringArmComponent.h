@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actor.h"
-#include "CameraComponent.h"
 #include "SceneComponent.h"
 
 class SpringArmComponent : public SceneComponent
@@ -10,9 +9,9 @@ class SpringArmComponent : public SceneComponent
     SpringArmComponent(Actor* parent, float cameraDistance, float cameraAngle);
     void Tick(float deltaTime) override;
 
-    static QVector3D GetCameraOffset(float cameraDistance, float angle);
-    void SetCamera(CameraComponent* cameraComponent);
-    QVector3D GetSocketLocation() const { return mWorldLocation + mCameraOffset; }
+    static QVector3D GetOffset(float cameraDistance, float angle);
+    void SetAttachment(SceneComponent* cameraComponent);
+    QVector3D GetSocketLocation() const { return mWorldLocation + mComponentOffset; }
 
     inline void SetSpringStiffness(float stiffness) { mSpringStiffness = stiffness; }
     inline void SetDamping(float damping) { mDamping = damping; }
@@ -21,10 +20,10 @@ class SpringArmComponent : public SceneComponent
 	bool bEnableCameraLag{true};
 
 private:
-    CameraComponent* mCameraComponent;
-    QVector3D mCameraOffset;
-    QVector3D mCameraLocation;
-    QVector3D mCameraVelocity;
+    SceneComponent* mAttachedComponent;
+    QVector3D mComponentOffset;
+    QVector3D mComponentLocation;
+    QVector3D mComponentVelocity;
 
     float mSpringStiffness{200.f};
     float mDamping{30.f};

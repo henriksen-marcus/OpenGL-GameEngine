@@ -53,7 +53,6 @@ HEADERS += \
     Source/Game/StaticSceneCamera.h \
     Source/Game/TestCameraActor.h \
     Source/Game/VisualFunction2D.h \
-    Source/Game/VisualFunction3D.h \
     Source/Game/VisualPoints.h \
     Source/Game/XYZ.h \
     Source/Utility/MathTasks.h \
@@ -92,7 +91,6 @@ SOURCES += \
     Source/Game/StaticSceneCamera.cpp \
     Source/Game/TestCameraActor.cpp \
     Source/Game/VisualFunction2D.cpp \
-    Source/Game/VisualFunction3D.cpp \
     Source/Game/VisualPoints.cpp \
     Source/Game/XYZ.cpp
 

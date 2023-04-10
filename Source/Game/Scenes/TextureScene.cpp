@@ -104,7 +104,7 @@ TextureScene::TextureScene()
  //   //PlayerController::GetInstance().SetCurrentCamera(Cam);
 
  //   auto* Springarm = new SpringArmComponent(player, 3.f, 45.f);
- //   Springarm->SetCamera(Cam);
+ //   Springarm->SetAttachment(Cam);
  //   Springarm->SetFollowParent(true);
  //   player->AddComponent(Springarm);
 
