@@ -1,5 +1,8 @@
 #include "MeshComponent.h"
 
+#include <qcolor.h>
+#include <sstream>
+
 #include "Math.h"
 #include "Shader.h"
 #include "Texture2D.h"
@@ -17,6 +20,189 @@ MeshComponent::MeshComponent(Actor* parent, GLenum drawMode)
 MeshComponent::~MeshComponent()
 {
     delete mTexture;
+}
+
+void MeshComponent::LoadMesh(const std::string& path)
+{
+
+	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+	std::vector<QVector3D> temp_vertices;
+	std::vector<QVector2D> temp_uvs;
+	std::vector<QVector3D> temp_normals;
+
+	FILE* file = fopen(path.c_str(), "r");
+	if (!file) {
+	    qDebug() << "Impossible to open the file!";
+	    return;
+	}
+
+    while(true) 
+    {
+	    char lineHeader[128];
+	    // Read the first word of the line
+	    int res = fscanf(file, "%s", lineHeader);
+	    if (res == EOF) break; // EOF = End Of File. Quit the loop.
+
+	    if (strcmp(lineHeader, "v") == 0) // Vertex position
+        {
+		    QVector3D vertex;
+		    fscanf_s(file, "%f %f %f\n", &vertex[0], &vertex[1], &vertex[2]);
+		    temp_vertices.push_back(vertex);
+        }
+        else if (strcmp( lineHeader, "vt" ) == 0) // Vertex texture coordinate
+        {
+		    QVector2D uv;
+		    fscanf_s(file, "%f %f\n", &uv[0], &uv[1]);
+		    temp_uvs.push_back(uv);
+        }
+        else if (strcmp( lineHeader, "vn" ) == 0) // Vertex normal
+        {
+		    QVector3D normal;
+		    fscanf_s(file, "%f %f %f\n", &normal[0], &normal[1], &normal[2]);
+		    temp_normals.push_back(normal);
+        }
+        else if (strcmp( lineHeader, "f" ) == 0)
+        {
+		    std::string vertex1, vertex2, vertex3;
+		    unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+		    int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+		    if (matches != 9){
+		        printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+		        return;
+		    }
+		    vertexIndices.push_back(vertexIndex[0]);
+		    vertexIndices.push_back(vertexIndex[1]);
+		    vertexIndices.push_back(vertexIndex[2]);
+		    uvIndices    .push_back(uvIndex[0]);
+		    uvIndices    .push_back(uvIndex[1]);
+		    uvIndices    .push_back(uvIndex[2]);
+		    normalIndices.push_back(normalIndex[0]);
+		    normalIndices.push_back(normalIndex[1]);
+		    normalIndices.push_back(normalIndex[2]);
+        }
+    }
+
+    mIndices = vertexIndices;
+    for (int i = 0; i < vertexIndices.size(); i++)
+    {
+        mVertices.emplace_back(temp_vertices[vertexIndices[i] - 1], QVector3D(1.f, 1.f, 1.f), temp_uvs[uvIndices[i] - 1], temp_normals[normalIndices[i] - 1]);
+	}
+}
+
+void MeshComponent::LoadFromOBJ(const std::string& path)
+{
+    mVertices.clear();
+    mIndices.clear();
+
+    std::vector<QVector3D> OBJ_vertices, OBJ_normals;
+	std::vector<QVector2D> OBJ_texcoords;
+
+    std::vector<GLint> OBJ_normal_indices, OBJ_texcoord_indices;
+
+    std::stringstream ss;
+    std::ifstream in_obj_file(path);
+    std::ifstream in_mtl_file;
+    std::string line = "";
+    std::string prefix = "";
+    QVector3D temp_vec3;
+    QVector2D temp_vec2;
+
+    if (!in_obj_file.is_open())
+    {
+    	qDebug() << "MESHCOMPONENT::OBJLOADER::Failed to open file: " << path.c_str();
+		return;
+	}
+
+    // Read the file line by line
+    while (std::getline(in_obj_file, line))
+    {
+        // Get the prefix of the line
+    	ss.clear();
+		ss.str(line);
+		
+		ss >> prefix;
+        if (prefix == "mtllib")
+        {
+	        std::string material_file;
+			ss >> material_file;
+            in_mtl_file.open(material_file);
+			LoadMTL(material_file);
+		}
+		else if (prefix == "usemtl")
+		{
+			std::string material_name;
+			ss >> material_name;
+			mMaterial = mMaterials[material_name];
+        }
+		else if (prefix == "v") // Vertex position
+		{
+            // Load all the vertices in order
+			ss >> temp_vec3[0] >> temp_vec3[1] >> temp_vec3[2];
+            OBJ_vertices.push_back(temp_vec3);
+			mVertices.emplace_back(temp_vec3);
+		}
+        else if (prefix == "vt") // Vertex texture coordinate
+        {
+        	// Load all the texture coordinates in order
+			ss >> temp_vec2[0] >> temp_vec2[1];
+			OBJ_texcoords.push_back(temp_vec2);
+        }
+		else if (prefix == "vn") // Vertex normal
+		{
+            // Load all the normals in order
+			ss >> temp_vec3[0] >> temp_vec3[1] >> temp_vec3[2];
+			OBJ_normals.push_back(temp_vec3.normalized());
+		}
+        else if (prefix == "s")
+        {
+	        std::string smooth;
+            ss >> smooth;
+            bSmoothShading = smooth == "1";
+        }
+		else if (prefix == "f") // Face
+		{
+			GLint v_index, vt_index, vn_index;
+			char delimiter;
+			std::string vertex_str;
+			while (std::getline(ss, vertex_str, ' '))
+			{
+				if (vertex_str.empty())
+					continue;
+
+				std::stringstream vertex_ss(vertex_str);
+				vertex_ss >> v_index >> std::noskipws >> delimiter >> std::noskipws >> vt_index >> std::noskipws >>
+					delimiter >> std::noskipws >> vn_index;
+
+				mIndices.push_back(v_index - 1);
+				OBJ_texcoord_indices.push_back(vt_index - 1);
+				OBJ_normal_indices.push_back(vn_index - 1);
+
+                mVertices[v_index- 1].SetUV(OBJ_texcoords[vt_index - 1]);
+                mVertices[v_index - 1].SetNormal(OBJ_normals[vn_index - 1].normalized());
+                mVertices[v_index - 1].SetColor(QVector3D(1.f, 1.f, 1.f));
+
+                //qDebug() << v_index << "/" << vt_index << "/" << vn_index;
+			}
+		}
+	}
+
+    // Load duplicate vertices for hard shading
+    if (!bSmoothShading)
+    {
+	    mVertices.clear();
+
+        for (size_t i = 0; i < mIndices.size(); ++i)
+        {
+	        Vertex v;
+			v.SetPos(OBJ_vertices[mIndices[i]]);
+			v.SetUV(OBJ_texcoords[OBJ_texcoord_indices[i]]);
+			v.SetNormal(OBJ_normals[OBJ_normal_indices[i]]);
+			v.SetColor(QVector3D(1.f, 1.f, 1.f));
+			mVertices.push_back(v);
+		}
+
+        mIndices.clear();
+    }
 }
 
 void MeshComponent::SetTexture(Texture2D* texture)
@@ -63,12 +249,50 @@ void MeshComponent::GenerateNormals()
     {
     	mVertices[i].SetNormal(mVertices[i].GetNormal().normalized());
 	}
+}
 
-    // Print the normals
-    /*for (int i = 0; i < mVertices.size(); i++)
-    {
-    	consolePrint("Vertex " + std::to_string(i) + ": ", mVertices[i].GetNormal());
-    }*/
+void MeshComponent::GenerateQuadNormals()
+{
+    if (mVertices.empty() || mIndices.empty() || mDrawMode == GL_LINES) return;
+	// Reset the normals
+	for (int i = 0; i < mVertices.size(); i++)
+	{
+		mVertices[i].SetNormal(QVector3D());
+	}
+	// Loop through each triangle and add the normal
+	for (int i = 0; i < mIndices.size(); i += 6)
+	{
+		// Get the indices of the three vertices that make up this triangle
+		GLuint i1 = mIndices[i];
+		GLuint i2 = mIndices[i + 1];
+		GLuint i3 = mIndices[i + 2];
+		GLuint i4 = mIndices[i + 3];
+		GLuint i5 = mIndices[i + 4];
+		GLuint i6 = mIndices[i + 5];
+		// Get the vertices
+		QVector3D v1 = mVertices[i1].GetPos();
+		QVector3D v2 = mVertices[i2].GetPos();
+		QVector3D v3 = mVertices[i3].GetPos();
+		QVector3D v4 = mVertices[i4].GetPos();
+		QVector3D v5 = mVertices[i5].GetPos();
+		QVector3D v6 = mVertices[i6].GetPos();
+		// Calculate the normal
+		QVector3D normal1 = QVector3D::crossProduct(v2 - v1, v3 - v1);
+		QVector3D normal2 = QVector3D::crossProduct(v5 - v4, v6 - v4);
+        QVector3D normal3 = (normal1 + normal2);
+		// Add the normal to the vertices
+		mVertices[i1].AddNormal(normal3);
+		mVertices[i2].AddNormal(normal3);
+		mVertices[i3].AddNormal(normal3);
+		mVertices[i4].AddNormal(normal3);
+		mVertices[i5].AddNormal(normal3);
+		mVertices[i6].AddNormal(normal3);
+	}
+	// Normalize the normals
+	for (int i = 0; i < mVertices.size(); i++)
+	{
+		mVertices[i].SetNormal(mVertices[i].GetNormal().normalized());
+	}
 }
 
 void MeshComponent::GenerateNeighbors()

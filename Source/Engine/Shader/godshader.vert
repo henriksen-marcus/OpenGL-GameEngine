@@ -11,10 +11,6 @@ uniform mat4 matrixTransform_IN;
 uniform mat4 projection_IN;
 uniform mat4 view_IN;
 
-//uniform vec3 lightPosition;
-//uniform vec3 lightColor;
-//uniform bool useLighting;
-
 // Output variables
 out vec4 fragColor;
 out vec2 fragTexCoord;
@@ -33,6 +29,7 @@ void main()
 	fragColor = color_IN;
 
 	//fragNormal = mat3(transpose(inverse(matrixTransform_IN))) * normal_IN;
-	fragNormal = normal_IN;
+	//fragNormal = normal_IN;
+	fragNormal = mat3(transpose(inverse(matrixTransform_IN))) * normal_IN;
 	fragPosition = vec3(matrixTransform_IN * vec4(position_IN, 1.f));
 }

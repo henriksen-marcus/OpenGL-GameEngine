@@ -192,6 +192,7 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\OBJMaterial.cpp" />
     <ClCompile Include="Source\Game\Scenes\BarycentricScene.cpp" />
     <ClCompile Include="Source\Game\MeshWalker.cpp" />
     <ClCompile Include="Source\Engine\Shader3.cpp" />
@@ -236,6 +237,7 @@
     <ClCompile Include="Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\OBJMaterial.h" />
     <ClInclude Include="Source\Engine\Timer.h" />
     <ClInclude Include="Source\Game\Scenes\BarycentricScene.h" />
     <ClInclude Include="Source\Engine\Math.h" />
@@ -326,7 +328,6 @@
     <None Include="Source\Engine\Shader\geo.frag" />
     <None Include="Source\Engine\Shader\geo.geom" />
     <None Include="Source\Engine\Shader\godshader.frag" />
-    <None Include="Source\Engine\Shader\godshader.geom" />
     <None Include="Source\Engine\Shader\godshader.vert" />
     <None Include="Source\Engine\Shader\phongshader.frag" />
     <None Include="Source\Engine\Shader\phongshader.vert" />

@@ -19,6 +19,7 @@ MeshWalker::MeshWalker(const QVector3D& location)
 	mSpringArm = new SpringArmComponent(this, 7.f, 35.f);
 	mComponents.push_back(mSpringArm);
 	mSpringArm->SetAttachment(mCamera);
+    mSpringArm->SetSpringStiffness(100.f);
 	//mSpringArm->bEnableCameraLag = false;
 
 	mLightCube = new LightCube(this, 0.05f);

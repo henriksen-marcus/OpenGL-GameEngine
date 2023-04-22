@@ -13,13 +13,23 @@ public:
     MeshComponent(Actor* parent, GLenum drawMode = GL_TRIANGLES);
     ~MeshComponent();
 
+    void LoadMesh(const std::string& path);
+    void LoadFromOBJ(const std::string& path);
+
     void SetTexture(Texture2D* texture);
     void SetTexture(const std::string& path);
 
     /**
      * \brief Generates normals for smooth shading.
+     * Per-triangle normal generation.
      */
     void GenerateNormals();
+
+    /**
+     * \brief Generates normals for smooth shading.
+     * Per-quad normal generation.
+     */
+    void GenerateQuadNormals();
 
     void GenerateNeighbors();
 
@@ -45,6 +55,7 @@ protected:
     Texture2D* mTexture;
     QVector3D mColor{1.f, 1.f, 1.f};
     GLenum mDrawMode;
+    bool bSmoothShading{true};
 
     // Stores vertices for the object
     std::vector<Vertex> mVertices;

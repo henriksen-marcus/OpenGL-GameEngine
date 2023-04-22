@@ -25,6 +25,8 @@ PlaneMesh::PlaneMesh(Actor* parent, const QVector3D& location, float sizeX, floa
     }
     else InitLines();
     Init();
+
+    UseShader("geo");
 }
 
 void PlaneMesh::InitTriangles()

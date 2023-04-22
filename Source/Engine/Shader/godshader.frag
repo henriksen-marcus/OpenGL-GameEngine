@@ -1,14 +1,3 @@
-//#version 410 core
-//
-//in vec4 fragColor;
-//out vec4 fragmentColor;
-//
-//void main()
-//{
-//    // Color given to current fragment (pixel)
-//    fragmentColor = fragColor;
-//}									
-
 #version 410 core
 
 in vec4 fragColor;
@@ -54,16 +43,6 @@ void main()
 
 		vec4 result = vec4((ambient + diffuse + specular), 1.f) * fragColor * texColor;
 		fragmentColor_OUT = result;
-		
-
-//		vec3 lightDirection = normalize(lightPosition - gl_FragCoord.xyz);
-//		float diffuseFactor = max(dot(normalize(fragNormal), lightDirection), 0.f);
-//		float diffuseIntensity = 0.8f;
-//		vec4 diffuseColor = vec4(lightColor, 1.f) * diffuseIntensity * diffuseFactor;
-//		fragmentColor = vec4(texColor.rgb * fragColor.rgb * (ambientColor + diffuseColor).rgb, texColor.a);
-//		fragmentColor = ambientColor * fragColor;
-//		float lightFactor = max(dot(normalize(fragNormal - 0.5), lightDirection), 0.f);
-//		fragmentColor = vec4(texColor.rgb * fragColor.rgb * lightFactor, texColor.a);
 	}
 	else 
 	{

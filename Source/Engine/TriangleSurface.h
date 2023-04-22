@@ -15,7 +15,7 @@ public:
      * \param f The function to draw. Must take two floats and return one float.
      * \param segments How many segments to subdivide the area into, aka resolution.
      */
-    void FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float ymin, float ymax, unsigned segments);
+    void FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float zmin, float zmax, unsigned segments);
 
     /**
      * \brief Load data points into this object's mVertices array using the given function.

@@ -85,7 +85,7 @@ void Pawn::ProcessMouseMovement(float xoffset, float yoffset)
 
 void Pawn::ProcessMouseScroll(float yoffset)
 {
-    mMovementSpeed = qBound(0.f, mMovementSpeed + yoffset * 0.01f, 10.f);
+    mMovementSpeed = qBound(0.01f, mMovementSpeed + yoffset * 0.01f, 15.f);
 }
 
 void Pawn::SetMovementSpeed(float speed)

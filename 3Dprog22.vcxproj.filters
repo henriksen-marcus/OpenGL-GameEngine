@@ -173,6 +173,9 @@
     <ClCompile Include="Source\Game\Scenes\BarycentricScene.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\OBJMaterial.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Actor.h">
@@ -355,6 +358,9 @@
     <ClInclude Include="Source\Engine\Timer.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\OBJMaterial.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -392,7 +398,6 @@
     <None Include="Source\Engine\Shader\phongshader.frag" />
     <None Include="Source\Engine\Shader\godshader.vert" />
     <None Include="Source\Engine\Shader\godshader.frag" />
-    <None Include="Source\Engine\Shader\godshader.geom" />
     <None Include="Source\Engine\Shader\geo.vert" />
     <None Include="Source\Engine\Shader\geo.frag" />
     <None Include="Source\Engine\Shader\geo.geom" />

@@ -47,6 +47,15 @@ struct Vertex
         v = v_;
     }
 
+	Vertex(const QVector3D& loc, const QVector3D& col, const QVector2D& uv, const QVector3D& norm)
+    {
+    	x = loc.x();   r = col.x();   a = norm.x();
+		y = loc.y();   g = col.y();   m = norm.y();
+		z = loc.z();   b = col.z();   c = norm.z();
+		u = uv.x();
+		v = uv.y();
+	}
+
 	Vertex()
 	{
 		x = y = z = r = g = b = u = v = a = m = c = 0.f;
@@ -91,8 +100,28 @@ struct Vertex
 		c += n.z();
 	}
 
+	void SetPos(const QVector3D& p)
+    {
+	    x = p.x();
+		y = p.y();
+		z = p.z();
+    }
+
+	void SetColor(const QVector3D& col)
+    {
+    	r = col.x();
+		g = col.y();
+		b = col.z();
+	}
+
+	void SetUV(const QVector2D& uv)
+    {
+    	u = uv.x();
+		v = uv.y();
+	}
+
 	// FORMAT: X,Y,Z,R,G,B,U,V,A,M,C
-	//! Overloaded ostream operator which writes all vertex data on an open textfile stream
+	// Overloaded ostream operator which writes all vertex data on an open textfile stream
 	friend std::ostream& operator << (std::ostream& os, const Vertex& v)
 	{
 		os << std::fixed;

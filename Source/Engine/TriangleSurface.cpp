@@ -74,36 +74,73 @@ TriangleSurface::TriangleSurface(Actor* parent)
 {
 }
 
-void TriangleSurface::FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float ymin,
-                                   float ymax, unsigned segments)
+void TriangleSurface::FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float zmin, float zmax, unsigned segments)
 {
     mVertices.clear();
 
-    // Seperate h values as the user might not give us a perfect square
-    float h_x = (xmax - xmin) / static_cast<float>(segments);
-    float h_y = (ymax - ymin) / static_cast<float>(segments);
-    
-    for (auto x{xmin}; x < xmax; x+=h_x)
+    // Separate h values as the user might not give us a perfect square
+    const float h_x = (xmax - xmin) / static_cast<float>(segments);
+    const float h_z = (zmax - zmin) / static_cast<float>(segments);
+
+    int num_vertices_x = segments + 1;
+    int num_vertices_y = segments + 1;
+
+    for (int x = 0; x < segments; x++)
     {
-        for (auto y{ymin}; y < ymax; y+=h_y)
-        {
-            float z = f(x, y);
-            mVertices.push_back(Vertex(x, z, y, x, y, z));
+	    for (int z = 0; z < segments; z++)
+	    {
+            float x_val = xmin + x * h_x;
+            float z_val = zmin + z * h_z;
+            float y_val = f(x_val, z_val);
 
-            z = f(x+h_x, y);
-            mVertices.push_back(Vertex(x+h_x, z, y, x+h_x, y, z));
-
-            z = f(x, y+h_y);
-            mVertices.push_back(Vertex(x, z, y+h_y, x, y+h_y, z));
-            mVertices.push_back(Vertex(x, z, y+h_y, x, y+h_y, z)); // Top left
-
-            z = f(x+h_x, y);
-            mVertices.push_back(Vertex(x+h_x, z, y, x+h_x, y, z)); // Bottom right
-
-            z = f(x+h_x, y+h_y);
-            mVertices.push_back(Vertex(x+h_x, z, y+h_y, x+h_x, y+h_y, z)); // Top right
-        }
+		    float y = f(x, z);
+            mVertices.emplace_back(x_val, y_val, z_val, QVector3D(1.f, 1.f, 1.f));
+	    }
     }
+
+    // Indices
+    for (int x = 0; x < segments - 1; x++)
+    {
+	    for (int z = 0; z < segments - 1; z++)
+	    {
+		    // Calculate the unique vertex index for each corner of the current quad
+		    int bottomLeftIndex = x + z * segments;
+		    int bottomRightIndex = (x + 1) + z * segments;
+		    int topLeftIndex = x + (z + 1) * segments;
+		    int topRightIndex = (x + 1) + (z + 1) * segments;
+
+		    // Add the indices for the two triangles of the quad
+		    mIndices.push_back(bottomLeftIndex);
+		    mIndices.push_back(bottomRightIndex);
+		    mIndices.push_back(topLeftIndex);
+
+		    mIndices.push_back(topLeftIndex);
+		    mIndices.push_back(bottomRightIndex);
+		    mIndices.push_back(topRightIndex);
+	    }
+    }
+    
+    //for (auto x{xmin}; x < xmax; x+=h_x)
+    //{
+    //    for (auto y{zmin}; y < zmax; y+=h_z)
+    //    {
+    //        float z = f(x, y);
+    //        mVertices.push_back(Vertex(x, z, y, x, y, z));
+
+    //        z = f(x+h_x, y);
+    //        mVertices.push_back(Vertex(x+h_x, z, y, x+h_x, y, z));
+
+    //        z = f(x, y+h_z);
+    //        mVertices.push_back(Vertex(x, z, y+h_z, x, y+h_z, z));
+    //        mVertices.push_back(Vertex(x, z, y+h_z, x, y+h_z, z)); // Top left
+
+    //        z = f(x+h_x, y);
+    //        mVertices.push_back(Vertex(x+h_x, z, y, x+h_x, y, z)); // Bottom right
+
+    //        z = f(x+h_x, y+h_z);
+    //        mVertices.push_back(Vertex(x+h_x, z, y+h_z, x+h_x, y+h_z, z)); // Top right
+    //    }
+    //}
 }
 
 void TriangleSurface::FromFunction(std::function<float(float, float)> f, QVector3D origin, float size, unsigned segments)
@@ -156,7 +193,7 @@ void TriangleSurface::FromImageFile(const std::string& fileName, float size, flo
     }
 
     mVertices.clear();
-    mIndices.clear(); // Add a new index vector
+    mIndices.clear();
 
     float h = size / resolution;
     float hSize = size / 2.f;

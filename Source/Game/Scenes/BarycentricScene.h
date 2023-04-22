@@ -14,6 +14,10 @@ public:
 	MeshWalker* mWalker;
 	void Tick(float deltaTime) override;
 
+	Actor* temp;
+	MeshComponent* m;
+	MeshComponent* d;
+
 	int ticks = 0;
 	Timer* timer;
 };
