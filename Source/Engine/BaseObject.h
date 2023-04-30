@@ -22,8 +22,9 @@ public:
     static void print(const std::string& message);
     static void print(const std::string& message, const QVector3D& vec);
     static void print(const QVector3D& vec);
-    static void consolePrint(const std::string& message);
-    static void consolePrint(const std::string& message, const QVector3D& vec);
+    static void cPrint(const std::string& message);
+    static void cPrint(const std::string& message, const QVector3D& vec);
+    static void cPrint(const QVector3D& vec);
 };
 
 template<typename Derived, typename Base>

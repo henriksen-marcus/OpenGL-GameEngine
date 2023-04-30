@@ -15,7 +15,7 @@ public:
      * \param init If we should call init right after construction (saves a line of code).
      */
     Actor(const QVector3D& location = QVector3D(), bool init = false);
-    ~Actor();
+    virtual ~Actor();
 
     void Init() override;
 
@@ -43,10 +43,9 @@ public:
 
     virtual QVector3D& GetActorForwardVector() { return mForward; }
     virtual QVector3D& GetActorUpVector() { return mUp; }
-    virtual QVector3D& GetActorRightVector()
+    virtual QVector3D GetActorRightVector()
     {
-	    QVector3D right = QVector3D::crossProduct(mForward, mUp);
-        return right;
+	    return QVector3D::crossProduct(mForward, mUp);
     }
 
     // ---------- Scale ---------- //

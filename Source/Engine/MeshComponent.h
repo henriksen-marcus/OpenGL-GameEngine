@@ -5,6 +5,7 @@
 
 class Timer;
 class Texture2D;
+class OBJMaterial;
 
 /* Holds mesh data. */
 class MeshComponent : public SceneComponent
@@ -15,6 +16,7 @@ public:
 
     void LoadMesh(const std::string& path);
     void LoadFromOBJ(const std::string& path);
+    std::vector<OBJMaterial*> ParseMTL(const std::string& path);
 
     void SetTexture(Texture2D* texture);
     void SetTexture(const std::string& path);
@@ -31,13 +33,18 @@ public:
      */
     void GenerateQuadNormals();
 
+    /**
+     * \brief Not working right now.
+     */
     void GenerateNeighbors();
 
     float GetHeight(const QVector2D& point);
 
     Vertex GetVertex(int index) const { return mVertices[index]; }
 
+	// Not working
     unsigned int GetMeshHeight();
+    // Not working
     unsigned int GetMeshWidth();
 
     virtual void Init();

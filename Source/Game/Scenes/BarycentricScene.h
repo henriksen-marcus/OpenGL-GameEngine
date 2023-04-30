@@ -1,5 +1,7 @@
 #pragma once
 #include "Source/Engine/World.h"
+#include "Source/Engine/QuadraticBezier.h"
+#include "Source/Engine/CubicBezier.h"
 
 class MeshWalker;
 class MeshComponent;
@@ -20,5 +22,11 @@ public:
 
 	int ticks = 0;
 	Timer* timer;
+
+
+	float myt = 0;
+	bool dir = false;
+
+	CubicBezier bez = CubicBezier(QVector3D());
 };
 

@@ -20,6 +20,8 @@
 #include "Source/Engine/Timer.h"
 #include "Source/Engine/Meshes/PlaneMesh.h"
 #include "Source/Game/HealthPack.h"
+#include "Source/Engine/QuadraticBezier.h"
+#include "Source/Engine/Meshes/LineMesh.h"
 
 
 BarycentricScene::BarycentricScene()
@@ -31,15 +33,11 @@ BarycentricScene::BarycentricScene()
 	plane->SetActorLocation(QVector3D(0.f, 4.5f, -15.f));
 	plane->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));*/
 
-	std::function<float(float, float)> f = [](float a, float b) -> float {
-		return atan(sin(a)+(b/2))/2;
-	};
 
 	//Actor* ground = new Actor();
 	//auto t = new TriangleSurface(ground);
-	//t->FromFunction(f, -10, 10, -10, 10, 50);
 	////t->FromImageFile("Assets/Heightmaps/Landscape2.jpg", 100.f, 50.f, 200.f);
-	////t->FromImageFile("Assets/Heightmaps/Heightmap8.jpg", 40.f, 2.f, 100.f);
+	//t->FromImageFile("Assets/Heightmaps/Heightmap8.jpg", 40.f, 2.f, 100.f);
 	////t->SetTexture("Assets/Textures/Landscape2.jpg");
 	//t->GenerateNormals();
 	//t->Init();
@@ -58,44 +56,48 @@ BarycentricScene::BarycentricScene()
 	//mActors.push_back(mWalker);
 	//mQuadtree->Insert(mWalker);
 
-	/*auto* hp = new HealthPack(QVector3D(0.f, 2.5f, -10.f));
-	mRenderer->Add("hp", hp);
-	mActors.push_back(hp);
-	mQuadtree->Insert(hp);
-	*/
-
 	auto cross = new XYZ();
 	mRenderer->Add("cross", cross);
-	cross->SetActorScale(QVector3D(3.f, 3.f, 3.f));
 
-	m = new MeshComponent(nullptr);
-	m->LoadFromOBJ("Assets/Meshes/artcube.obj");
+	/*m = new MeshComponent(nullptr);
+	m->LoadFromOBJ("Assets/Meshes/CurvedSurface_flat.obj");
 	m->Init();
 	m->bUseLighting = true;
 	m->SetFollowParent(false);
 
-	SpawnActor<Actor>("cube", m);
+	SpawnActor<Actor>("cube", m);*/
 
 
-	auto l = SpawnActor<Actor>("light", new LightCube(nullptr, 0.0001f));
-	l->SetActorLocation(QVector3D(0.f, 5.f, 0.f));
+	/*auto l = SpawnActor<Actor>("light", new LightCube(nullptr, 0.0001f));
+	l->SetActorLocation(QVector3D(0.f, 5.f, 0.f));*/
 
+	SetWorldColor(QVector3D(0.1f, 0.1f, 0.1f));
 
 	auto fCam = new FlyingCamera(QVector3D(0.f, 2.f, 2.f));
 	fCam->SetAsCurrent();
 	fCam->GetCamera()->SetAsCurrent();
 	mRenderer->Add("fcam", fCam);
+
+	temp = SpawnActor<Actor>("temp", new CubeMesh(nullptr, 0.2f));
+
+	bez.AddSegment({{1,1,1}, {2,1,-1}, {3,0,0}});
+	bez.AddSegment({{4,-1,1}, {5,-1,-1}, {6,0,0}});
+	bez.AddSegment({{7,1,1}, {7,2,-1}, {6,3,0}});
+	bez.mResolution = 100;
+	bez.Init();
+	bez.InitPoints();
+	bez.bDrawPoints = true;
+	bez.SetWorldLocation(QVector3D(5.f, -2.f, 0.f));
+
+	SpawnActor<Actor>("curveactor", &bez);
+
+	bez(0.2f);
 }
 
 void BarycentricScene::Tick(float deltaTime)
 {
 	World::Tick(deltaTime);
 
-	m->mShaderName = "god";
-	m->Draw();
-	m->mShaderName = "geo";
-	m->Draw();
+	temp->SetActorLocation(bez(myt));
 
-	//m->AddWorldOffset(QVector3D(0.02f, 0.f, 0.f));
-	//m->AddWorldRotation(QVector3D(0.2f, 0.f, 0.1f));
 }

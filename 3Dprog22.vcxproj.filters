@@ -176,6 +176,18 @@
     <ClCompile Include="Source\Engine\OBJMaterial.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\QuadraticBezier.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Bezier.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\CubicBezier.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\CurveScene.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Actor.h">
@@ -359,6 +371,24 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\OBJMaterial.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\QuadraticBezier.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Bezier.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\CubicBezier.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Color.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\CurveScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ZigZag.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

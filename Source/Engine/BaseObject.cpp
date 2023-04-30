@@ -49,12 +49,17 @@ void BaseObject::print(const QVector3D& vec)
     print(std::to_string(vec.x()) + " " + std::to_string(vec.y()) + " " + std::to_string(vec.z()));
 }
 
-void BaseObject::consolePrint(const std::string& message)
+void BaseObject::cPrint(const std::string& message)
 {
     std::cout << message << std::endl;
 }
 
-void BaseObject::consolePrint(const std::string& message, const QVector3D& vec)
+void BaseObject::cPrint(const std::string& message, const QVector3D& vec)
 {
     std::cout << message << " " << vec.x() << " " << vec.y() << " " << vec.z() << std::endl;
+}
+
+void BaseObject::cPrint(const QVector3D& vec)
+{
+    std::cout << vec.x() << " " << vec.y() << " " << vec.z() << std::endl;
 }

@@ -30,6 +30,7 @@
 #include "Source/Game/Scenes/HeightmapScene.h"
 #include "Source/Engine/Shader3.h"
 #include "Source/Game/Scenes/BarycentricScene.h"
+#include "Source/Game/Scenes/CurveScene.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -119,8 +120,7 @@ void RenderWindow::init()
     std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
 
     std::filesystem::path cwd = std::filesystem::current_path();
-    std::cout << cwd << std::endl;
-
+    std::cout << "Current program path: " << cwd << std::endl;
 
 
     //auto* texScene = new TextureScene();
@@ -128,8 +128,11 @@ void RenderWindow::init()
     //auto* heightmapscene = new HeightmapScene();
     //WorldManager::GetInstance().SetWorld(heightmapscene);
 
-    auto* baryscene = new BarycentricScene();
-    WorldManager::GetInstance().SetWorld(baryscene);
+    /*auto* baryscene = new BarycentricScene();
+    WorldManager::GetInstance().SetWorld(baryscene);*/
+
+    CurveScene* curveScene = new CurveScene();
+    WorldManager::GetInstance().SetWorld(curveScene);
     
 
     auto* s1 = new Shader();
@@ -177,8 +180,11 @@ void RenderWindow::processInput()
 
 void RenderWindow::render()
 {
-    mContext->makeCurrent(this); //must be called every frame (every time mContext->swapBuffers is called)
-    initializeOpenGLFunctions();    //must call this every frame it seems...
+    mContext->makeCurrent(this); // Must be called every frame (every time mContext->swapBuffers is called)
+    //initializeOpenGLFunctions(); // Must call this every frame it seems..
+
+    QVector3D col = WorldManager::GetInstance().GetWorld()->GetWorldColor();
+    glClearColor(col.x(), col.y(), col.z(), 1.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Calculate framerate before checkForGLerrors() because that call takes a long time

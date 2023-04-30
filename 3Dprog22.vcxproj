@@ -192,6 +192,13 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Scenes\CurveScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\CubicBezier.cpp" />
+    <ClCompile Include="Source\Engine\Bezier.cpp" />
+    <ClCompile Include="Source\Engine\QuadraticBezier.cpp" />
     <ClCompile Include="Source\Engine\OBJMaterial.cpp" />
     <ClCompile Include="Source\Game\Scenes\BarycentricScene.cpp" />
     <ClCompile Include="Source\Game\MeshWalker.cpp" />
@@ -237,6 +244,13 @@
     <ClCompile Include="Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Scenes\CurveScene.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\CubicBezier.h" />
+    <ClInclude Include="Source\Engine\Bezier.h" />
+    <ClInclude Include="Source\Engine\QuadraticBezier.h" />
     <ClInclude Include="Source\Engine\OBJMaterial.h" />
     <ClInclude Include="Source\Engine\Timer.h" />
     <ClInclude Include="Source\Game\Scenes\BarycentricScene.h" />
@@ -262,6 +276,7 @@
     <ClInclude Include="Source\Game\HealthPack.h" />
     <ClInclude Include="Source\Game\House.h" />
     <ClInclude Include="Source\Game\LineNPC.h" />
+    <ClInclude Include="Source\Utility\Color.h" />
     <ClInclude Include="Source\Utility\MathTasks.h" />
     <ClInclude Include="Source\Engine\MeshComponent.h" />
     <ClInclude Include="Source\Engine\Meshes\LineMesh.h" />
@@ -294,6 +309,7 @@
     <ClInclude Include="Source\Engine\enums.h" />
     <ClInclude Include="Source\Utility\functions.h" />
     <ClInclude Include="Source\Engine\logger.h" />
+    <ClInclude Include="Source\Engine\ZigZag.h" />
     <QtMoc Include="Source\Engine\mainwindow.h">
     </QtMoc>
     <QtMoc Include="Source\Engine\renderwindow.h">

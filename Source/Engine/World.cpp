@@ -1,6 +1,6 @@
 #include "World.h"
 #include "Actor.h"
-#include <QElapsedTimer>
+#include "Renderer.h"
 #include "PausableTimer.h"
 #include "Quadtree.h"
 #include <iostream>
@@ -108,4 +108,9 @@ void World::RemoveActor(Actor* actor)
 
     // We don't need to remove it from the quadtree as it is updated each tick.
     //mQuadtree->Remove(actor);
+}
+
+void World::BeginPlay()
+{
+	mRenderer->BeginPlay();
 }

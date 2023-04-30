@@ -78,14 +78,15 @@ void SceneComponent::AddWorldScale(const QVector3D& offset)
 
 void SceneComponent::Tick(float deltaTime)
 {
-    if (followParentTransform)
-	    SetWorldLocation(mParent->GetActorLocation() + mParent->GetActorQuatRotation().rotatedVector(mRelativeLocation));
-
-    if (followParentRotation)
-        SetWorldRotation(mParent->GetActorQuatRotation() * mRelativeRotation);
-
-    if (followParentScale)
-        SetWorldScale(mParent->GetActorScale());
+    if (mParent)
+    {
+	    if (followParentTransform)
+		    SetWorldLocation(mParent->GetActorLocation() + mParent->GetActorQuatRotation().rotatedVector(mRelativeLocation));
+	    if (followParentRotation)
+	        SetWorldRotation(mParent->GetActorQuatRotation() * mRelativeRotation);
+	    if (followParentScale)
+	        SetWorldScale(mParent->GetActorScale());
+    }
 
     UpdateModelMatrixQuat();
     UpdateVectors();

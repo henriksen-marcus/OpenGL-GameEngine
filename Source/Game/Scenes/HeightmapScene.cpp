@@ -76,7 +76,7 @@ HeightmapScene::HeightmapScene()
 	mRenderer->Add("pl", pl);
 	pl->SetAsCurrent();
 
-	/*consolePrint("Bary: ", Math::Barycentric(
+	/*cPrint("Bary: ", Math::Barycentric(
 		QVector3D(1.2f, 0.f, 1.2f), 
 		QVector3D(0,0,0), 
 		QVector3D(3.f, 0.f, 1.f), 

@@ -2,6 +2,7 @@
 
 #include <qcolor.h>
 #include <sstream>
+#include <filesystem>
 
 #include "Math.h"
 #include "Shader.h"
@@ -9,6 +10,7 @@
 #include "World.h"
 #include "Source/Game/Arrow.h"
 #include "Source/Engine/Timer.h"
+#include "Source/Engine/OBJMaterial.h"
 
 
 MeshComponent::MeshComponent(Actor* parent, GLenum drawMode)
@@ -99,9 +101,13 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
 
     std::vector<GLint> OBJ_normal_indices, OBJ_texcoord_indices;
 
+    std::vector<OBJMaterial*> OBJ_materials;
+    std::unordered_map<int, OBJMaterial*> indexMaterial;
+
+    OBJMaterial* current_material = nullptr;
+
     std::stringstream ss;
     std::ifstream in_obj_file(path);
-    std::ifstream in_mtl_file;
     std::string line = "";
     std::string prefix = "";
     QVector3D temp_vec3;
@@ -121,19 +127,20 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
 		ss.str(line);
 		
 		ss >> prefix;
-        if (prefix == "mtllib")
+        if (prefix == "mtllib") // One obj file can have multiple mtl files attached
         {
+            // Get file name
 	        std::string material_file;
 			ss >> material_file;
-            in_mtl_file.open(material_file);
-			LoadMTL(material_file);
+
+            // Add given obj path to the mtl file path
+            std::string mtl_path = std::filesystem::path(path).parent_path().string();
+            mtl_path += "/" + material_file;
+
+            // Retrieve the containing materials
+            auto mtl = ParseMTL(mtl_path);
+            OBJ_materials.insert(OBJ_materials.end(), mtl.begin(), mtl.end());
 		}
-		else if (prefix == "usemtl")
-		{
-			std::string material_name;
-			ss >> material_name;
-			mMaterial = mMaterials[material_name];
-        }
 		else if (prefix == "v") // Vertex position
 		{
             // Load all the vertices in order
@@ -159,6 +166,18 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
             ss >> smooth;
             bSmoothShading = smooth == "1";
         }
+        else if (prefix == "usemtl")
+		{
+			std::string material_name;
+			ss >> material_name;
+
+			for (const auto& mat : OBJ_materials)
+				if (mat->mName == material_name)
+				{
+					current_material = mat;
+					break;
+				}
+        }
 		else if (prefix == "f") // Face
 		{
 			GLint v_index, vt_index, vn_index;
@@ -179,7 +198,13 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
 
                 mVertices[v_index- 1].SetUV(OBJ_texcoords[vt_index - 1]);
                 mVertices[v_index - 1].SetNormal(OBJ_normals[vn_index - 1].normalized());
-                mVertices[v_index - 1].SetColor(QVector3D(1.f, 1.f, 1.f));
+
+                if (current_material) 
+                {
+                	mVertices[v_index - 1].SetColor(current_material->mDiffuse);
+                    indexMaterial[v_index - 1] = current_material;
+                }
+				else mVertices[v_index - 1].SetColor(QVector3D(1.f, 1.f, 1.f));
 
                 //qDebug() << v_index << "/" << vt_index << "/" << vn_index;
 			}
@@ -197,12 +222,106 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
 			v.SetPos(OBJ_vertices[mIndices[i]]);
 			v.SetUV(OBJ_texcoords[OBJ_texcoord_indices[i]]);
 			v.SetNormal(OBJ_normals[OBJ_normal_indices[i]]);
-			v.SetColor(QVector3D(1.f, 1.f, 1.f));
+
+	        /*auto it = indexMaterial.find(i);
+	        if (it != indexMaterial.end()) 
+                v.SetColor(it->second->mDiffuse);
+			else 
+                v.SetColor(QVector3D(1.f, 1.f, 1.f));*/
+
 			mVertices.push_back(v);
 		}
 
+        for (auto& i : indexMaterial)
+            mVertices[i.first].SetColor(i.second->mDiffuse);
+
+        std::cout << indexMaterial.size() << " " << mVertices.size() << std::endl;
+
+
         mIndices.clear();
     }
+}
+
+std::vector<OBJMaterial*> MeshComponent::ParseMTL(const std::string& path)
+{
+    std::cout << "MESHCOMPONENT::OBJLOADER::Parsing MTL file: '" << path.c_str() << "'";
+    std::ifstream in_mtl_file(path);
+    if (!in_mtl_file.is_open()) return {};
+    std::cout << "MESHCOMPONENT::OBJLOADER::MTL file opened successfully";
+
+    OBJMaterial* current_mat = nullptr;
+
+    std::vector<OBJMaterial*> materials;
+    std::string line = "";
+    std::string prefix = "";
+	std::stringstream ss;
+	while (std::getline(in_mtl_file, line))
+	{
+        // Get the prefix of the line
+    	ss.clear();
+		ss.str(line);
+        ss >> prefix;
+
+        if (prefix == "newmtl")
+        {
+            if (current_mat) materials.push_back(current_mat);
+            std::string name;
+            ss >> name;
+            current_mat = new OBJMaterial();
+            current_mat->mName = name;
+        }
+        else if (prefix == "Ka")
+        {
+	        QVector3D ambient;
+	        ss >> ambient[0] >> ambient[1] >> ambient[2];
+	        current_mat->mAmbient = ambient;
+        }
+        else if (prefix == "Kd")
+        {
+	        QVector3D diffuse;
+	        ss >> diffuse[0] >> diffuse[1] >> diffuse[2];
+	        current_mat->mDiffuse = diffuse;
+        }
+        else if (prefix == "Ks")
+        {
+	        QVector3D specular;
+	        ss >> specular[0] >> specular[1] >> specular[2];
+	        current_mat->mSpecular = specular;
+        }
+        else if (prefix == "Ke")
+        {
+	        QVector3D emission;
+	        ss >> emission[0] >> emission[1] >> emission[2];
+	        current_mat->mEmission = emission;
+        }
+        else if (prefix == "Ns")
+        {
+	        float shininess;
+	        ss >> shininess;
+	        current_mat->mShininess = shininess;
+        }
+        else if (prefix == "d")
+        {
+	        float transparency;
+	        ss >> transparency;
+	        current_mat->mTransparency = transparency;
+        }
+        else if (prefix == "Ni")
+        {
+	        float opticalDensity;
+	        ss >> opticalDensity;
+	        current_mat->mOpticalDensity = opticalDensity;
+        }
+        else if (prefix == "illum")
+        {
+	        float illuminationModel;
+	        ss >> illuminationModel;
+	        current_mat->mIlluminationModel = illuminationModel;
+        }
+	}
+
+    if (current_mat) materials.push_back(current_mat);
+    return materials;
 }
 
 void MeshComponent::SetTexture(Texture2D* texture)
@@ -346,20 +465,20 @@ void MeshComponent::GenerateNeighbors()
         }
     }
 
-    consolePrint("Indices size: " + std::to_string(mIndices.size()) + " Neighbour size: " + std::to_string(mNeighbors.size()));
+    cPrint("Indices size: " + std::to_string(mIndices.size()) + " Neighbour size: " + std::to_string(mNeighbors.size()));
     //for (int i = 0; i < mIndices.size(); i++)
-    //	consolePrint(std::to_string(mIndices[i]));
+    //	cPrint(std::to_string(mIndices[i]));
 
-    //consolePrint("______");
+    //cPrint("______");
 
     //for (int i = 0; i < mNeighbors.size(); i++)
-    //    consolePrint(std::to_string(mNeighbors[i]));
+    //    cPrint(std::to_string(mNeighbors[i]));
 
     //return;
-    consolePrint("Indices: Neighbors:\n");
+    cPrint("Indices: Neighbors:\n");
     for (int i = 0; i < mIndices.size(); i+=3)
     {
-    	consolePrint(std::to_string(mIndices[i]) + " " + std::to_string(mIndices[i+1]) + " " + std::to_string(mIndices[i+2]) + "   " + std::to_string(mNeighbors[i]) + " " + std::to_string(mNeighbors[i+1]) + " " + std::to_string(mNeighbors[i+2]));
+    	cPrint(std::to_string(mIndices[i]) + " " + std::to_string(mIndices[i+1]) + " " + std::to_string(mIndices[i+2]) + "   " + std::to_string(mNeighbors[i]) + " " + std::to_string(mNeighbors[i+1]) + " " + std::to_string(mNeighbors[i+2]));
 	}
 
 
@@ -373,40 +492,6 @@ void MeshComponent::GenerateNeighbors()
 		GetWorld()->mRenderer->Add("arrow", a);
     }
 }
-
-
-// Linear search for now
-//float MeshComponent::GetHeight(const QVector2D& point)
-//{
-//    if (mVertices.empty() || mIndices.empty() || mDrawMode == GL_LINES) return -1;
-//
-//    // For each triangle
-//    for (int i = 0; i < mIndices.size(); i += 3)
-//    {
-//	    // Get the indices of the three vertices that make up this triangle
-//	    GLuint i1 = mIndices[i];
-//	    GLuint i2 = mIndices[i + 1];
-//	    GLuint i3 = mIndices[i + 2];
-//
-//	    // Get the vertices
-//	    auto v1 = mVertices[i1].GetPos2D();
-//	    auto v2 = mVertices[i2].GetPos2D();
-//	    auto v3 = mVertices[i3].GetPos2D();
-//
-//	    // Get the barycentric coordinates
-//        float u, v, w;
-//        Math::Barycentric(v1, v2, v3, point, u, v, w);
-//
-//	    // Check if the point is inside the triangle
-//        if (u >= 0.f && u <= 1.f && v >= 0.f && v <= 1.f && w >= 0.f && w <= 1.f)
-//		{
-//			// Get the height of the triangle
-//			auto h = mVertices[i1].y * u + mVertices[i2].y * v + mVertices[i3].y * w;
-//            return h;
-//		}
-//    }
-//    return -1;
-//}
 
 float MeshComponent::GetHeight(const QVector2D& point)
 {
