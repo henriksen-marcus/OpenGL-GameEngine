@@ -2,24 +2,18 @@
 #include "Vendor/stb_image.h"
 #include <iostream>
 
-Texture2D::Texture2D(const std::string& path)
-    : mRendererID(0),
-      mFilepath(path),
-      mLocalBuffer(nullptr),
-      mWidth(0),
-      mHeight(0),
-      mBPP(0)
+Texture2D::Texture2D(const std::string& path) : Texture()
 {
     // Load actual image from disk
     stbi_set_flip_vertically_on_load(1);
-    mLocalBuffer = stbi_load(path.c_str(), &mWidth, &mHeight, &mBPP, 0);
+    mLocalBuffer = stbi_load(path.c_str(), &mWidth, &mHeight, &mNumChannels, 0);
 
     if (mLocalBuffer)
     {
         initializeOpenGLFunctions();
 
-        glGenTextures(1, &mRendererID);
-        glBindTexture(GL_TEXTURE_2D, mRendererID);
+        glGenTextures(1, &mTextureID);
+        glBindTexture(GL_TEXTURE_2D, mTextureID);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -46,14 +40,13 @@ Texture2D::Texture2D(const std::string& path)
 
 Texture2D::~Texture2D()
 {
-    glDeleteTextures(1, &mRendererID);
 }
 
 void Texture2D::Bind(unsigned int slot)
 {
     initializeOpenGLFunctions();
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, mRendererID);
+    glBindTexture(GL_TEXTURE_2D, mTextureID);
 }
 
 void Texture2D::Unbind()

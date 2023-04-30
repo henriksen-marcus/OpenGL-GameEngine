@@ -4,8 +4,11 @@ in vec4 fragColor;
 in vec2 fragTexCoord;
 in vec3 fragNormal;
 in vec3 fragPosition;
+in vec3 textureDir;
 
 uniform sampler2D texture_IN;
+//uniform samplerCube cubemap_IN;
+
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
 uniform bool useLighting;

@@ -2,6 +2,8 @@
 
 #include "BaseObject.h"
 #include "Renderer.h"
+#include <qvector3d.h>
+#include "MeshComponent.h"
 
 class Actor;
 class QElapsedTimer;
@@ -44,6 +46,11 @@ public:
      */
     void SetWorldColor(const QVector3D& color) { mWorldColor = color; }
     QVector3D GetWorldColor() const { return mWorldColor; }
+
+    /**
+     * \brief Spawns an axis cross at the origin.
+     */
+    void SpawnXYZ();
 
     /**
      * \brief Spawn an actor into the world. Automatically constructs

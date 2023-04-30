@@ -9,6 +9,7 @@ class XYZ : public Actor
 {
 public:
     XYZ();
+	virtual ~XYZ();
 
 	/**
 	 * \brief Load the vertex data into memory and save information

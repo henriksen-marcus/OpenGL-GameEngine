@@ -4,7 +4,7 @@
 #include "VertexClasses.h"
 
 class Timer;
-class Texture2D;
+class Texture;
 class OBJMaterial;
 
 /* Holds mesh data. */
@@ -18,7 +18,7 @@ public:
     void LoadFromOBJ(const std::string& path);
     std::vector<OBJMaterial*> ParseMTL(const std::string& path);
 
-    void SetTexture(Texture2D* texture);
+    void SetTexture(Texture* texture);
     void SetTexture(const std::string& path);
 
     /**
@@ -59,7 +59,7 @@ public:
     Timer* mTimer;
 
 protected:
-    Texture2D* mTexture;
+    Texture* mTexture;
     QVector3D mColor{1.f, 1.f, 1.f};
     GLenum mDrawMode;
     bool bSmoothShading{true};

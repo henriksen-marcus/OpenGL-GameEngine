@@ -1,9 +1,7 @@
 #include "MeshComponent.h"
-
 #include <qcolor.h>
 #include <sstream>
 #include <filesystem>
-
 #include "Math.h"
 #include "Shader.h"
 #include "Texture2D.h"
@@ -11,6 +9,7 @@
 #include "Source/Game/Arrow.h"
 #include "Source/Engine/Timer.h"
 #include "Source/Engine/OBJMaterial.h"
+#include "Texture.h"
 
 
 MeshComponent::MeshComponent(Actor* parent, GLenum drawMode)
@@ -324,7 +323,7 @@ std::vector<OBJMaterial*> MeshComponent::ParseMTL(const std::string& path)
     return materials;
 }
 
-void MeshComponent::SetTexture(Texture2D* texture)
+void MeshComponent::SetTexture(Texture* texture)
 {
     mTexture = texture;
 }
@@ -609,8 +608,7 @@ void MeshComponent::Draw()
     }
     else glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
 
-    glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
     activeShader->SetBool("useLighting", false);
-    //if (mTexture) mTexture->Unbind();
+    if (mTexture) mTexture->Unbind();
 }

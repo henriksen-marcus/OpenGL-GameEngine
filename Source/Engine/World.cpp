@@ -5,6 +5,8 @@
 #include "Quadtree.h"
 #include <iostream>
 
+#include "Source/Game/XYZ.h"
+
 
 World::World()
 {
@@ -95,12 +97,15 @@ float World::GetUnpausedTimeSeconds()
     return worldUnpausedTimer->elapsed();
 }
 
+void World::SpawnXYZ()
+{
+    auto* xyz = new XYZ();
+    mRenderer->Add("SpawnedXYZ", xyz);
+    mActors.push_back(xyz);
+}
+
 void World::RemoveActor(Actor* actor)
 {
-//    for (int i{}; i < mActors.size(); i++)
-//    {
-//        if (mActors[i] == actor) mActors.erase(mActors.begin() + i);
-//    }
     auto it = std::find(mActors.begin(), mActors.end(), actor);
     if (it != mActors.end()) mActors.erase(it);
 

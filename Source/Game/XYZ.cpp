@@ -16,6 +16,10 @@ XYZ::XYZ()
 	Init();
 }
 
+XYZ::~XYZ()
+{
+}
+
 void XYZ::Init()
 {	
     initializeOpenGLFunctions();

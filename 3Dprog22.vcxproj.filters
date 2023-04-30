@@ -188,6 +188,21 @@
     <ClCompile Include="Source\Game\Scenes\CurveScene.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\CubemapScene.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Texture3D.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Texture.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Skybox.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Actor.h">
@@ -391,6 +406,18 @@
     <ClInclude Include="Source\Engine\ZigZag.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\CubemapScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Texture3D.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Texture.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Skybox.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -431,5 +458,7 @@
     <None Include="Source\Engine\Shader\geo.vert" />
     <None Include="Source\Engine\Shader\geo.frag" />
     <None Include="Source\Engine\Shader\geo.geom" />
+    <None Include="Source\Engine\Shader\skybox.frag" />
+    <None Include="Source\Engine\Shader\skybox.vert" />
   </ItemGroup>
 </Project>

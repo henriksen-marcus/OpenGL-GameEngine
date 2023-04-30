@@ -1,23 +1,15 @@
 #pragma once
 
 #include "BaseObject.h"
+#include "Texture.h"
 
-class Texture2D : public BaseObject
+class Texture2D : public Texture
 {
 public:
     Texture2D(const std::string& path);
-    ~Texture2D();
+    virtual ~Texture2D();
 
-    void Bind(unsigned int slot = 0);
-    void Unbind();
-
-    inline int GetWidth() const { return mWidth; }
-    inline int GetHeight() const { return mHeight; }
-
-protected:
-    GLuint mRendererID;
-    std::string mFilepath;
-    unsigned char* mLocalBuffer;
-    int mWidth, mHeight, mBPP;
+    void Bind(unsigned int slot = 0) override;
+    void Unbind() override;
 };
 

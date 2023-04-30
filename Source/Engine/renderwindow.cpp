@@ -31,6 +31,7 @@
 #include "Source/Engine/Shader3.h"
 #include "Source/Game/Scenes/BarycentricScene.h"
 #include "Source/Game/Scenes/CurveScene.h"
+#include "Source/Game/Scenes/CubemapScene.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -113,27 +114,24 @@ void RenderWindow::init()
     glEnable(GL_DEPTH_TEST);            //enables depth sorting - must then use GL_DEPTH_BUFFER_BIT in glClear
     //    glEnable(GL_CULL_FACE);       //draws only front side of models - usually what you want - test it out!
     glClearColor(128.f/255.f, 200.f/255.f, 0.9f, 1.f);    //gray color used in glClear GL_COLOR_BUFFER_BIT
-    //glClearColor(0.f, 0.f, 0.f, 0.f);
-
-    TCHAR buffer[MAX_PATH] = { 0 };
-    GetModuleFileName( NULL, buffer, MAX_PATH );
-    std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
 
     std::filesystem::path cwd = std::filesystem::current_path();
     std::cout << "Current program path: " << cwd << std::endl;
 
-
     //auto* texScene = new TextureScene();
     //WorldManager::GetInstance().SetWorld(texScene);
+
     //auto* heightmapscene = new HeightmapScene();
     //WorldManager::GetInstance().SetWorld(heightmapscene);
 
-    /*auto* baryscene = new BarycentricScene();
-    WorldManager::GetInstance().SetWorld(baryscene);*/
+    auto* baryscene = new BarycentricScene();
+    WorldManager::GetInstance().SetWorld(baryscene);
 
-    CurveScene* curveScene = new CurveScene();
-    WorldManager::GetInstance().SetWorld(curveScene);
-    
+    /*CurveScene* curveScene = new CurveScene();
+    WorldManager::GetInstance().SetWorld(curveScene);*/
+
+    /*auto* cubescene = new CubemapScene();
+    WorldManager::GetInstance().SetWorld(cubescene);*/
 
     auto* s1 = new Shader();
     s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");
@@ -147,11 +145,15 @@ void RenderWindow::init()
     auto* s4 = new Shader3();
     s4->CreateFromFiles("Source/Engine/Shader/geo.vert", "Source/Engine/Shader/geo.geom", "Source/Engine/Shader/geo.frag");
 
+    auto* s5 = new Shader();
+    s5->CreateFromFiles("Source/Engine/Shader/skybox.vert", "Source/Engine/Shader/skybox.frag");
+
     auto& SM = ShaderManager::GetInstance();
     SM.Shaders["plain"] = s1;
     SM.Shaders["texture"] = s2;
     SM.Shaders["god"] = s3;
     SM.Shaders["geo"] = s4;
+    SM.Shaders["skybox"] = s5;
     SM.ActiveShader = s1;
 
     DebugLogger::GetInstance().SetRenderWindow(this);
