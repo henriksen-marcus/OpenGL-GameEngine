@@ -27,7 +27,7 @@ public:
     
     // ---------- Translation ---------- //
     virtual const QVector3D& GetActorLocation() const;
-    virtual const QVector2D GetActorLocation2D() const;
+    virtual QVector2D GetActorLocation2D() const;
     virtual void SetActorLocation(const QVector3D& location);
     virtual void AddActorLocalOffset(const QVector3D& offset);
     virtual void AddActorWorldOffset(const QVector3D& offset);

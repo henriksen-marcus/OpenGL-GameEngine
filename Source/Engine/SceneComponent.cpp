@@ -2,9 +2,9 @@
 #include "Actor.h"
 
 SceneComponent::SceneComponent(Actor* parent) :
-	followParentTransform(true),
-	followParentRotation(true),
-	followParentScale(true),
+	bFollowParentTransform(true),
+	bFollowParentRotation(true),
+	bFollowParentScale(true),
 	mParent(parent)
 {
 }
@@ -16,9 +16,9 @@ void SceneComponent::SetupAttachment(Actor* parent)
 
 void SceneComponent::SetFollowParent(bool follow)
 {
-    followParentTransform = follow;
-    followParentRotation = follow;
-    followParentRotation = follow;
+    bFollowParentTransform = follow;
+    bFollowParentRotation = follow;
+    bFollowParentScale = follow;
 }
 
 void SceneComponent::SetRelativeLocation(const QVector3D& location)
@@ -80,11 +80,13 @@ void SceneComponent::Tick(float deltaTime)
 {
     if (mParent)
     {
-	    if (followParentTransform)
+        if (bFollowParentScale)
 		    SetWorldLocation(mParent->GetActorLocation() + mParent->GetActorQuatRotation().rotatedVector(mRelativeLocation));
-	    if (followParentRotation)
+
+	    if (bFollowParentRotation)
 	        SetWorldRotation(mParent->GetActorQuatRotation() * mRelativeRotation);
-	    if (followParentScale)
+
+	    if (bFollowParentScale)
 	        SetWorldScale(mParent->GetActorScale());
     }
 

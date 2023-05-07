@@ -210,6 +210,10 @@
     <ClCompile Include="Source\Game\Scenes\BarycentricScene.cpp" />
     <ClCompile Include="Source\Game\MeshWalker.cpp" />
     <ClCompile Include="Source\Engine\Shader3.cpp" />
+    <ClCompile Include="Source\Game\Scenes\Eksamen2019Scene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Source\Game\Scenes\HeightmapScene.cpp" />
     <ClCompile Include="Source\Game\FlyingCamera.cpp" />
     <ClCompile Include="Source\Engine\Actor.cpp" />
@@ -260,6 +264,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Source\Engine\Meshes\TetrahedronMesh.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\Eksamen2019Scene.h">
       <SubType>
       </SubType>
     </ClInclude>

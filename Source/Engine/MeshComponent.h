@@ -3,6 +3,8 @@
 #include "SceneComponent.h"
 #include "VertexClasses.h"
 
+class Texture2D;
+class Texture3D;
 class Timer;
 class Texture;
 class OBJMaterial;
@@ -23,8 +25,10 @@ public:
      */
     void UpdateMesh();
 
-    void SetTexture(Texture* texture);
-    void SetTexture(const std::string& path);
+    void SetTexture2D(Texture2D* texture);
+    void SetTexture2D(const std::string& path);
+
+    void SetTexture3D(Texture3D* texture);
 
     /**
      * \brief Generates normals for smooth shading.
@@ -76,6 +80,14 @@ public:
     
 protected:
     Texture* mTexture;
+
+    /**
+     * \brief What kind of texture we have.
+     * No texture: 0,
+     * 2D Texture: 2,
+     * 3D Texture: 3
+     */
+    int mTextureDimension{0};
     QVector3D mColor{1.f, 1.f, 1.f};
     GLenum mDrawMode;
     bool bSmoothShading{true};

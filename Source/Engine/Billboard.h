@@ -8,10 +8,5 @@ public:
 	virtual ~Billboard();
 
 	void Tick(float deltaTime) override;
-
-	//QMatrix4x4 viewmodelmatrix;
-
-	/*void Init() override;
-	void Draw() override;*/
 };
 

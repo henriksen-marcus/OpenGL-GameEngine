@@ -6,9 +6,7 @@ class TriangleSurface : public MeshComponent
 {
 public:
     TriangleSurface(Actor* parent);
-
-    /*void Init() override;
-    void Draw() override;*/
+    virtual ~TriangleSurface();
 
     /**
      * \brief Create a flat surface with the given parameters.
@@ -41,15 +39,33 @@ public:
 
     /**
      * \brief Load data points into this object's mVertices array using a text file.
+     * This will not work if the file uses indices for the vertices.
      * \param fileName Path to the file including file name and extension.
      */
-    void FromTextFile(std::string fileName);
+    void FromTextFileVertices(std::string fileName);
+
+    /**
+     * \brief Load data points into this object's mVertices array using a text file.
+     * Indices need to be present in the file for this to work.
+     * \param fileName Path to the file including file name and extension.
+     */
+    void FromTextFileIndices(std::string fileName);
 
     /**
      * \brief Load data points into a text file from this object's mVertices array.
+     * This does not load indices.
      * \param fileName Path to the file including file name and extension.
+     * \remarks This object needs to be made in vertices only mode.
      */
-    void ToTextFile(std::string fileName);
+    void ToTextFileVertices(std::string fileName);
+
+    /**
+     * \brief Load data points into a text file from this object's mVertices array.
+     * This does load indices.
+     * \param fileName Path to the file including file name and extension.
+     * \remarks This object needs to be made using indices.
+     */
+    void ToTextFileIndices(std::string fileName);
 
     /**
      * \brief Creates a surface from a heightmap image file.

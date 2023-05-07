@@ -5,7 +5,7 @@
 Plane::Plane(const QVector3D& location, float sizeX, float sizeY, const QVector3D& color, GLenum mode)
 {
     mMesh = new PlaneMesh(this, sizeX, sizeY, color, mode);
-    mMesh->SetTexture(new Texture2D("Assets/Textures/wall.jpg"));
+    mMesh->SetTexture2D(new Texture2D("Assets/Textures/ct.jpg"));
     mMesh->SetFollowParent(true);
     mMesh->mShaderName = "god";
     Init();

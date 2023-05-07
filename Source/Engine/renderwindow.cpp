@@ -32,6 +32,7 @@
 #include "Source/Game/Scenes/BarycentricScene.h"
 #include "Source/Game/Scenes/CurveScene.h"
 #include "Source/Game/Scenes/CubemapScene.h"
+#include "Source/Game/Scenes/Eksamen2019Scene.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -130,8 +131,11 @@ void RenderWindow::init()
     /*CurveScene* curveScene = new CurveScene();
     WorldManager::GetInstance().SetWorld(curveScene);*/
 
-    auto* cubescene = new CubemapScene();
-    WorldManager::GetInstance().SetWorld(cubescene);
+    /*auto* cubescene = new CubemapScene();
+    WorldManager::GetInstance().SetWorld(cubescene);*/
+
+    auto* eksScene = new Eksamen2019Scene();
+    WorldManager::GetInstance().SetWorld(eksScene);
 
     auto* s1 = new Shader();
     s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");

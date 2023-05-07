@@ -15,7 +15,7 @@ public:
     SceneComponent(Actor* parent);
 
     /* Attach this object to the given actor. */
-    void SetupAttachment(Actor* parent);
+    virtual void SetupAttachment(Actor* parent);
 
     /* Remove the attachment to the current actor
        if there is one. */
@@ -63,9 +63,9 @@ public:
 
     /* If the component should copy the position
      * of it's owning actor, with an offset. */
-    bool followParentTransform;
-    bool followParentRotation;
-    bool followParentScale;
+    bool bFollowParentTransform{true};
+    bool bFollowParentRotation{true};
+    bool bFollowParentScale{true};
 
     QMatrix4x4 mMatrix{};
 protected:

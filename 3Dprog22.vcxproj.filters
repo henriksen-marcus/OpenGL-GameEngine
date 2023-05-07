@@ -206,6 +206,9 @@
     <ClCompile Include="Source\Engine\Billboard.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\Eksamen2019Scene.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Actor.h">
@@ -443,6 +446,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Billboard.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\Eksamen2019Scene.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -53,7 +53,7 @@ const QVector3D& Actor::GetActorLocation() const
     return mLocation;
 }
 
-const QVector2D Actor::GetActorLocation2D() const
+QVector2D Actor::GetActorLocation2D() const
 {
     return QVector2D(mLocation.x(), mLocation.z());
 }
@@ -61,7 +61,6 @@ const QVector2D Actor::GetActorLocation2D() const
 void Actor::SetActorLocation(const QVector3D& location)
 {
     mLocation = location;
-    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalOffset(const QVector3D& offset)
@@ -80,33 +79,28 @@ void Actor::AddActorWorldOffset(const QVector3D& offset)
 const QVector3D& Actor::GetActorRotation()
 {
     return mRotationQuat.toEulerAngles();
-    //return mRotation;
 }
 
 void Actor::SetActorRotation(const QVector3D& rotation)
 {
     mRotation = rotation;
     mRotationQuat = QQuaternion::fromEulerAngles(rotation);
-    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalRotation(const QVector3D& offset)
 {
     mRotation += offset;
     mRotationQuat *= QQuaternion::fromEulerAngles(offset);
-    //UpdateModelMatrixQuat();
 }
 
 void Actor::SetActorRotation(const QQuaternion& rotation)
 {
     mRotationQuat = rotation;
-    //UpdateModelMatrixQuat();
 }
 
 void Actor::AddActorLocalRotation(const QQuaternion& offset)
 {
     mRotationQuat *= offset;
-    //UpdateModelMatrixQuat();
 }
 
 
@@ -166,6 +160,7 @@ MeshComponent* Actor::GetMesh()
 void Actor::SetMesh(MeshComponent* mesh)
 {
     mMesh = mesh;
+    mesh->SetupAttachment(this);
 }
 
 void Actor::ClearMesh()

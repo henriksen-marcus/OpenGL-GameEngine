@@ -20,7 +20,7 @@ TextureScene::TextureScene()
 
     /*auto* cubeactor = new Actor();
     auto* cube = new CubeMesh(cubeactor, 0.5f);
-    cube->SetTexture("../OpenGLMainQt/Textures/tex.jpg");
+    cube->SetTexture2D("../OpenGLMainQt/Textures/tex.jpg");
     cubeactor->SetMesh(cube);
     mActors.push_back(cubeactor);
     mRenderer->Add("cubeactor", cubeactor);*/

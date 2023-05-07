@@ -72,10 +72,11 @@ namespace Math
 		const float uu = u * u;
 		const QVector3D p = uu * u * a + 3.0f * uu * t * b + 3.0f * u * tt * c + tt * t * d;*/
 
+		// Lerp just because I can
 		auto ab = Lerp<QVector3D>(a,b,t);
 		auto bc = Lerp<QVector3D>(b,c,t);
 		auto cd = Lerp<QVector3D>(c,d,t);
-
+		// lerp-de-lerp-lerp
 		auto ab_bc = Lerp<QVector3D>(ab,bc,t);
 		auto bc_cd = Lerp<QVector3D>(bc,cd,t);
 
@@ -95,7 +96,7 @@ namespace Math
 	 */
 	static constexpr float FInterpTo(float current, float target, float deltaTime, float interpSpeed)
 	{
-		if (interpSpeed <= 0.f)return target;
+		if (interpSpeed <= 0.f) return target;
 
 		const float dist = target - current;
 
@@ -107,7 +108,6 @@ namespace Math
 
 		return current + deltaMove;
 	}
-
 
 	/**
 	 * \brief Vector interpolation. Use this function in Tick().
@@ -131,8 +131,6 @@ namespace Math
 
 		return current + deltaMove;
 	}
-
-
-};
+}
 
 

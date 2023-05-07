@@ -5,6 +5,7 @@
 #include "Math.h"
 #include "Shader.h"
 #include "Texture2D.h"
+#include "Texture3D.h"
 #include "World.h"
 #include "Source/Game/Arrow.h"
 #include "Source/Engine/Timer.h"
@@ -331,14 +332,25 @@ void MeshComponent::UpdateMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void MeshComponent::SetTexture(Texture* texture)
+void MeshComponent::SetTexture2D(Texture2D* texture)
 {
     mTexture = texture;
+    mTextureDimension = 2;
+    Init();
 }
 
-void MeshComponent::SetTexture(const std::string& path)
+void MeshComponent::SetTexture2D(const std::string& path)
 {
     mTexture = new Texture2D(path);
+    mTextureDimension = 2;
+    Init();
+}
+
+void MeshComponent::SetTexture3D(Texture3D* texture)
+{
+    mTexture = texture;
+    mTextureDimension = 3;
+    Init();
 }
 
 void MeshComponent::GenerateNormals()
@@ -374,6 +386,18 @@ void MeshComponent::GenerateNormals()
     for (int i = 0; i < mVertices.size(); i++)
     {
     	mVertices[i].SetNormal(mVertices[i].GetNormal().normalized());
+	}
+
+    std::cout << "First vertices " << "\n";
+
+    for (auto v : mVertices)
+    {
+    	std::cout << v << "\n";
+    }
+
+    for (auto i : mIndices)
+    {
+    	std::cout << i << "\n";
 	}
 }
 
@@ -551,13 +575,6 @@ void MeshComponent::ClearMemory()
 
 void MeshComponent::Init()
 {
-    if (mIBO != 0)
-    {
-        glDeleteVertexArrays(1, &mVAO);
-    	glDeleteBuffers(1, &mIBO);
-		mIBO = 0;
-	}
-
     if (mVertices.empty()) return;
 
     initializeOpenGLFunctions();
@@ -617,6 +634,7 @@ void MeshComponent::Draw()
     glUniformMatrix4fv(activeShader->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
 
     activeShader->SetBool("useLighting", bUseLighting);
+    //activeShader->SetInt("textureDimension", mTextureDimension);
 
     glBindVertexArray(mVAO);
 

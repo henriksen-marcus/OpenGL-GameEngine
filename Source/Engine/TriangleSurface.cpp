@@ -6,9 +6,14 @@
 #include "qimagereader.h"
 #include "mainwindow.h"
 #include "Source/Utility/Color.h"
+#include <sstream>
 
 TriangleSurface::TriangleSurface(Actor* parent)
 	: MeshComponent(parent)
+{
+}
+
+TriangleSurface::~TriangleSurface()
 {
 }
 
@@ -38,6 +43,9 @@ void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, f
 
 void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, float distanceX, float distanceZ)
 {
+    mVertices.clear();
+    mIndices.clear();
+
     const float x_range = xmax - xmin;
     const float z_range = zmax - zmin;
 
@@ -53,13 +61,11 @@ void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, f
     // Grid resolution on z axis
     const int num_vertices_z = static_cast<int>(std::ceilf((zmax - zmin) / distanceZ));
 
-    std::cout << "h_x: " << h_x << std::endl;
+    /*std::cout << "h_x: " << h_x << std::endl;
     std::cout << "h_z: " << h_z << std::endl;
     std::cout << "num_vertices_x: " << num_vertices_x << std::endl;
-    std::cout << "num_vertices_z: " << num_vertices_z << std::endl;
+    std::cout << "num_vertices_z: " << num_vertices_z << std::endl;*/
 
-    float maxx = 0;
-    float maxz = 0;
 
     for (int x = 0; x <= num_vertices_x; x++)
     {
@@ -76,9 +82,6 @@ void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, f
 	    }
     }
 
-    std::cout << "Max X: " << maxx << std::endl;
-    std::cout << "Max Z: " << maxz << std::endl;
-
     for (int x = 0; x < num_vertices_x; x++)
     {
 	    for (int z = 0; z < num_vertices_z; z++)
@@ -94,16 +97,16 @@ void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, f
             //   |__\
 
             mIndices.push_back(base);
-            mIndices.push_back(right);
             mIndices.push_back(up);
+            mIndices.push_back(right);
 
             //     __
             //     \  |
             //      \ |
             //       \|
             mIndices.push_back(up);
-            mIndices.push_back(right);
             mIndices.push_back(up_right);
+            mIndices.push_back(right);
 
             // Debug
             /*std::cout << "x: " << x <<  " z: " << z << std::endl;
@@ -121,6 +124,7 @@ void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, f
 void TriangleSurface::FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float zmin, float zmax, unsigned segments)
 {
     mVertices.clear();
+    mIndices.clear();
 
     // Separate h values as the user might not give us a perfect square
     const float h_x = (xmax - xmin) / static_cast<float>(segments);
@@ -196,25 +200,74 @@ void TriangleSurface::FromFunction(std::function<float(float, float)> f, QVector
     FromFunction(f, min, max, min, max, segments);
 }
 
-void TriangleSurface::FromTextFile(std::string fileName)
+void TriangleSurface::FromTextFileVertices(std::string fileName)
 {
     mVertices.clear();
+    mIndices.clear();
+
     std::string line;
     std::ifstream file(fileName.c_str());
     if (file.is_open()) {
         int n;
         file >> n;
         mVertices.reserve(n);
-        for (int i{}; i < n; ++i) {
+
+        for (int i{}; i < n; ++i) 
+        {
             Vertex vertex;
             file >> vertex;
             mVertices.push_back(vertex);
         }
+
         file.close();
     }
 }
 
-void TriangleSurface::ToTextFile(std::string fileName)
+void TriangleSurface::FromTextFileIndices(std::string fileName)
+{
+
+    std::ifstream file(fileName);
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open the file: " << fileName << std::endl;
+        return;
+    }
+
+    bool flag = true;
+
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+        int numCommas = std::count(line.begin(), line.end(), ',');
+
+        if (numCommas == 10) // Vertex data
+        {
+            Vertex vertex;
+            ss >> vertex;
+            mVertices.push_back(vertex);
+        }
+        else if (numCommas == 0) // Index data
+        {
+            GLuint index;
+            if (flag) 
+            {
+                flag = false;
+            	continue;
+            }
+            ss >> index;
+            mIndices.push_back(index);
+        }
+        else
+        {
+            std::cerr << "Invalid line format: " << line << std::endl;
+        }
+    }
+
+    file.close();
+}
+
+void TriangleSurface::ToTextFileVertices(std::string fileName)
 {
     std::fstream o;
     o.open(fileName.c_str(), std::ios::out);
@@ -224,6 +277,27 @@ void TriangleSurface::ToTextFile(std::string fileName)
         for (int i{}; i < mVertices.size(); i++) {
             o << mVertices[i] << std::endl;
         }
+        o.close(); 
+    }
+}
+
+void TriangleSurface::ToTextFileIndices(std::string fileName)
+{
+    std::fstream o;
+    o.open(fileName.c_str(), std::ios::out);
+    if (o.is_open())
+    {
+        o << mVertices.size() + mIndices.size() << std::endl;
+
+        for (int i{}; i < mVertices.size(); i++) 
+        {
+            o << mVertices[i] << std::endl;
+        }
+
+        for (int i{}; i < mIndices.size(); i++)
+        {
+        	o << mIndices[i] << std::endl;
+		}
         o.close(); 
     }
 }

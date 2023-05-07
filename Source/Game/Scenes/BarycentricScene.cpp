@@ -31,12 +31,17 @@ BarycentricScene::BarycentricScene()
 {
 	WorldManager::GetInstance().SetWorld(this);
 
+	auto* plane = new Plane(QVector3D(0.f, 10.f, 0.f), 2.f, 2.f);
+	mRenderer->Add("plane", plane);
+	plane->SetActorLocation(QVector3D(0.f, 4.5f, -15.f));
+	plane->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+
 
 	Actor* ground = new Actor();
 	auto t = new TriangleSurface(ground);
 	//t->FromImageFile("Assets/Heightmaps/Landscape2.jpg", 100.f, 50.f, 200.f);
 	t->FromImageFile("Assets/Heightmaps/Heightmap8.jpg", 40.f, 2.f, 100.f);
-	//t->SetTexture("Assets/Textures/Landscape2.jpg");
+	//t->SetTexture2D("Assets/Textures/Landscape2.jpg");
 	t->GenerateNormals();
 	t->Init();
 	mSurface = t;
@@ -70,7 +75,7 @@ BarycentricScene::BarycentricScene()
 
 	SetWorldColor(Color::Cyan);
 
-	std::vector<std::string> faces
+	/*std::vector<std::string> faces
 	{
 		"Assets/Textures/Skybox/field-skyboxes/FishPond/right.jpg",
 		"Assets/Textures/Skybox/field-skyboxes/FishPond/left.jpg",
@@ -80,7 +85,7 @@ BarycentricScene::BarycentricScene()
 		"Assets/Textures/Skybox/field-skyboxes/FishPond/back.jpg"
 	};
 	auto* skybox = new Skybox(new Texture3D(faces));
-	mRenderer->SetSkybox(skybox);
+	mRenderer->SetSkybox(skybox);*/
 }
 
 void BarycentricScene::Tick(float deltaTime)

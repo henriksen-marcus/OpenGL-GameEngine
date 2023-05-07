@@ -4,7 +4,6 @@ in vec4 fragColor;
 in vec2 fragTexCoord;
 in vec3 fragNormal;
 in vec3 fragPosition;
-in vec3 textureDir;
 
 uniform sampler2D texture_IN;
 //uniform samplerCube cubemap_IN;
@@ -14,16 +13,26 @@ uniform vec3 lightColor;
 uniform bool useLighting;
 out vec4 fragmentColor_OUT;
 uniform vec3 cameraPosition;
+uniform int textureDimension;
 
 void main()
 {
-    vec4 texColor = texture2D(texture_IN, fragTexCoord);
-    
-    if (fragTexCoord == vec2(0.0)) 
+    vec4 texColor;
+    texColor = texture2D(texture_IN, fragTexCoord);
+	if (fragTexCoord == vec2(0.0)) 
 	{
-        texColor = vec4(1.0, 1.0, 1.0, 1.0); // use white color if sampling from default texture
-    }
-    
+		// Use white color if sampling from default texture
+		texColor = vec4(1.0, 1.0, 1.0, 1.0); 
+	}
+//	else if (textureDimension == 2)
+//	{
+//		texColor = texture2D(texture_IN, fragTexCoord);
+//	}
+//	else if (textureDimension == 3)
+//	{
+//		texColor = texture(cubemap_IN, fragNormal);
+//	}
+
     // Compute lighting if enabled
 	if (useLighting)
 	{
