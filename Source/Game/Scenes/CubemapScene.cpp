@@ -54,12 +54,12 @@ CubemapScene::CubemapScene()
 	billboard->Init();
 	SpawnActor("bill", billboard);
 
-	/*auto p = new PlaneMesh(nullptr, 1.f, 1.f);
+	auto p = new PlaneMesh(nullptr, 1.f, 1.f);
 	p->SetTexture2D(new Texture2D("Assets/Textures/wall.jpg"));
 	mesh = new Actor();
 	mesh->SetMesh(p);
 	mRenderer->Add("planedsadsadsa", mesh);
-	mesh->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));*/
+	mesh->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
 }
 
 CubemapScene::~CubemapScene()
@@ -74,9 +74,9 @@ void CubemapScene::Tick(float deltaTime)
 {
 	World::Tick(deltaTime);
 
-	/*auto cam = PlayerController::GetInstance().GetCurrentCamera();
+	auto cam = PlayerController::GetInstance().GetCurrentCamera();
 	auto target = cam->GetWorldLocation();
-	target += cam->GetForwardVector() * 2.f;
-	auto pos = Math::VInterpTo(mesh->GetActorLocation(), target, deltaTime, 5.f);
-	mesh->SetActorLocation(pos);*/
+	target += cam->GetForwardVector() * 6.f;
+	auto pos = Math::VInterpConstantTo(mesh->GetActorLocation(), target, deltaTime, 5.f);
+	mesh->SetActorLocation(pos);
 }

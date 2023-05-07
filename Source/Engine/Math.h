@@ -131,6 +131,42 @@ namespace Math
 
 		return current + deltaMove;
 	}
+
+	static QVector3D VInterpConstantTo(const QVector3D& current, const QVector3D& target, float deltaTime, float interpSpeed)
+	{
+		const QVector3D delta = target - current;
+		const float deltaM = delta.length();
+		const float maxStep = interpSpeed * deltaTime;
+
+		if (deltaM > maxStep)
+		{
+			if (maxStep > 0.f)
+			{
+				const QVector3D deltaN = delta.normalized();
+				return current + deltaN * maxStep;
+			}
+			else
+			{
+				return current;
+			}
+		}
+
+		return target;
+	}
+
+	static float FInterpConstantTo(float Current, float Target, float DeltaTime, float InterpSpeed)
+	{
+		const float Dist = Target - Current;
+
+		// If distance is too small, just set the desired location
+		if (powf(Dist, 2) < 1.0e-8f)
+		{
+			return Target;
+		}
+
+		const float Step = InterpSpeed * DeltaTime;
+		return Current + std::clamp(Dist, -Step, Step);
+	}
 }
 
 
