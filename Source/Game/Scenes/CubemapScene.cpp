@@ -48,22 +48,18 @@ CubemapScene::CubemapScene()
 	t->FromFlat(0.f, 1.f, 0.f, 1.f, 0.5f, 0.5f);
 	t->Init();
 	SpawnActor("t", t);*/
-	/*auto billboard = new Billboard(nullptr, 0.5f, 0.5f, {1.f, 0.f, 0.f});
-	billboard->SetTexture2D(new Texture2D("Assets/Textures/ct.jpg"));
-	SpawnActor("bill", new Billboard(nullptr, 0.5f, 0.5f, {1.f, 0.f, 0.f}));*/
 
-	auto p = new PlaneMesh(nullptr, 1.f, 1.f);
-	p->mShaderName = "god";
+	auto billboard = new Billboard(nullptr, 0.5f, 0.5f);
+	billboard->SetTexture2D(new Texture2D("Assets/Textures/wall.jpg"));
+	billboard->Init();
+	SpawnActor("bill", billboard);
+
+	/*auto p = new PlaneMesh(nullptr, 1.f, 1.f);
 	p->SetTexture2D(new Texture2D("Assets/Textures/wall.jpg"));
 	mesh = new Actor();
 	mesh->SetMesh(p);
 	mRenderer->Add("planedsadsadsa", mesh);
-	mesh->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
-
-	auto* plane = new Plane(QVector3D(0.f, 10.f, 0.f), 2.f, 2.f);
-	mRenderer->Add("plane", plane);
-	plane->SetActorLocation(QVector3D(0.f, 1.5f, -1.f));
-	plane->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));
+	mesh->AddActorLocalRotation(QVector3D(90.f, 0.f, 0.f));*/
 }
 
 CubemapScene::~CubemapScene()

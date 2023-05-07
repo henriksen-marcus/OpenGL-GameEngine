@@ -387,18 +387,6 @@ void MeshComponent::GenerateNormals()
     {
     	mVertices[i].SetNormal(mVertices[i].GetNormal().normalized());
 	}
-
-    std::cout << "First vertices " << "\n";
-
-    for (auto v : mVertices)
-    {
-    	std::cout << v << "\n";
-    }
-
-    for (auto i : mIndices)
-    {
-    	std::cout << i << "\n";
-	}
 }
 
 void MeshComponent::GenerateQuadNormals()

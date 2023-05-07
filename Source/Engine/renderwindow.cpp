@@ -131,12 +131,11 @@ void RenderWindow::init()
     /*CurveScene* curveScene = new CurveScene();
     WorldManager::GetInstance().SetWorld(curveScene);*/
 
-    /*auto* cubescene = new CubemapScene();
-    WorldManager::GetInstance().SetWorld(cubescene);*/
+    auto* cubescene = new CubemapScene();
+    WorldManager::GetInstance().SetWorld(cubescene);
 
-    auto* eksScene = new Eksamen2019Scene();
-    WorldManager::GetInstance().SetWorld(eksScene);
-
+    /*auto* eksScene = new Eksamen2019Scene();
+    WorldManager::GetInstance().SetWorld(eksScene);*/
     auto* s1 = new Shader();
     s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");
 
