@@ -5,73 +5,117 @@
 #include <string>
 #include "qimagereader.h"
 #include "mainwindow.h"
-
-//void TriangleSurface::Init()
-//{
-//    if (mVertices.empty()) return;
-//
-//    initializeOpenGLFunctions();
-//
-//    glGenVertexArrays(1, &mVAO);
-//    glBindVertexArray(mVAO);
-//
-//    glGenBuffers(1, &mVBO);
-//    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-//    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
-//
-//    // [x,y,z,r,g,b,u,v]
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<GLvoid*>(0));
-//    glEnableVertexAttribArray(0);
-//
-//    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
-//    glEnableVertexAttribArray(1);
-//
-//    // Normals
-//    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(8 * sizeof(GLfloat)));
-//	glEnableVertexAttribArray(3);
-//
-//    if (!mIndices.empty())
-//    {
-//        glGenBuffers(1, &mIBO);
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
-//        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
-//    }
-//
-//    glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbind
-//    glBindVertexArray(0); // This should be above the unbind beneath
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Unbind
-//}
-//
-//void TriangleSurface::Draw()
-//{
-//	if (mVertices.empty()) return;
-//
-//    UseShader(mShaderName);
-//
-//    // Uniforms specific to the shader.
-//    Shader* activeShader = GetActiveShader();
-//    activeShader->SendUniforms();
-//    if (bUseLighting) activeShader->SetBool("useLighting", true);
-//
-//    glUniformMatrix4fv(activeShader->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
-//
-//    glBindVertexArray(mVAO);
-//
-//    // Decide if we should use IBO or not
-//    if (!mIndices.empty())
-//    {
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIBO);
-//        glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-//    }
-//    else glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
-//
-//    glBindVertexArray(0);
-//}
+#include "Source/Utility/Color.h"
 
 TriangleSurface::TriangleSurface(Actor* parent)
 	: MeshComponent(parent)
 {
+}
+
+void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, float jump)
+{
+    int segmentsX = static_cast<int>((xmax - xmin) / jump);
+    int segmentsZ = static_cast<int>((zmax - zmin) / jump);
+
+    //std::cout << "Segments: " << segmentsX << "x" << segmentsZ << std::endl;
+
+    for (float x = xmin; x < xmax; x += jump)
+    {
+	    for (float z = zmin; z < zmax; z += jump)
+	    {
+		    mVertices.emplace_back(x, 0.f, z, QVector3D(1.f, 1.f, 1.f));
+		    mVertices.emplace_back(x+jump, 0.f, z, QVector3D(1.f, 1.f, 1.f));
+		    mVertices.emplace_back(x, 0.f, z+jump, QVector3D(1.f, 1.f, 1.f));
+
+            mVertices.emplace_back(x, 0.f, z+jump, QVector3D(1.f, 1.f, 1.f));
+		    mVertices.emplace_back(x+jump, 0.f, z, QVector3D(1.f, 1.f, 1.f));
+		    mVertices.emplace_back(x+jump, 0.f, z+jump, QVector3D(1.f, 1.f, 1.f));
+	    }
+    }
+
+    mIndices.clear();
+}
+
+void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, float distanceX, float distanceZ)
+{
+    const float x_range = xmax - xmin;
+    const float z_range = zmax - zmin;
+
+    if (distanceX > x_range) distanceX = x_range;
+    if (distanceZ > z_range) distanceZ = z_range;
+
+    // How far apart each vertex is, how far we will move per iteration
+    const float h_x = distanceX;
+    const float h_z = distanceZ;
+
+    // Grid resolution on x axis
+    const int num_vertices_x = static_cast<int>(std::ceilf((xmax - xmin) / distanceX));
+    // Grid resolution on z axis
+    const int num_vertices_z = static_cast<int>(std::ceilf((zmax - zmin) / distanceZ));
+
+    std::cout << "h_x: " << h_x << std::endl;
+    std::cout << "h_z: " << h_z << std::endl;
+    std::cout << "num_vertices_x: " << num_vertices_x << std::endl;
+    std::cout << "num_vertices_z: " << num_vertices_z << std::endl;
+
+    float maxx = 0;
+    float maxz = 0;
+
+    for (int x = 0; x <= num_vertices_x; x++)
+    {
+	    for (int z = 0; z <= num_vertices_z; z++)
+	    {
+            float distX = x * h_x;
+            float distZ = z * h_z;
+
+            if (xmin + distX > xmax) distX -= std::abs(distX - xmax);
+            if (zmin + distZ > zmax) distZ -= std::abs(distZ - zmax);
+            
+		    mVertices.emplace_back(xmin + distX, 0.f, zmin + distZ, Color::White);
+            //qDebug() << "Vertex: " << xmin + distX << ", 0, " << zmin + distZ;
+	    }
+    }
+
+    std::cout << "Max X: " << maxx << std::endl;
+    std::cout << "Max Z: " << maxz << std::endl;
+
+    for (int x = 0; x < num_vertices_x; x++)
+    {
+	    for (int z = 0; z < num_vertices_z; z++)
+	    {
+		    // Calculate the unique vertex index for each corner of the current quad
+            int base = x * (num_vertices_z + 1) + z;
+            int right = (x + 1) * (num_vertices_z + 1) + z;
+            int up = x * (num_vertices_z + 1) + (z + 1);
+            int up_right = (x + 1) * (num_vertices_z + 1) + (z + 1);
+
+            //   |\
+            //   | \
+            //   |__\
+
+            mIndices.push_back(base);
+            mIndices.push_back(right);
+            mIndices.push_back(up);
+
+            //     __
+            //     \  |
+            //      \ |
+            //       \|
+            mIndices.push_back(up);
+            mIndices.push_back(right);
+            mIndices.push_back(up_right);
+
+            // Debug
+            /*std::cout << "x: " << x <<  " z: " << z << std::endl;
+            std::cout << "Base: " << base << std::endl;
+            std::cout << "Right: " << right << std::endl;
+            std::cout << "Up: " << up << std::endl;*/
+	    }
+    }
+
+    /*std::cout << "Num vertices: " << mVertices.size() << std::endl;
+    std::cout << "Num indices: " << mIndices.size() << std::endl;
+    std::cout << "Num triangles: " << mIndices.size() / 3 << std::endl;*/
 }
 
 void TriangleSurface::FromFunction(std::function<float(float, float)> f, float xmin, float xmax, float zmin, float zmax, unsigned segments)
@@ -95,6 +139,7 @@ void TriangleSurface::FromFunction(std::function<float(float, float)> f, float x
 
 		    float y = f(x, z);
             mVertices.emplace_back(x_val, y_val, z_val, QVector3D(1.f, 1.f, 1.f));
+            mVertices.emplace_back(xmin + (x * h_x), 0.f, zmin + (z * h_z), Color::White);
 	    }
     }
 

@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Source/Game/XYZ.h"
+#include "Source/Engine/Actor.h"
 
 
 World::World()
@@ -102,6 +103,11 @@ void World::SpawnXYZ()
     auto* xyz = new XYZ();
     mRenderer->Add("SpawnedXYZ", xyz);
     mActors.push_back(xyz);
+}
+
+Actor* World::SpawnActor(const std::string& name, MeshComponent* mesh)
+{
+    return SpawnActor<Actor>(name, mesh);
 }
 
 void World::RemoveActor(Actor* actor)

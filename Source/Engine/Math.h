@@ -86,6 +86,53 @@ namespace Math
 	{
 		return CubicBezier(curve.a, curve.b, curve.c, curve.d, t);
 	}
+
+	/**
+	 * \brief Float interpolation. Use this function in Tick().
+	 * \param current The current position.
+	 * \param target Target position.
+	 * \return The interpolated number.
+	 */
+	static constexpr float FInterpTo(float current, float target, float deltaTime, float interpSpeed)
+	{
+		if (interpSpeed <= 0.f)return target;
+
+		const float dist = target - current;
+
+		// If distance is small, just set the target location
+		if (dist * dist < 1.0e-8f) return target;
+
+		// Delta Move, Clamp so we do not over shoot.
+		const float deltaMove = dist * std::clamp(deltaTime * interpSpeed, 0.f, 1.f);
+
+		return current + deltaMove;
+	}
+
+
+	/**
+	 * \brief Vector interpolation. Use this function in Tick().
+	 * \param current The current position.
+	 * \param target Target position.
+	 * \return The interpolated position.
+	 */
+	static constexpr QVector3D VInterpTo(const QVector3D& current, const QVector3D& target, float deltaTime, float interpSpeed)
+	{
+		if (interpSpeed <= 0.f) return target;
+
+		const QVector3D dist = target - current;
+
+		// If distance is small, just set the target location
+		const float epsilon = 0.001f;
+		if (dist.lengthSquared() < epsilon * epsilon) return target;
+
+		// Delta move, clamp so we do not over shoot
+		const float alpha = std::clamp(deltaTime * interpSpeed, 0.0f, 1.0f);
+		const QVector3D deltaMove = dist * alpha;
+
+		return current + deltaMove;
+	}
+
+
 };
 
 

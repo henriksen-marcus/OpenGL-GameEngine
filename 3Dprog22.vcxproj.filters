@@ -203,6 +203,9 @@
     <ClCompile Include="Source\Engine\Renderer.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Billboard.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Actor.h">
@@ -418,6 +421,30 @@
     <ClInclude Include="Source\Engine\Skybox.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\CurveScene.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ui_mainwindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_mainwindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\SphereMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Templates\MyMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\CylinderMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\TetrahedronMesh.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Billboard.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -460,5 +487,7 @@
     <None Include="Source\Engine\Shader\geo.geom" />
     <None Include="Source\Engine\Shader\skybox.frag" />
     <None Include="Source\Engine\Shader\skybox.vert" />
+    <None Include="Source\Engine\Shader\billboard.frag" />
+    <None Include="Source\Engine\Shader\billboard.vert" />
   </ItemGroup>
 </Project>

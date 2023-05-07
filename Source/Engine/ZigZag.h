@@ -2,7 +2,7 @@
 
 /**
  * \brief Zigzag interpolates between two values.
- * \tparam T Datatype, e.g. float, vector..
+ * \tparam T Datatype, e.g. float, int
  */
 template<class T>
 class ZigZag
@@ -45,7 +45,8 @@ ZigZag<T>::~ZigZag()
 template <class T>
 T ZigZag<T>::operator()()
 {
+	T value = std::clamp(t, mMin, mMax);
 	t = mDirection ? t + mIncrement : t - mIncrement;
-	mDirection = (t >= mMax) ? false : (t <= mMin) ? true : mDirection;
-	return t;
+	if (t >= mMax || t <= mMin) mDirection = !mDirection;
+	return value;
 }

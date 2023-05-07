@@ -323,6 +323,14 @@ std::vector<OBJMaterial*> MeshComponent::ParseMTL(const std::string& path)
     return materials;
 }
 
+void MeshComponent::UpdateMesh()
+{
+    // Update the vertex data in the VBO
+	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void MeshComponent::SetTexture(Texture* texture)
 {
     mTexture = texture;
@@ -535,8 +543,21 @@ unsigned MeshComponent::GetMeshWidth()
     return 0;
 }
 
+void MeshComponent::ClearMemory()
+{
+    mVertices.clear();
+    mIndices.clear();
+}
+
 void MeshComponent::Init()
 {
+    if (mIBO != 0)
+    {
+        glDeleteVertexArrays(1, &mVAO);
+    	glDeleteBuffers(1, &mIBO);
+		mIBO = 0;
+	}
+
     if (mVertices.empty()) return;
 
     initializeOpenGLFunctions();
@@ -595,7 +616,7 @@ void MeshComponent::Draw()
 
     glUniformMatrix4fv(activeShader->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
 
-    if (bUseLighting) activeShader->SetBool("useLighting", true);
+    activeShader->SetBool("useLighting", bUseLighting);
 
     glBindVertexArray(mVAO);
 

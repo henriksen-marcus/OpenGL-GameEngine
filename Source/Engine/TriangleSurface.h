@@ -11,6 +11,19 @@ public:
     void Draw() override;*/
 
     /**
+     * \brief Create a flat surface with the given parameters.
+     * \param jump Distance between each vertex.
+     */
+    void FromFlat(float xmin, float xmax, float zmin, float zmax, float jump);
+
+    /**
+     * \brief Create a flat surface with the given parameters.
+     * \param distanceX Distance between each vertex on the x axis.
+     * \param distanceZ Distance between each vertex on the z axis.
+     */
+    void FromFlat(float xmin, float xmax, float zmin, float zmax, float distanceX, float distanceZ);
+
+    /**
      * \brief Load data points into this object's mVertices array using the given function.
      * \param f The function to draw. Must take two floats and return one float.
      * \param segments How many segments to subdivide the area into, aka resolution.

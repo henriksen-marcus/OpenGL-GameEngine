@@ -31,7 +31,7 @@ public:
 	void SetMat4(const std::string& name, const QMatrix4x4& value);
 
 protected:
-    GLuint shaderID, uniformProjection, uniformModel, uniformView;
+	GLuint shaderID{}, uniformProjection{}, uniformModel{}, uniformView{};
 
     static constexpr float defaultFOV{75.f};
     static constexpr float aspectRatio{16.f/9.f};

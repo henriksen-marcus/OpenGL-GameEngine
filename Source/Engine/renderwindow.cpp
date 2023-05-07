@@ -124,14 +124,14 @@ void RenderWindow::init()
     //auto* heightmapscene = new HeightmapScene();
     //WorldManager::GetInstance().SetWorld(heightmapscene);
 
-    auto* baryscene = new BarycentricScene();
-    WorldManager::GetInstance().SetWorld(baryscene);
+    /*auto* baryscene = new BarycentricScene();
+    WorldManager::GetInstance().SetWorld(baryscene);*/
 
     /*CurveScene* curveScene = new CurveScene();
     WorldManager::GetInstance().SetWorld(curveScene);*/
 
-    /*auto* cubescene = new CubemapScene();
-    WorldManager::GetInstance().SetWorld(cubescene);*/
+    auto* cubescene = new CubemapScene();
+    WorldManager::GetInstance().SetWorld(cubescene);
 
     auto* s1 = new Shader();
     s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");
@@ -148,12 +148,16 @@ void RenderWindow::init()
     auto* s5 = new Shader();
     s5->CreateFromFiles("Source/Engine/Shader/skybox.vert", "Source/Engine/Shader/skybox.frag");
 
+    auto* s6 = new Shader();
+    s6->CreateFromFiles("Source/Engine/Shader/billboard.vert", "Source/Engine/Shader/billboard.frag");
+
     auto& SM = ShaderManager::GetInstance();
     SM.Shaders["plain"] = s1;
     SM.Shaders["texture"] = s2;
     SM.Shaders["god"] = s3;
     SM.Shaders["geo"] = s4;
     SM.Shaders["skybox"] = s5;
+    SM.Shaders["billboard"] = s6;
     SM.ActiveShader = s1;
 
     DebugLogger::GetInstance().SetRenderWindow(this);

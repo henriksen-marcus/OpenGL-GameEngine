@@ -18,6 +18,11 @@ public:
     void LoadFromOBJ(const std::string& path);
     std::vector<OBJMaterial*> ParseMTL(const std::string& path);
 
+    /**
+     * \brief Sends the mesh data to the GPU again.
+     */
+    void UpdateMesh();
+
     void SetTexture(Texture* texture);
     void SetTexture(const std::string& path);
 
@@ -40,12 +45,22 @@ public:
 
     float GetHeight(const QVector2D& point);
 
-    Vertex GetVertex(int index) const { return mVertices[index]; }
+    /**
+     * \return The actual vertex at the given index.
+     */
+    Vertex& GetVertex(int index) { return mVertices[index]; }
+
 
 	// Not working
     unsigned int GetMeshHeight();
     // Not working
     unsigned int GetMeshWidth();
+
+    /**
+     * \brief Releases vertex and index data from CPU memory.
+     * \remarks This will stop the mesh from being drawn.
+     */
+    void ClearMemory();
 
     virtual void Init();
     virtual void Draw();
@@ -58,6 +73,7 @@ public:
 
     Timer* mTimer;
 
+    
 protected:
     Texture* mTexture;
     QVector3D mColor{1.f, 1.f, 1.f};
@@ -69,7 +85,6 @@ protected:
 
     // Stores vertex indices for the object
     std::vector<GLuint> mIndices;
-
     std::vector<int> mNeighbors;
 
     // Vertex Array Object

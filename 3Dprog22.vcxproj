@@ -192,6 +192,7 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\Billboard.cpp" />
     <ClCompile Include="Source\Engine\Renderer.cpp" />
     <ClCompile Include="Source\Engine\Skybox.cpp" />
     <ClCompile Include="Source\Game\Scenes\CubemapScene.cpp">
@@ -252,7 +253,20 @@
     <ClCompile Include="Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\Billboard.h" />
+    <ClInclude Include="Source\Engine\CurveScene.h" />
+    <ClInclude Include="Source\Engine\Meshes\CylinderMesh.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Meshes\TetrahedronMesh.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Source\Utility\Templates\MyMesh.h" />
+    <ClInclude Include="Source\Engine\Meshes\SphereMesh.h" />
     <ClInclude Include="Source\Engine\Skybox.h" />
+    <ClInclude Include="Source\Engine\ui_mainwindow.h" />
     <ClInclude Include="Source\Game\Scenes\CubemapScene.h">
       <SubType>
       </SubType>
@@ -330,6 +344,7 @@
     <ClInclude Include="Source\Engine\Meshes\TestMesh.h" />
     <ClInclude Include="Source\Engine\Texture3D.h" />
     <ClInclude Include="Source\Engine\Texture.h" />
+    <ClInclude Include="ui_mainwindow.h" />
     <ClInclude Include="Vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +370,8 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Source\Engine\Shader\billboard.frag" />
+    <None Include="Source\Engine\Shader\billboard.vert" />
     <None Include="Source\Engine\Shader\fragment.frag" />
     <None Include="Source\Engine\Shader\geo.frag" />
     <None Include="Source\Engine\Shader\geo.geom" />

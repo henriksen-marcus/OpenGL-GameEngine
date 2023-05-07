@@ -67,6 +67,7 @@ public:
     bool followParentRotation;
     bool followParentScale;
 
+    QMatrix4x4 mMatrix{};
 protected:
     Actor* mParent;
 
@@ -76,7 +77,6 @@ protected:
     QQuaternion mRelativeRotation{};
     QQuaternion mWorldRotation{};
 
-    QMatrix4x4 mMatrix{};
 
     // The world-space scale of the object
     QVector3D mScale{1.f, 1.f, 1.f};

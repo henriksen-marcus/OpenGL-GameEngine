@@ -53,6 +53,11 @@ public:
     void SpawnXYZ();
 
     /**
+     * \brief Shorthand for SpawnActor<Actor>().
+     */
+    Actor* SpawnActor(const std::string& name, MeshComponent* mesh);
+
+    /**
      * \brief Spawn an actor into the world. Automatically constructs
      * an actor and adds it to the render queue.
      * \tparam T The class derived from actor to construct.
