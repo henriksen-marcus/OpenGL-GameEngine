@@ -12,6 +12,7 @@ HEADERS += \
     Source/Engine/Actor.h \
     Source/Engine/BaseObject.h \
     Source/Engine/Bezier.h \
+    Source/Engine/Billboard.h \
     Source/Engine/Boundry2D.h \
     Source/Engine/CameraComponent.h \
     Source/Engine/CubicBezier.h \
@@ -19,9 +20,16 @@ HEADERS += \
     Source/Engine/DebugLogger.h \
     Source/Engine/Math.h \
     Source/Engine/MeshComponent.h \
+    Source/Engine/Meshes/ArrowMesh.h \
     Source/Engine/Meshes/CubeMesh.h \
+    Source/Engine/Meshes/CylinderMesh.h \
+    Source/Engine/Meshes/FlatTriangleMesh.h \
+    Source/Engine/Meshes/LightCube.h \
     Source/Engine/Meshes/LineMesh.h \
     Source/Engine/Meshes/PlaneMesh.h \
+    Source/Engine/Meshes/SphereMesh.h \
+    Source/Engine/Meshes/TestMesh.h \
+    Source/Engine/Meshes/TetrahedronMesh.h \
     Source/Engine/OBJMaterial.h \
     Source/Engine/Octree.h \
     Source/Engine/PausableTimer.h \
@@ -65,6 +73,7 @@ HEADERS += \
     Source/Game/Scenes/BarycentricScene.h \
     Source/Game/Scenes/CubemapScene.h \
     Source/Game/Scenes/CurveScene.h \
+    Source/Game/Scenes/Eksamen2019Scene.h \
     Source/Game/Scenes/HeightmapScene.h \
     Source/Game/Scenes/Scene1.h \
     Source/Game/Scenes/TextureScene.h \
@@ -73,6 +82,7 @@ HEADERS += \
     Source/Game/VisualFunction2D.h \
     Source/Game/VisualPoints.h \
     Source/Game/XYZ.h \
+    Source/Utility/Color.h \
     Source/Utility/MathTasks.h \
     Source/Utility/functions.h \
     Source/Engine/Texture.h \
@@ -82,6 +92,7 @@ SOURCES += \
     Source/Engine/Actor.cpp \
     Source/Engine/BaseObject.cpp \
     Source/Engine/Bezier.cpp \
+    Source/Engine/Billboard.cpp \
     Source/Engine/Boundry2D.cpp \
     Source/Engine/CameraComponent.cpp \
     Source/Engine/CubicBezier.cpp \
@@ -120,6 +131,7 @@ SOURCES += \
     Source/Game/Scenes/BarycentricScene.cpp \
     Source/Game/Scenes/CubemapScene.cpp \
     Source/Game/Scenes/CurveScene.cpp \
+    Source/Game/Scenes/Eksamen2019Scene.cpp \
     Source/Game/Scenes/HeightmapScene.cpp \
     Source/Game/Scenes/Scene1.cpp \
     Source/Game/Scenes/TextureScene.cpp \
