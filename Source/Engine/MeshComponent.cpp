@@ -127,7 +127,7 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
 		ss.str(line);
 		
 		ss >> prefix;
-        if (prefix == "mtllib") // One obj file can have multiple mtl files attached
+        /*if (prefix == "mtllib") // One obj file can have multiple mtl files attached
         {
             // Get file name
 	        std::string material_file;
@@ -141,7 +141,7 @@ void MeshComponent::LoadFromOBJ(const std::string& path)
             auto mtl = ParseMTL(mtl_path);
             OBJ_materials.insert(OBJ_materials.end(), mtl.begin(), mtl.end());
 		}
-		else if (prefix == "v") // Vertex position
+		else */if (prefix == "v") // Vertex position
 		{
             // Load all the vertices in order
 			ss >> temp_vec3[0] >> temp_vec3[1] >> temp_vec3[2];
@@ -515,7 +515,7 @@ void MeshComponent::GenerateNeighbors()
 float MeshComponent::GetHeight(const QVector2D& point)
 {
     if (mVertices.empty() || mIndices.empty() || mDrawMode == GL_LINES) return -1;
-    mTimer->Start();
+    //mTimer->Start();
     // For each triangle
     for (int i = std::max(0, triangleIndex - 10); i < mIndices.size(); i += 3)
     {

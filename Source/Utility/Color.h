@@ -1,7 +1,7 @@
 #pragma once
 #include <qvectornd.h>
 
-static class Color
+/*static*/ class Color
 {
 public:
 	/*

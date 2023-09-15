@@ -8,11 +8,14 @@ Quadtree::Quadtree(Boundry2D* boundry, float _z)
 
 Quadtree::~Quadtree()
 {
-    delete nw;
-    delete ne;
-    delete sw;
-    delete se;
+    if (mIsDivided) {
+        if (nw != nullptr) delete nw;
+        if (ne != nullptr) delete ne;
+        if (sw != nullptr) delete sw;
+        if (se != nullptr) delete se;
+    }
     delete mBoundry;
+
     /* We don't delete the actors because the
      * the quadtree doesn't own them. */
 }
@@ -21,7 +24,7 @@ void Quadtree::Insert(Actor* actor)
 {
     if (!actor) return;
 
-    /* If this node does't contain the center
+    /* If this node doesn't contain the center
      * position of the new actor, let another node
      * handle it. */
     if (!mBoundry->Contains(actor)) return;
@@ -97,16 +100,16 @@ void Quadtree::UpdateTree(const std::vector<Actor*>& existingActors)
 void Quadtree::CheckChildren()
 {
     if (!mIsDivided) return;
-    if (nw->IsLeaf() && ne->IsLeaf() && sw->IsLeaf() && se->IsLeaf())
-    {
-        delete nw;
-        delete ne;
-        delete sw;
-        delete se;
+   //if (nw && nw->IsLeaf() && ne && ne->IsLeaf() && sw && sw->IsLeaf() && se && se->IsLeaf())
+    //{
+        /*if (nw != nullptr) delete nw;
+        if (ne != nullptr) delete ne;
+        if (sw != nullptr) delete sw;
+        if (se != nullptr) delete se;*/
 
         nw = ne = sw = se = nullptr;
         mIsDivided = false;
-    }
+    //}
 }
 
 void Quadtree::Subdivide()
@@ -121,6 +124,7 @@ void Quadtree::Subdivide()
     this->ne = new Quadtree(new Boundry2D(QVector2D(loc.x()+newHL, loc.y()+newHL), newHL), z+incr);
     this->sw = new Quadtree(new Boundry2D(QVector2D(loc.x()-newHL, loc.y()-newHL), newHL), z+incr);
     this->se = new Quadtree(new Boundry2D(QVector2D(loc.x()+newHL, loc.y()-newHL), newHL), z+incr);
+
 }
 
 void Quadtree::Query(std::vector<Actor*>& found, Boundry2D* boundry)

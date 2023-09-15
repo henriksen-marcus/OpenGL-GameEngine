@@ -115,7 +115,7 @@ const QVector3D& Actor::GetActorScale()
 void Actor::SetActorScale(const QVector3D& scale)
 {
     mScale = scale;
-    UpdateCollisionScale();
+    //UpdateCollisionScale();
     //UpdateModelMatrixQuat();
 }
 

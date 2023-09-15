@@ -6,6 +6,7 @@ class CameraComponent;
 class LightCube;
 class TriangleSurface;
 class LineActor;
+class Timer;
 
 class MeshWalker : public Pawn
 {
@@ -16,10 +17,22 @@ public:
 	void Draw() override;
 	void SetAsCurrent() override;
 	void ProcessKeyboard(Movement direction) override;
+	void OnPickup(PickupType pickup) override;
+
+	/* Switch between first and third person camera. */
+	void SwitchCamera();
+
+	void OnGameReset();
+
 	MeshComponent* mSurface;
-protected:
+	MeshComponent* testcube;
+	Timer* switchTimer;
+	Timer* lightTimer;
 	SpringArmComponent* mSpringArm;
-	CameraComponent* mCamera;
+
+protected:
+	CameraComponent* mThirdPersonCamera;
+	CameraComponent* mFirstPersonCamera;
 	LightCube* mLightCube;
 	LineActor* mLine;
 };

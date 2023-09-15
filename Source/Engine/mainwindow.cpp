@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     windowHeight = height();
     center = QPoint(windowWidth/2, windowHeight/2);
 
+    setWindowTitle("SoReal Engine");
+    setWindowIcon(QIcon("Assets/ueicon.ico"));
+
     init(); //initializes parts of the program
 }
 
@@ -87,11 +90,11 @@ void MainWindow::on_rotationButton_toggled(bool checked)
 {
     if(checked)
     {
-        ui->rotationButton->setText("Stop rotation");
+        //ui->rotationButton->setText("Stop rotation");
     }
     else
     {
-        ui->rotationButton->setText("Start rotation");
+        //ui->rotationButton->setText("Start rotation");
     }
 }
 

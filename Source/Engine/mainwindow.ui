@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>SoReal Engine</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../../../Downloads/ueicon.ico</normaloff>../../../../../Downloads/ueicon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>

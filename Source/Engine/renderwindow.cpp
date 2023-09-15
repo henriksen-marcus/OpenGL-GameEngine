@@ -33,6 +33,8 @@
 #include "Source/Game/Scenes/CurveScene.h"
 #include "Source/Game/Scenes/CubemapScene.h"
 #include "Source/Game/Scenes/Eksamen2019Scene.h"
+#include "Source/Game/Scenes/Eksamen2023Scene.h"
+#include "Source/Engine/Math.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -131,11 +133,15 @@ void RenderWindow::init()
     /*CurveScene* curveScene = new CurveScene();
     WorldManager::GetInstance().SetWorld(curveScene);*/
 
-    auto* cubescene = new CubemapScene();
-    WorldManager::GetInstance().SetWorld(cubescene);
+    /*auto* cubescene = new CubemapScene();
+    WorldManager::GetInstance().SetWorld(cubescene);*/
 
     /*auto* eksScene = new Eksamen2019Scene();
     WorldManager::GetInstance().SetWorld(eksScene);*/
+
+    auto* e2023Scene = new Eksamen2023Scene();
+    WorldManager::GetInstance().SetWorld(e2023Scene);
+
     auto* s1 = new Shader();
     s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");
 
@@ -165,6 +171,11 @@ void RenderWindow::init()
 
     DebugLogger::GetInstance().SetRenderWindow(this);
     WorldManager::GetInstance().GetWorld()->BeginPlay();
+
+    float u, v, w;
+    Math::Barycentric(QVector2D(0, 0), QVector2D(0.5f, 1), QVector2D(1, 0), QVector2D(0.5f, 0.5f), u, v, w);
+
+    std::cout << "u: " << u << " v: " << v << " w: " << w << "\n";
 }
 
 

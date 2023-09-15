@@ -17,5 +17,6 @@ enum PickupType
     Health,
     Speed,
     Life,
-    Damage
+    Damage,
+    Switch
 };

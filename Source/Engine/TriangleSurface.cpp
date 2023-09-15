@@ -8,6 +8,8 @@
 #include "Source/Utility/Color.h"
 #include <sstream>
 
+#include <cmath>
+
 TriangleSurface::TriangleSurface(Actor* parent)
 	: MeshComponent(parent)
 {
@@ -57,9 +59,9 @@ void TriangleSurface::FromFlat(float xmin, float xmax, float zmin, float zmax, f
     const float h_z = distanceZ;
 
     // Grid resolution on x axis
-    const int num_vertices_x = static_cast<int>(std::ceilf((xmax - xmin) / distanceX));
+    const int num_vertices_x = static_cast<int>(ceilf((xmax - xmin) / distanceX));
     // Grid resolution on z axis
-    const int num_vertices_z = static_cast<int>(std::ceilf((zmax - zmin) / distanceZ));
+    const int num_vertices_z = static_cast<int>(ceilf((zmax - zmin) / distanceZ));
 
     /*std::cout << "h_x: " << h_x << std::endl;
     std::cout << "h_z: " << h_z << std::endl;

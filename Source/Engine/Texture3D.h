@@ -7,7 +7,7 @@ public:
 	Texture3D(const std::vector<std::string>& paths);
 	virtual ~Texture3D();
 
-	void Bind(unsigned int slot = 0) override;
+	void Bind(unsigned slot = 0) override;
 	void Unbind() override;
 
 protected:

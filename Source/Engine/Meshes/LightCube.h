@@ -19,8 +19,19 @@ public:
 	    // Uniforms specific to the shader.
 	    Shader* activeShader = GetActiveShader();
 	    activeShader->SendUniforms();
-		activeShader->SetVec3("lightColor", mColor);
+
+		if (activateLight)
+		{
+			activeShader->SetVec3("lightColor", mColor);
+		}
+		else
+		{
+			activeShader->SetVec3("lightColor", {});
+		}
+		
+
 		activeShader->SetVec3("lightPosition", mWorldLocation);
+
 	    glUniformMatrix4fv(activeShader->GetModelLocation(), 1, GL_FALSE, mMatrix.constData());
 
 	    glBindVertexArray(mVAO);
@@ -38,4 +49,5 @@ public:
 	    glBindVertexArray(0);
 	}
 
+	bool activateLight = true;
 };

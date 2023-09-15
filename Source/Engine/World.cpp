@@ -125,3 +125,10 @@ void World::BeginPlay()
 {
 	mRenderer->BeginPlay();
 }
+
+void World::RestartGame()
+{
+    print("Game restarted!");
+    cPrint("Game restarted!");
+	worldTimer->restart();
+}

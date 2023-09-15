@@ -63,9 +63,11 @@ HEADERS += \
     Source/Game/Axis.h \
     Source/Game/Camera.h \
     Source/Game/CubePlayer.h \
+    Source/Game/Enemy.h \
     Source/Game/FlyingCamera.h \
     Source/Game/HealthPack.h \
     Source/Game/House.h \
+    Source/Game/LightSwitch.h \
     Source/Game/LineActor.h \
     Source/Game/LineNPC.h \
     Source/Game/MeshWalker.h \
@@ -74,6 +76,7 @@ HEADERS += \
     Source/Game/Scenes/CubemapScene.h \
     Source/Game/Scenes/CurveScene.h \
     Source/Game/Scenes/Eksamen2019Scene.h \
+    Source/Game/Scenes/Eksamen2023Scene.h \
     Source/Game/Scenes/HeightmapScene.h \
     Source/Game/Scenes/Scene1.h \
     Source/Game/Scenes/TextureScene.h \
@@ -121,9 +124,11 @@ SOURCES += \
     Source/Game/Arrow.cpp \
     Source/Game/Axis.cpp \
     Source/Game/CubePlayer.cpp \
+    Source/Game/Enemy.cpp \
     Source/Game/FlyingCamera.cpp \
     Source/Game/HealthPack.cpp \
     Source/Game/House.cpp \
+    Source/Game/LightSwitch.cpp \
     Source/Game/LineActor.cpp \
     Source/Game/LineNPC.cpp \
     Source/Game/MeshWalker.cpp \
@@ -132,6 +137,7 @@ SOURCES += \
     Source/Game/Scenes/CubemapScene.cpp \
     Source/Game/Scenes/CurveScene.cpp \
     Source/Game/Scenes/Eksamen2019Scene.cpp \
+    Source/Game/Scenes/Eksamen2023Scene.cpp \
     Source/Game/Scenes/HeightmapScene.cpp \
     Source/Game/Scenes/Scene1.cpp \
     Source/Game/Scenes/TextureScene.cpp \

@@ -36,6 +36,7 @@ Texture2D::Texture2D(const std::string& path) : Texture()
         std::cout << "Failed to load image.\n";
     }
 	stbi_image_free(mLocalBuffer);
+    stbi_set_flip_vertically_on_load(0);
 }
 
 Texture2D::~Texture2D()

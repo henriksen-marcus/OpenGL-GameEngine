@@ -16,6 +16,7 @@ out vec4 fragColor;
 out vec2 fragTexCoord;
 out vec3 fragNormal;
 out vec3 fragPosition;
+out vec3 fragCubeTexCoords;
 
 void main()											
 {
@@ -32,4 +33,6 @@ void main()
 	//fragNormal = normal_IN;
 	fragNormal = mat3(transpose(inverse(matrixTransform_IN))) * normal_IN;
 	fragPosition = vec3(matrixTransform_IN * vec4(position_IN, 1.f));
+
+	fragCubeTexCoords = position_IN;
 }

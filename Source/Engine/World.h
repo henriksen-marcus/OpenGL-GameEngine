@@ -13,6 +13,11 @@ class Cube;
 class Renderer;
 class MeshComponent;
 
+struct PlayerStart
+{
+    QVector3D location, rotation;
+};
+
 class World : public BaseObject
 {
 public:
@@ -86,7 +91,10 @@ public:
      */
     void RemoveActor(Actor* actor);
 
-    virtual void BeginPlay();;
+    virtual void BeginPlay();
+
+
+    virtual void RestartGame();
 
     Renderer* mRenderer;
 
@@ -109,6 +117,8 @@ protected:
     QElapsedTimer* worldUnpausedTimer;
 
     QVector3D mWorldColor{};
+
+    PlayerStart mPlayerStart{ {},{} };
 };
 
 template<class T>

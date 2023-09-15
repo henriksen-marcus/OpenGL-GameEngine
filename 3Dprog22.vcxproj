@@ -195,6 +195,8 @@
     <ClCompile Include="Source\Engine\Billboard.cpp" />
     <ClCompile Include="Source\Engine\Renderer.cpp" />
     <ClCompile Include="Source\Engine\Skybox.cpp" />
+    <ClCompile Include="Source\Game\Enemy.cpp" />
+    <ClCompile Include="Source\Game\LightSwitch.cpp" />
     <ClCompile Include="Source\Game\Scenes\CubemapScene.cpp">
       <SubType>
       </SubType>
@@ -214,6 +216,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\Eksamen2023Scene.cpp" />
     <ClCompile Include="Source\Game\Scenes\HeightmapScene.cpp" />
     <ClCompile Include="Source\Game\FlyingCamera.cpp" />
     <ClCompile Include="Source\Engine\Actor.cpp" />
@@ -267,10 +270,13 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Source\Game\Enemy.h" />
+    <ClInclude Include="Source\Game\LightSwitch.h" />
     <ClInclude Include="Source\Game\Scenes\Eksamen2019Scene.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\Eksamen2023Scene.h" />
     <ClInclude Include="Source\Utility\Templates\MyMesh.h" />
     <ClInclude Include="Source\Engine\Meshes\SphereMesh.h" />
     <ClInclude Include="Source\Engine\Skybox.h" />

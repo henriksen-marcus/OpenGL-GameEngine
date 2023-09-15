@@ -6,21 +6,32 @@
 #include "Source/Engine/TriangleSurface.h"
 #include "Source/Game/Scenes/HeightmapScene.h"
 #include "Source/Game/Scenes/BarycentricScene.h"
+#include "Source/Game/Scenes/Eksamen2023Scene.h"
 #include "Source/Game/LineActor.h"
+#include "Source/Engine/PlayerController.h"
+#include "Source/Engine/Timer.h"
+#include "Source/Engine/Texture3D.h"
+
 
 MeshWalker::MeshWalker(const QVector3D& location)
 : Pawn(location)
 {
-	mCamera = new CameraComponent(this);
-	mComponents.push_back(mCamera);
-	mCamera->SetFollowParent(false);
-	mCamera->bLookAtParent = true;
+	mThirdPersonCamera = new CameraComponent(this);
+	mComponents.push_back(mThirdPersonCamera);
+	mThirdPersonCamera->SetFollowParent(false);
+	mThirdPersonCamera->bLookAtParent = true;
+
+    mFirstPersonCamera = new CameraComponent(this);
+    mComponents.push_back(mFirstPersonCamera);
+    mFirstPersonCamera->SetFollowParent(true);
+    mFirstPersonCamera->bLookAtParent = false;
+    mFirstPersonCamera->AddRelativeLocation({ 0.f, 0.2f, -0.8f });
 
 	mSpringArm = new SpringArmComponent(this, 7.f, 35.f);
 	mComponents.push_back(mSpringArm);
-	mSpringArm->SetAttachment(mCamera);
+	mSpringArm->SetAttachment(mThirdPersonCamera);
     mSpringArm->SetSpringStiffness(100.f);
-	//mSpringArm->bEnableCameraLag = false;
+	mSpringArm->bEnableCameraLag = false;
 
 	mLightCube = new LightCube(this, 0.05f);
 	mComponents.push_back(mLightCube);
@@ -39,16 +50,26 @@ MeshWalker::MeshWalker(const QVector3D& location)
 
     SetCollisionComponent(0.25f);
 
-	mMesh = new CubeMesh(this, 0.5f, QVector3D(0.f, 1.f, 0.f));
-    mMesh->bUseLighting = true;
+	mMesh = new CubeMesh(this, 0.5f, QVector3D(1.f, 1.f, 1.f));
+    mMesh->bFollowParentScale = true;
+    mMesh->SetTexture2D("Assets/Textures/wall.jpg");
+    mMesh->bUseLighting = false;
+    mMesh->Init();
+
+    switchTimer = new Timer();
+    switchTimer->Start();
+
+    lightTimer = new Timer();
+    lightTimer->Start();
 }
 
 void MeshWalker::BeginPlay()
 {
 	Pawn::BeginPlay();
 
-	mCamera->SetWorldLocation(mSpringArm->GetSocketLocation());
-	mSurface = static_cast<BarycentricScene*>(GetWorld())->GetSurface();
+	mThirdPersonCamera->SetWorldLocation(mSpringArm->GetSocketLocation());
+	mSurface = static_cast<Eksamen2023Scene*>(GetWorld())->GetSurface();
+    mLightCube->SetWorldLocation({0, 2, 0});
 }
 
 void MeshWalker::Tick(float deltaTime)
@@ -71,7 +92,7 @@ void MeshWalker::Draw()
 void MeshWalker::SetAsCurrent()
 {
 	Pawn::SetAsCurrent();
-	mCamera->SetAsCurrent();
+	mThirdPersonCamera->SetAsCurrent();
 }
 
 void MeshWalker::ProcessKeyboard(Movement direction)
@@ -91,7 +112,7 @@ void MeshWalker::ProcessKeyboard(Movement direction)
         AddActorWorldOffset(GetActorRightVector() * mMovementSpeed);
         break;
     case Movement::UP:
-        AddActorWorldOffset(mWorldUp * mMovementSpeed);
+        SwitchCamera();
         break;
     case Movement::DOWN:
         AddActorWorldOffset(-mWorldUp * mMovementSpeed);
@@ -105,4 +126,46 @@ void MeshWalker::ProcessKeyboard(Movement direction)
         AddActorLocalRotation(QVector3D(0.f, -1.f, 0.f));
         break;
     }
+}
+
+void MeshWalker::OnPickup(PickupType pickup)
+{
+    switch (pickup)
+    {
+	case PickupType::Health:
+        static_cast<Eksamen2023Scene*>(GetWorld())->AddScore();
+		break;
+	case PickupType::Damage:
+        GetWorld()->RestartGame();
+		break;
+    case PickupType::Switch:
+        if (lightTimer->GetDuration() < 1000) break;
+        lightTimer->Reset();
+        mLightCube->activateLight = !mLightCube->activateLight;
+        print("toggle light");
+        break;
+	}
+}
+
+void MeshWalker::SwitchCamera()
+{
+    // Make sure we don't spam the switch
+    if (switchTimer->GetDuration() < 500) return;
+    switchTimer->Reset();
+    
+
+    auto* activeCamera = GetPlayerController().GetCurrentCamera();
+    if (activeCamera == mThirdPersonCamera)
+    {
+        GetPlayerController().SetCurrentCamera(mFirstPersonCamera);
+	}
+    else
+    {
+        GetPlayerController().SetCurrentCamera(mThirdPersonCamera);
+	}
+}
+
+void MeshWalker::OnGameReset()
+{
+    mLightCube->activateLight = true;
 }
