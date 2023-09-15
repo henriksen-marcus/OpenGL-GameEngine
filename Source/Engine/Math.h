@@ -2,6 +2,8 @@
 
 #include "qvector2d.h"
 
+#define SMALL_NUMBER 1.0e-8f
+
 struct QuadraticCurve
 {
 	// Starting point
@@ -25,12 +27,12 @@ struct CubicCurve
 namespace Math
 {
 	template<class T>
-	static constexpr T Lerp(const T& start, const T& end, const float t)
+	static constexpr T Lerp(const T& start, const T& end, const float t) noexcept
 	{
 		return start + t * (end - start);
 	}
 
-	static constexpr void Barycentric(QVector2D a, QVector2D b, QVector2D c, QVector2D p, float& u, float& v, float& w)
+	static constexpr void Barycentric(QVector2D a, QVector2D b, QVector2D c, QVector2D p, float& u, float& v, float& w) noexcept
 	{
 		QVector2D v0 = b - a, v1 = c - a, v2 = p - a;
 		float d00 = QVector2D::dotProduct(v0, v0);
@@ -51,7 +53,7 @@ namespace Math
 	 * \param t Time.
 	 * \return The point on the quadratic bezier curve at time t.
 	 */
-	static constexpr QVector3D QuadraticBezier(const QVector3D& a, const QVector3D& b, const QVector3D& c, float t)
+	static constexpr QVector3D QuadraticBezier(const QVector3D& a, const QVector3D& b, const QVector3D& c, const float t)
 	{
 		const float u = 1.0f - t;
 	    const float tt = t * t;
@@ -65,7 +67,7 @@ namespace Math
 		return QuadraticBezier(curve.a, curve.b, curve.c, t);
 	}
 
-	static constexpr QVector3D CubicBezier(const QVector3D& a, const QVector3D& b, const QVector3D& c, const QVector3D& d, float t)
+	static constexpr QVector3D CubicBezier(const QVector3D& a, const QVector3D& b, const QVector3D& c, const QVector3D& d, const float t)
 	{
 		/*const float u = 1.0f - t;
 		const float tt = t * t;
@@ -83,7 +85,7 @@ namespace Math
 		return Lerp<QVector3D>(ab_bc,bc_cd,t);
 	}
 
-	static constexpr QVector3D CubicBezier(const CubicCurve& curve, float t)
+	static constexpr QVector3D CubicBezier(const CubicCurve& curve, const float t)
 	{
 		return CubicBezier(curve.a, curve.b, curve.c, curve.d, t);
 	}
@@ -94,14 +96,14 @@ namespace Math
 	 * \param target Target position.
 	 * \return The interpolated number.
 	 */
-	static constexpr float FInterpTo(float current, float target, float deltaTime, float interpSpeed)
+	static constexpr float FInterpTo(const float current, const float target, const float deltaTime, const float interpSpeed)
 	{
 		if (interpSpeed <= 0.f) return target;
 
 		const float dist = target - current;
 
 		// If distance is small, just set the target location
-		if (dist * dist < 1.0e-8f) return target;
+		if (dist * dist < SMALL_NUMBER) return target;
 
 		// Delta Move, Clamp so we do not over shoot.
 		const float deltaMove = dist * std::clamp(deltaTime * interpSpeed, 0.f, 1.f);
@@ -132,7 +134,7 @@ namespace Math
 		return current + deltaMove;
 	}
 
-	static QVector3D VInterpConstantTo(const QVector3D& current, const QVector3D& target, float deltaTime, float interpSpeed)
+	static QVector3D VInterpConstantTo(const QVector3D& current, const QVector3D& target, const float deltaTime, const float interpSpeed)
 	{
 		const QVector3D delta = target - current;
 		const float deltaM = delta.length();
@@ -159,7 +161,7 @@ namespace Math
 		const float Dist = Target - Current;
 
 		// If distance is too small, just set the desired location
-		if (powf(Dist, 2) < 1.0e-8f)
+		if (powf(Dist, 2) < SMALL_NUMBER)
 		{
 			return Target;
 		}
