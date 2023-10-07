@@ -20,6 +20,8 @@ World::World()
     worldUnpausedTimer = new QElapsedTimer();
     worldTimer->start();
     worldUnpausedTimer->start();
+
+    mSurface = nullptr;
 }
 
 World::~World()
@@ -30,6 +32,7 @@ World::~World()
     delete mRenderer;
     for (auto a : mActors)
         delete a;
+    delete mSurface;
 }
 
 void World::Tick(float deltaTime)

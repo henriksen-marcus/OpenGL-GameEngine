@@ -47,6 +47,11 @@ public:
     float GetUnpausedTimeSeconds();
 
     /**
+     * \return The ground in the world, if there is any.
+     */
+    virtual MeshComponent* GetSurface() const { return mSurface; };
+
+    /**
      * \brief Sets the glClearColor value for this world.
      */
     void SetWorldColor(const QVector3D& color) { mWorldColor = color; }
@@ -93,7 +98,6 @@ public:
 
     virtual void BeginPlay();
 
-
     virtual void RestartGame();
 
     Renderer* mRenderer;
@@ -112,6 +116,8 @@ protected:
     float mDeltaTime{};
     float timeSeconds{};
     float unpausedTimeSeconds{};
+
+    MeshComponent* mSurface;
 
     PauseableTimer* worldTimer;
     QElapsedTimer* worldUnpausedTimer;
