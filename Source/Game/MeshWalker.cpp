@@ -68,7 +68,7 @@ void MeshWalker::BeginPlay()
 	Pawn::BeginPlay();
 
 	mThirdPersonCamera->SetWorldLocation(mSpringArm->GetSocketLocation());
-	mSurface = static_cast<Eksamen2023Scene*>(GetWorld())->GetSurface();
+	mSurface = GetWorld()->GetSurface();
     mLightCube->SetWorldLocation({0, 2, 0});
 }
 
@@ -76,9 +76,12 @@ void MeshWalker::Tick(float deltaTime)
 {
 	Pawn::Tick(deltaTime);
 
-	// Follow the surface on the map
-    auto h = mSurface->GetHeight(GetActorLocation2D());
-    mLocation.setY(h+0.4f);
+    if (mSurface)
+    {
+        // Follow the surface on the map
+        auto h = mSurface->GetHeight(GetActorLocation2D());
+        mLocation.setY(h + 0.4f);
+    }
 
     mLine->Update(mLocation, mLightCube->GetWorldLocation());
 }
