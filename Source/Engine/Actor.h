@@ -65,6 +65,7 @@ public:
     virtual void OnCollision(Actor* otherActor){};
     
     void AddComponent(SceneComponent* component);
+    SceneComponent* GetComponent(int index);
 
     MeshComponent* GetMesh();
     void SetMesh(MeshComponent* mesh);

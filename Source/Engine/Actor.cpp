@@ -152,6 +152,11 @@ void Actor::AddComponent(SceneComponent* component)
     component->SetupAttachment(this);
 }
 
+SceneComponent* Actor::GetComponent(int index)
+{
+    return mComponents[index];
+}
+
 MeshComponent* Actor::GetMesh()
 {
     return mMesh;
