@@ -11,8 +11,6 @@ class BarycentricScene : public World
 {
 public:
 	BarycentricScene();
-	MeshComponent* GetSurface() const { return mSurface; }
-	MeshComponent* mSurface;
 	MeshWalker* mWalker;
 	void Tick(float deltaTime) override;
 };
