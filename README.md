@@ -1,7 +1,7 @@
 # OpenGL Game Engine
 
 A small code engine for simulating a game world with actors, controllable pawns, custom meshes and materials as well as collision logic.<br>
-Made using OpenGL in C++, and Qt as the graphical user interface. This project was made as an exam
+Made using OpenGL in C++, and Qt as the graphical user interface. This project was made as a folder exam for a 3D-progamming course.
 
 ## Preview
 <p align="center">
