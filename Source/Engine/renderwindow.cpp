@@ -34,6 +34,7 @@
 #include "Source/Game/Scenes/CubemapScene.h"
 #include "Source/Game/Scenes/Eksamen2019Scene.h"
 #include "Source/Game/Scenes/Eksamen2023Scene.h"
+#include "Source/Game/Scenes/PresentationWorld.h"
 #include "Source/Engine/Math.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
@@ -121,11 +122,11 @@ void RenderWindow::init()
     std::filesystem::path cwd = std::filesystem::current_path();
     std::cout << "Current program path: " << cwd << std::endl;
 
-    //auto* texScene = new TextureScene();
-    //WorldManager::GetInstance().SetWorld(texScene);
+    /*auto* texScene = new TextureScene();
+    WorldManager::GetInstance().SetWorld(texScene);*/
 
-    //auto* heightmapscene = new HeightmapScene();
-    //WorldManager::GetInstance().SetWorld(heightmapscene);
+    /*auto* heightmapscene = new HeightmapScene();
+    WorldManager::GetInstance().SetWorld(heightmapscene);*/
 
     /*auto* baryscene = new BarycentricScene();
     WorldManager::GetInstance().SetWorld(baryscene);*/
@@ -141,6 +142,9 @@ void RenderWindow::init()
 
     auto* e2023Scene = new Eksamen2023Scene();
     WorldManager::GetInstance().SetWorld(e2023Scene);
+
+    /*auto* presentationScene = new PresentationWorld();
+    WorldManager::GetInstance().SetWorld(presentationScene);*/
 
     auto* s1 = new Shader();
     s1->CreateFromFiles("Source/Engine/Shader/vertex.vert", "Source/Engine/Shader/fragment.frag");

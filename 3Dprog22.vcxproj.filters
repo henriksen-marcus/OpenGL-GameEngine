@@ -218,6 +218,9 @@
     <ClCompile Include="Source\Game\LightSwitch.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Scenes\PresentationWorld.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Actor.h">
@@ -467,6 +470,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\LightSwitch.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scenes\PresentationWorld.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

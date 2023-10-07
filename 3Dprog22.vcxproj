@@ -192,6 +192,7 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Scenes\PresentationWorld.cpp" />
     <ClCompile Include="Source\Engine\Billboard.cpp" />
     <ClCompile Include="Source\Engine\Renderer.cpp" />
     <ClCompile Include="Source\Engine\Skybox.cpp" />
@@ -260,6 +261,7 @@
     <ClCompile Include="Vendor\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Scenes\PresentationWorld.h" />
     <ClInclude Include="Source\Engine\Billboard.h" />
     <ClInclude Include="Source\Engine\CurveScene.h" />
     <ClInclude Include="Source\Engine\Meshes\CylinderMesh.h">

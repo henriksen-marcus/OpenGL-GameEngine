@@ -90,7 +90,7 @@ Eksamen2023Scene::Eksamen2023Scene()
 	SpawnActor<Actor>("monkey", m)->SetActorLocation({ 0.f, 4.f, -10.f });
 
 	// GlClearColor color
-	SetWorldColor(Color::Cyan);
+	SetWorldColor(QVector3D(0.f/255, 64.f/255, 128.f/255));
 
 	// Skybox
 	/*std::vector<std::string> faces
